@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Scenes/MapaTest.unity.meta
 guid: 86def82a5cec8474483b0a76f6cf8f9a
+=======
+<<<<<<<< HEAD:Assets/Scenes/Camara.unity.meta
+guid: 3f77993bfd2003f43aa01d79fc885bb7
+========
+guid: e3791efe5ba7f4d49a3e031936381c67
+>>>>>>>> origin/main:Assets/Scenes/Daniela1.unity.meta
+>>>>>>> origin/Noah:Assets/Scenes/Camara.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
