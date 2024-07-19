@@ -19,6 +19,10 @@ public class MovimientoPersonaje : MonoBehaviour
     private Rigidbody RBPersonaje;
     private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
+    [Header("Escalera")]
+    public bool EnEscalera;
+    [Header("Ataque")]
+    public bool PuedoAtacar;
 
 
     private void Awake()
@@ -36,11 +40,22 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Update()
     {
-        Movimiento();
+        if ((Personaje.Colisiones.CercaEscalera && Controles.EjeZ != 0) || EnEscalera)
+        {
+            SubirEscaleras();
+        }
+        else
+        {
+            Movimiento();
+        }
+
+        ReiniciarSaltos();
+        
     }
 
     void Movimiento()
     {
+        
         MovimientoXZ = new Vector3(Controles.EjeX, 0, Controles.EjeZ).normalized;
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
@@ -61,7 +76,7 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         bool Puedo = false;
         //Si estoy en el suelo, siempre puedo saltar
-        if (Personaje.Gravedad.EnSuelo)
+        if (Personaje.Gravedad.EnSuelo || EnEscalera)
         {
             Puedo = true;
         }
@@ -95,9 +110,21 @@ public class MovimientoPersonaje : MonoBehaviour
         CalcularVelocidad();
     }
 
-
     public void CalcularVelocidad()
     {
         VelocidadFinal = VelocidadBase * VelocidadModificador;
+    }
+
+    public void SubirEscaleras()
+    {
+        EnEscalera = true;
+        RBPersonaje.useGravity = false;
+        PuedoAtacar = false;
+
+        MovimientoXZ = new Vector3(Controles.EjeX, Controles.EjeZ, 0).normalized;
+        MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
+        RBPersonaje.linearVelocity = MovimientoFinal;
+
+        //MODIFICACIONES: Funcion PuedoSaltar ahora devuelve true si esta EnEscalera
     }
 }

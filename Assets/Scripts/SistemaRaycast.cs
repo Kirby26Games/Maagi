@@ -46,7 +46,7 @@ public class SistemaRaycast : MonoBehaviour
                 AngulacionSuelo = Vector3.Angle(Vector3.up, DatosPendiente.normal);
 
             }
-            //Estamos en el suelo si AngulacionSuelo es menor a el angolo de escalada maximo
+            //Estamos en el suelo si AngulacionSuelo es menor a el angolo de escalada maximo O si estamos en una escalera
             SistemaPersonaje.Gravedad.EnSuelo = AngulacionSuelo <= AnguloEscaladaMaximo;
             //Dibujo el rayo de escalada
             Debug.DrawRay(transform.position + Vector3.forward * 0.01f, Vector3.down * DistanciaRayoEscalada, Color.magenta);
