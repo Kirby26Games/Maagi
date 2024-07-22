@@ -41,7 +41,7 @@ public class MovimientoSimple : MonoBehaviour
         {
             Camara.position = bordeTemporal.MovimientoDeCamara;
             transform.position += bordeTemporal.ModMovimientoDePersonaje;
-            _ResetFiltro();
+            ResetFiltro();
         }
 
         // Cambia el efecto de la gravedad sobre el personaje al tocar una escalera
@@ -64,7 +64,7 @@ public class MovimientoSimple : MonoBehaviour
         }
     }
 
-    private async void _ResetFiltro()
+    private async void ResetFiltro()
     {
         Image imagenFiltro = _Filtro.GetComponent<Image>();
         // Reinicia el temporizador
