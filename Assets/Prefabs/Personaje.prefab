@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 2260340639806594522}
   - component: {fileID: 8905940627804752459}
   - component: {fileID: 6523635149077786332}
-  - component: {fileID: 47269018950400865}
-  - component: {fileID: 405719642357843963}
-  - component: {fileID: 5065448684150115686}
-  - component: {fileID: 625382299924582290}
   - component: {fileID: 5588199316284667521}
+  - component: {fileID: 102133088144530437}
   - component: {fileID: 5448920212085218350}
   - component: {fileID: 1571377771316135303}
+  - component: {fileID: 9141048713900540063}
+  - component: {fileID: 7918498663416027673}
+  - component: {fileID: 3572153109131290950}
   m_Layer: 0
   m_Name: Personaje
   m_TagString: Untagged
@@ -90,71 +90,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &47269018950400865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577602945081306605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff53137d9d53e214281f1511dfbbc7a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Movimiento: {fileID: 0}
-  Gravedad: {fileID: 0}
-  Raycast: {fileID: 0}
-  Controles: {fileID: 0}
-  "Tama\xF1o": {fileID: 0}
---- !u!114 &405719642357843963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577602945081306605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b0a9b19f53c8b54da0201a8ebc8a09d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  VelocidadBase: 3
-  MultiplicadorAlCorrer: 2
-  MovimientoLibre: 0
-  DistanciaSalto: 0
-  SaltosEnElAireMaximos: 1
---- !u!114 &5065448684150115686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577602945081306605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aa24c00474a9374a83261a9ed188276, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RangoDeteccionSuelo: 0
-  ColorDeteccionSuelo: {r: 1, g: 0, b: 0, a: 1}
-  AnguloEscaladaMaximo: 0
-  Radio: 0
---- !u!114 &625382299924582290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577602945081306605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a57cc1162cdbaa438aa695bb54ede78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Gravedad: -9.82
-  EnSuelo: 0
-  EjeY: 0
 --- !u!212 &5588199316284667521
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -204,12 +139,29 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 10.799999, y: 19.199999}
+  m_Size: {x: 1.08, y: 1.0105263}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &102133088144530437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe873a943554b694aa97def19236016b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Movimiento: {fileID: 0}
+  Gravedad: {fileID: 0}
+  Raycast: {fileID: 0}
+  Controles: {fileID: 0}
+  "Tama\xF1o": {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,3 +191,50 @@ MonoBehaviour:
   EjeZ: 0
   RatonHorizontal: 0
   RatonVertical: 0
+--- !u!114 &9141048713900540063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a018be98d91b31c42916aa37cd626f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VelocidadBase: 3
+  MultiplicadorAlCorrer: 2
+  DistanciaSalto: 0
+  SaltosEnElAireMaximos: 0
+--- !u!114 &7918498663416027673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233a06c71821d304087f218781a8a1aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gravedad: -9.82
+  EnSuelo: 0
+  EjeY: 1
+--- !u!114 &3572153109131290950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ddb7cc9dcbdc341a275833c4aee633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RangoDeteccionSuelo: 0
+  ColorDeteccionSuelo: {r: 1, g: 0, b: 0, a: 1}
+  AnguloEscaladaMaximo: 20
+  Radio: 0
