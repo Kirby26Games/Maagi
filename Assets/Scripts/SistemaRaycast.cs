@@ -10,7 +10,7 @@ public class SistemaRaycast : MonoBehaviour
     public Color ColorDeteccionSuelo;
     public float AnguloEscaladaMaximo;
     private float DistanciaRayoEscalada;
-    private float AngulacionSuelo;
+    public float AngulacionSuelo;
     [Header("Medidas")]
     private float Alto;
     private float Ancho;
@@ -43,10 +43,10 @@ public class SistemaRaycast : MonoBehaviour
             if (Physics.Raycast(transform.position, -transform.up, out DatosPendiente, DistanciaRayoEscalada))
             {
                 //Cogemos el angulo de la pendiente usando su normal
-                AngulacionSuelo = Vector3.Angle(Vector3.up, DatosPendiente.normal);
+                AngulacionSuelo = Vector3.Angle(transform.up, DatosPendiente.normal);
 
             }
-            //Estamos en el suelo si AngulacionSuelo es menor a el angolo de escalada maximo O si estamos en una escalera
+            //Estamos en el suelo si AngulacionSuelo es menor a el angolo de escalada maximo
             SistemaPersonaje.Gravedad.EnSuelo = AngulacionSuelo <= AnguloEscaladaMaximo;
             //Dibujo el rayo de escalada
             Debug.DrawRay(transform.position + Vector3.forward * 0.01f, Vector3.down * DistanciaRayoEscalada, Color.magenta);

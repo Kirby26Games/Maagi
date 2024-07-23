@@ -13,6 +13,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
     [Header("Salto")]
+    public int DireccionSalto = -2;
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
@@ -59,7 +60,7 @@ public class MovimientoPersonaje : MonoBehaviour
         MovimientoXZ = new Vector3(Controles.EjeX, 0, Controles.EjeZ).normalized;
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
-        MovimientoFinal.y += Personaje.Gravedad.EjeY;
+        MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         RBPersonaje.linearVelocity = MovimientoFinal;
     }
 
@@ -69,7 +70,7 @@ public class MovimientoPersonaje : MonoBehaviour
         {
             return;
         }
-        Personaje.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * Personaje.Gravedad.Gravedad);
+        Personaje.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * Personaje.Gravedad.Gravedad); 
     }
 
     public bool PuedoSaltar()
