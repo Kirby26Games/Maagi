@@ -37,5 +37,9 @@ public class ControlesPersonaje : MonoBehaviour
         {
         
         }
+        if (Input.GetKeyDown(Controles.Apuntar))
+        {
+            Personaje.Apuntar.CambiarObjetivo();
+        }
     }
 }
