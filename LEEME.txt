@@ -1,0 +1,7 @@
+Reglas de nomenclatura:
+Todos los nombres en español
+VariablePublica
+_VariablePrivada
+variableLocal
+IInterfaz
+Cualquier codigo minimamente complejo debe de comentarse, incluso hacer summary si es necesario
