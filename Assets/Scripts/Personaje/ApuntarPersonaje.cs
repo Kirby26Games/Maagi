@@ -56,12 +56,15 @@ public class ApuntarPersonaje : MonoBehaviour
         }
     }
 
-
     void DetectarObjetivos()
     {
         ObjetivosDetectados.Clear();
         foreach (Transform objetivo in ObjetivosEnPantalla)
         {
+            Vector3 direccionObjetivo = (objetivo.position - transform.position).normalized;
+            float anguloDeteccion = Vector3.Angle(transform.right, direccionObjetivo);
+            float anguloApuntar = 22.5f;
+
             RaycastHit detectado;
             //Hago un raycast a los ObjetivosEnPantalla, y si los golpea los añado a la lista ObjetivosDetectados,
             //así nos aseguramos de que solo podemos CambiarObjetivo() entre esos objetivos y no entre todos los que haya en pantalla
@@ -71,7 +74,11 @@ public class ApuntarPersonaje : MonoBehaviour
                 {
                     Debug.DrawRay(transform.position, objetivo.position - transform.position, Color.red);
                     Debug.Log("DETECTADO " + detectado.transform.name);
-                    ObjetivosDetectados.Add(objetivo);
+                    if (anguloDeteccion <= anguloApuntar)
+                    {
+                        // Agrega a la lista de enemigos detectados
+                        ObjetivosDetectados.Add(objetivo);
+                    }
                 }
             }
         }
