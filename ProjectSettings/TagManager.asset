@@ -5,8 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - Escalera
+<<<<<<< HEAD
+=======
   - Gravedad
   - Jugador
+>>>>>>> origin/main
   layers:
   - Default
   - TransparentFX

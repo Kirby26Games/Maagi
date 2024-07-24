@@ -4,30 +4,35 @@ public class ColisionesPersonaje : MonoBehaviour
 {
     public bool CercaEscalera;
     private SistemasPersonaje Personaje;
-    private Rigidbody RBPersonaje;
 
     private void Awake()
     {
         Personaje = GetComponent<SistemasPersonaje>();
-        RBPersonaje = GetComponent<Rigidbody>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Escalera")
+        if (other.TryGetComponent(out ZonasGravedad zonasGravedad))
         {
-            CercaEscalera = true;
+            zonasGravedad.CalcularCambioGravedad(gameObject);
         }
+
+        if (other.TryGetComponent(out Escaleras escaleras))
+        {
+            Personaje.Movimiento.CercaEscalera = true;
+            Personaje.Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Escalera")
+        if (other.TryGetComponent(out Escaleras escaleras))
         {
-            CercaEscalera = false;
+            Personaje.Movimiento.CercaEscalera = false;
             Personaje.Movimiento.EnEscalera = false;
-            Personaje.Movimiento.PuedoAtacar = true;
-            RBPersonaje.useGravity = true;
+            Personaje.Ataque.PuedoAtacar = true;
         }
     }
+
 }
