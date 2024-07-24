@@ -20,6 +20,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
+    public int VelocidadSubirEscaleras;
     public bool EnEscalera;
     public bool CercaEscalera;
 
@@ -122,7 +123,7 @@ public class MovimientoPersonaje : MonoBehaviour
         Personaje.Ataque.PuedoAtacar = false;
 
         MovimientoXZ = new Vector3(Controles.EjeX, Controles.EjeZ, 0).normalized;
-        MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
+        MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
         RBPersonaje.linearVelocity = MovimientoFinal;
     }
 }

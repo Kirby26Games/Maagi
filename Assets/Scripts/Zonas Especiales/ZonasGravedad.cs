@@ -2,53 +2,20 @@ using UnityEngine;
 
 public class ZonasGravedad : MonoBehaviour
 {
-    public bool Techo;
-    public bool ParedDer;
-    public bool ParedIzq;
-    
-    public bool AlternarGravedad;
     private Quaternion RotacionObjetivo;
     private int VelocidadRotacion = 3;
-    public GameObject ObjetoAfectado;
 
-    private void Start()
+    public void CalcularCambioGravedad(GameObject objeto)
     {
-        RotacionObjetivo = VerificarPosicion();
-    }
+        RotacionObjetivo = transform.rotation;
 
-    private void Update()
-    {
-        if (AlternarGravedad) 
-        {
-            RotarPersonaje();
-        }
+        RotarPersonaje(objeto);
 
     }
 
-    private Quaternion VerificarPosicion()
+    private void RotarPersonaje(GameObject objeto)
     {
-        Quaternion RotacionObjetivo = Quaternion.identity;
-
-        if (Techo)
-        {
-            RotacionObjetivo = Quaternion.Euler(180, 0, 0);
-        }
-        else if (ParedDer)
-        {
-            RotacionObjetivo = Quaternion.Euler(0, 0, 90);
-        }
-        else if (ParedIzq)
-        {
-            RotacionObjetivo = Quaternion.Euler(0, 0, -90);
-        }
-
-        return RotacionObjetivo;
-
-    }
-
-    private void RotarPersonaje()
-    {
-        ObjetoAfectado.transform.rotation = RotacionObjetivo;
+        objeto.transform.rotation = RotacionObjetivo;
     }
     
 
