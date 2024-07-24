@@ -4,12 +4,17 @@
 TagManager:
   serializedVersion: 3
   tags:
+<<<<<<< HEAD
   - Escalera
 <<<<<<< HEAD
 =======
   - Gravedad
   - Jugador
 >>>>>>> origin/main
+=======
+  - Enemigo
+  - Aliado
+>>>>>>> origin/Alex
   layers:
   - Default
   - TransparentFX
