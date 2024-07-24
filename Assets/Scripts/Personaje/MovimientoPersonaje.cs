@@ -21,8 +21,8 @@ public class MovimientoPersonaje : MonoBehaviour
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
     public bool EnEscalera;
-    [Header("Ataque")]
-    public bool PuedoAtacar;
+    public bool CercaEscalera;
+
 
 
     private void Awake()
@@ -40,7 +40,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Update()
     {
-        if ((Personaje.Colisiones.CercaEscalera && Controles.EjeZ != 0) || EnEscalera)
+        if ((CercaEscalera && Controles.EjeZ != 0) || EnEscalera)
         {
             SubirEscaleras();
         }
@@ -119,7 +119,7 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         //MODIFICACIONES: Sistema gravedad pone EjeY = 0 cuando EnEscalera = true; Funcion PuedoSaltar ahora devuelve true si esta EnEscalera;
         EnEscalera = true;
-        PuedoAtacar = false;
+        Personaje.Ataque.PuedoAtacar = false;
 
         MovimientoXZ = new Vector3(Controles.EjeX, Controles.EjeZ, 0).normalized;
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;

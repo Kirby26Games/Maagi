@@ -1081,6 +1081,7 @@ GameObject:
   - component: {fileID: 1671875746}
   - component: {fileID: 1671875744}
   - component: {fileID: 1671875747}
+  - component: {fileID: 1671875748}
   m_Layer: 2
   m_Name: Escalera Trigger
   m_TagString: Escalera
@@ -1179,6 +1180,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1671875748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671875743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5672639e7bfde549907eb2039312a6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1701164194
 GameObject:
   m_ObjectHideFlags: 0

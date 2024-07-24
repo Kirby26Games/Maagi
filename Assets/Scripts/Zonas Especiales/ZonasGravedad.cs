@@ -7,8 +7,8 @@ public class ZonasGravedad : MonoBehaviour
     public bool ParedIzq;
     
     public bool AlternarGravedad;
-    public Quaternion RotacionObjetivo;
-    public int VelocidadRotacion = 3;
+    private Quaternion RotacionObjetivo;
+    private int VelocidadRotacion = 3;
     public GameObject ObjetoAfectado;
 
     private void Start()
