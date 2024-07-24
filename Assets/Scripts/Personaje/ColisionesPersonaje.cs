@@ -14,6 +14,12 @@ public class ColisionesPersonaje : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.TryGetComponent(out ZonasGravedad zonasGravedad))
+        {
+            zonasGravedad.AlternarGravedad = true;
+            zonasGravedad.ObjetoAfectado = this.gameObject;
+        }
+        
         if (other.gameObject.tag == "Escalera")
         {
             CercaEscalera = true;
@@ -22,12 +28,17 @@ public class ColisionesPersonaje : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.TryGetComponent(out ZonasGravedad zonasGravedad))
+        {
+            zonasGravedad.AlternarGravedad = false;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        
         if (other.gameObject.tag == "Escalera")
         {
             CercaEscalera = false;
             Personaje.Movimiento.EnEscalera = false;
             Personaje.Movimiento.PuedoAtacar = true;
-            RBPersonaje.useGravity = true;
         }
     }
 }

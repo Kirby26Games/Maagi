@@ -7,6 +7,12 @@ public class SistemaGravedad : MonoBehaviour
     public float EjeY;
     public float LimiteVelocidadCaida = -20;
     public Vector3 DireccionGravedad;
+    private SistemasPersonaje Personaje;
+
+    private void Awake()
+    {
+        Personaje = GetComponent<SistemasPersonaje>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -15,7 +21,7 @@ public class SistemaGravedad : MonoBehaviour
     }
     public void CalcularGravedad()
     {
-        if (EnSuelo && EjeY <= 0)
+        if ((EnSuelo && EjeY <= 0) || Personaje.Movimiento.EnEscalera)
         {
             EjeY = 0;
             DireccionGravedad = transform.up * EjeY;

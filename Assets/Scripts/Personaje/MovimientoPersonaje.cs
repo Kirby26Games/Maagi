@@ -13,7 +13,6 @@ public class MovimientoPersonaje : MonoBehaviour
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
     [Header("Salto")]
-    public int DireccionSalto = -2;
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
@@ -57,7 +56,7 @@ public class MovimientoPersonaje : MonoBehaviour
     void Movimiento()
     {
         
-        MovimientoXZ = new Vector3(Controles.EjeX, 0, Controles.EjeZ).normalized;
+        MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
@@ -118,14 +117,12 @@ public class MovimientoPersonaje : MonoBehaviour
 
     public void SubirEscaleras()
     {
+        //MODIFICACIONES: Sistema gravedad pone EjeY = 0 cuando EnEscalera = true; Funcion PuedoSaltar ahora devuelve true si esta EnEscalera;
         EnEscalera = true;
-        RBPersonaje.useGravity = false;
         PuedoAtacar = false;
 
         MovimientoXZ = new Vector3(Controles.EjeX, Controles.EjeZ, 0).normalized;
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         RBPersonaje.linearVelocity = MovimientoFinal;
-
-        //MODIFICACIONES: Funcion PuedoSaltar ahora devuelve true si esta EnEscalera
     }
 }

@@ -5,48 +5,51 @@ public class ZonasGravedad : MonoBehaviour
     public bool Techo;
     public bool ParedDer;
     public bool ParedIzq;
-    public Vector3 Direccion;
     
-    public bool alternarGravedad;
-    public int rotatingSpeed;
-    public Quaternion targetRotation;
-    public Quaternion originalRotation;
-    Rigidbody rbObjetoAfectado;
+    public bool AlternarGravedad;
+    public Quaternion RotacionObjetivo;
+    public int VelocidadRotacion = 3;
+    public GameObject ObjetoAfectado;
 
     private void Start()
     {
-
+        RotacionObjetivo = VerificarPosicion();
     }
 
     private void Update()
     {
-
-        if (rbObjetoAfectado != null) 
+        if (AlternarGravedad) 
         {
-            rbObjetoAfectado.gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotatingSpeed * Time.deltaTime);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Jugador") 
-        { 
-            targetRotation = new Quaternion(180,0,0,0);
-            originalRotation = other.gameObject.transform.rotation;
-            rbObjetoAfectado = other.gameObject.GetComponent<Rigidbody>();
-
+            RotarPersonaje();
         }
 
     }
 
-    private void OnTriggerExit(Collider other)
+    private Quaternion VerificarPosicion()
     {
-        if (other.gameObject.tag == "Jugador")
+        Quaternion RotacionObjetivo = Quaternion.identity;
+
+        if (Techo)
         {
-            alternarGravedad = false;
-            targetRotation = originalRotation;
-            rbObjetoAfectado = other.gameObject.GetComponent<Rigidbody>();
+            RotacionObjetivo = Quaternion.Euler(180, 0, 0);
         }
+        else if (ParedDer)
+        {
+            RotacionObjetivo = Quaternion.Euler(0, 0, 90);
+        }
+        else if (ParedIzq)
+        {
+            RotacionObjetivo = Quaternion.Euler(0, 0, -90);
+        }
+
+        return RotacionObjetivo;
+
     }
+
+    private void RotarPersonaje()
+    {
+        ObjetoAfectado.transform.rotation = RotacionObjetivo;
+    }
+    
 
 }
