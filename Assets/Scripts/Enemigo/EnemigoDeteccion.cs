@@ -6,8 +6,8 @@ public class EnemigoDeteccion : MonoBehaviour
     [Header("Interactuables")]
     private SphereCollider _EsferaDeteccion;
     [Header("Memoria")]
-    public EstadoEnemigo EstadoActual;
-    public GameObject[] Objetivo;
+    private EstadoEnemigo _EstadoActual;
+    public GameObject[] Objetivos;
     private int _MemoriaUsada;
     [Header("Parametros")]
     public Vector3 DireccionMirada;
@@ -18,27 +18,32 @@ public class EnemigoDeteccion : MonoBehaviour
         _EsferaDeteccion = GetComponent<SphereCollider>();
         _EsferaDeteccion.radius = VariablesGlobales.Instancia.RadioDeteccion;
         
-        Objetivo = new GameObject[VariablesGlobales.Instancia.MemoriaAtencion];
+        Objetivos = new GameObject[VariablesGlobales.Instancia.MemoriaAtencion];
         _MemoriaUsada = 0;
 
-        EstadoActual = GetComponentInParent<EstadoEnemigo>();
+        _EstadoActual = GetComponentInParent<EstadoEnemigo>();
     }
 
     private void Update()
     {
-        // Revisa la distancia de cada objetivo para evaluar la prioridad
-        Objetivo = OrdenarMemoria(Objetivo);
-        // Revisa que el objetivo no esté a rango de ataque
-        if(EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        // No revisa nada si aún no ha detectado a nadie
+        if( _MemoriaUsada < 1 )
         {
-            EstadoActual.Estado = "Combate";
+            return;
+        }
+        // Revisa la distancia de cada objetivo para evaluar la prioridad
+        Objetivos = OrdenarMemoria(Objetivos);
+        // Revisa que el objetivo no esté a rango de ataque
+        if(_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        {
+            _EstadoActual.Estado = "Combate";
         }
         else
         {
-            EstadoActual.Estado = string.Empty;
+            _EstadoActual.Estado = string.Empty;
         }
         // Si no está en combate, revisa su estado
-        if(EstadoActual.Estado != "Combate")
+        if(_EstadoActual.Estado != "Combate")
         {
             CambiarEstadoEnemigo();
         }
@@ -51,21 +56,26 @@ public class EnemigoDeteccion : MonoBehaviour
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad
             if (ComprobarVisibilidad(i))
             {
-                EstadoActual.Estado = "Perseguir";
-                EstadoActual.ObjetivoFijado = Objetivo[i];
+                _EstadoActual.Estado = "Alerta";
+                _EstadoActual.ObjetivoFijado = Objetivos[i];
                 return;
             }
         }
         // Si nadie está visible vuelve a vigilar
-        EstadoActual.Estado = "Vigilante";
-        EstadoActual.ObjetivoFijado = null;
+        _EstadoActual.Estado = "Vigilante";
+        _EstadoActual.ObjetivoFijado = null;
     }
 
     private bool ComprobarVisibilidad(int iteracion)
     {
+        // Comprueba si el ángulo entre su mirada y donde está el objetivo se sale por cualquiera de los lados de la amplitud
+        if (Mathf.Abs(Vector2.SignedAngle(Objetivos[iteracion].transform.position - transform.position, DireccionMirada)) > AmplitudMirada / 2)
+        {
+            return false;
+        }
         RaycastHit[] detectados;
-        Vector3 maximoObjetivo = new(Objetivo[iteracion].transform.position.x, Objetivo[iteracion].GetComponent<Collider>().bounds.max.y - 0.01f, Objetivo[iteracion].transform.position.z);
-        Vector3 minimoObjetivo = new(Objetivo[iteracion].transform.position.x, Objetivo[iteracion].GetComponent<Collider>().bounds.min.y + 0.01f, Objetivo[iteracion].transform.position.z);
+        Vector3 maximoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.max.y - 0.01f, Objetivos[iteracion].transform.position.z);
+        Vector3 minimoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.min.y + 0.01f, Objetivos[iteracion].transform.position.z);
         // Detecta todos los objetos entre él y la parte superior del objetivo
         detectados = Physics.RaycastAll(transform.position, maximoObjetivo - transform.position, Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
         Debug.DrawRay(transform.position, maximoObjetivo - transform.position);
@@ -108,11 +118,11 @@ public class EnemigoDeteccion : MonoBehaviour
         if(other.gameObject.GetComponent<MovimientoSimple>() != null)
         {
             // Y si no lo habíamos detectado ya antes y tenemos espacio en memoria
-            int indice = EncontrarEnPosicion(Objetivo, other.gameObject);
-            if(indice < 0 && _MemoriaUsada < Objetivo.Length)
+            int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
+            if(indice < 0 && _MemoriaUsada < Objetivos.Length)
             {
                 // Recuérdalo
-                Objetivo[_MemoriaUsada] = other.gameObject;
+                Objetivos[_MemoriaUsada] = other.gameObject;
                 _MemoriaUsada++;
             }
         }
@@ -121,11 +131,11 @@ public class EnemigoDeteccion : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         // Si lo habíamos detectado ya antes
-        int indice = EncontrarEnPosicion(Objetivo, other.gameObject);
+        int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
         if(indice > -1)
         {
             // Olvídalo
-            Objetivo[indice] = null;
+            Objetivos[indice] = null;
             _MemoriaUsada--;
             // Y reorganiza la memoria
             ReorganizarMemoria();
@@ -148,15 +158,15 @@ public class EnemigoDeteccion : MonoBehaviour
     // Reorganiza el vector Objetivo manteniendo el orden y dejando instancias vacías al final
     private void ReorganizarMemoria()
     {
-        for (int i = 0; i < Objetivo.Length; i++)
+        for (int i = 0; i < Objetivos.Length; i++)
         {
-            if (Objetivo[i] == null)
+            if (Objetivos[i] == null)
             {
-                for (int j = i; j < Objetivo.Length - 1; j++)
+                for (int j = i; j < Objetivos.Length - 1; j++)
                 {
-                    Objetivo[j] = Objetivo[j + 1];
+                    Objetivos[j] = Objetivos[j + 1];
                 }
-                Objetivo[^1] = null;
+                Objetivos[^1] = null;
             }
         }
     }

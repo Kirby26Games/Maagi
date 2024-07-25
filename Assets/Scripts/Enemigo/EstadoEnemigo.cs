@@ -8,7 +8,7 @@ public class EstadoEnemigo : MonoBehaviour
     private void Start()
     {
         // Estado inicial del enemigo
-        Estado = "Vigilante";
+        Estado = "Vigilante"; // null -> Vigilante -> Alerta -> Combate
         ObjetivoFijado = null;
     }
 }
