@@ -70,13 +70,13 @@ public class MovimientoPersonaje : MonoBehaviour
         RBPersonaje.linearVelocity = MovimientoFinal;
     }
 
-    public void Saltar()
+    public void Saltar(float porcentajeSalto)
     {
         if (!PuedoSaltar())
         {
             return;
         }
-        Personaje.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * Personaje.Gravedad.Gravedad);
+        Personaje.Gravedad.EjeY = Mathf.Sqrt((DistanciaSalto * porcentajeSalto) * -2 * Personaje.Gravedad.Gravedad);
     }
 
     public bool PuedoSaltar()
