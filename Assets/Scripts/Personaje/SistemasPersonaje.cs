@@ -26,6 +26,5 @@ public class SistemasPersonaje : MonoBehaviour
         Tamaño = GetComponent<TamañoPersonaje>(); 
         Colisiones = GetComponent<ColisionesPersonaje>();
         Ataque = GetComponent<AtaquePersonaje>();
-
     }
 }

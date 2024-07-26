@@ -9,4 +9,6 @@ public struct Controles
     public static KeyCode Salir = KeyCode.Escape;
     public static KeyCode Interactuar = KeyCode.Mouse1;
     public static KeyCode Atacar = KeyCode.Mouse0;
+    public static KeyCode Subir = KeyCode.W;
+    public static KeyCode Bajar = KeyCode.S;
 }

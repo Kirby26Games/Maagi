@@ -20,18 +20,30 @@ public class ColisionesPersonaje : MonoBehaviour
         if (other.TryGetComponent(out Escaleras escaleras))
         {
             Personaje.Movimiento.CercaEscalera = true;
+            Personaje.Movimiento.PosicionEscalera = escaleras.transform.position.x;
             Personaje.Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
+            Personaje.Movimiento.EscaleraLimiteSuperior = escaleras.YLimiteSuperior;
+            Personaje.Movimiento.EscaleraLimiteInferior = escaleras.YLimiteInferior;
         }
-        
+
+        if (other.TryGetComponent(out Suelo suelo))
+        {
+            Personaje.Movimiento.AtravesandoSuelo = true;
+        }
+
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent(out Escaleras escaleras))
         {
+            Personaje.Movimiento.SoltarEscalera();
             Personaje.Movimiento.CercaEscalera = false;
-            Personaje.Movimiento.EnEscalera = false;
-            Personaje.Ataque.PuedoAtacar = true;
+        }
+
+        if (other.TryGetComponent(out Suelo suelo))
+        {
+            Personaje.Movimiento.AtravesandoSuelo = false;
         }
     }
 
