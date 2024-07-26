@@ -33,13 +33,23 @@ public class ControlesPersonaje : MonoBehaviour
         {
             Personaje.Movimiento.Correr(false);
         }
+        if (Input.GetKeyDown(Controles.Subir))
+        {
+            if (Personaje.Movimiento.CercaEscalera)
+            {
+                Personaje.Movimiento.PuedoSubir = true;
+            }
+        }
+        if (Input.GetKeyDown(Controles.Bajar))
+        {
+            if (Personaje.Movimiento.CercaEscalera)
+            {
+                Personaje.Movimiento.PuedoSubir = true;
+            }
+        }
         if (Input.GetKeyDown(Controles.Salir))
         {
         
-        }
-        if (Input.GetKeyDown(Controles.Apuntar))
-        {
-            Personaje.Apuntar.CambiarObjetivo();
         }
     }
 }

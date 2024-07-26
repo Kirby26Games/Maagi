@@ -1,6 +1,8 @@
 using System.Globalization;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class MovimientoPersonaje : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
     [Header("Salto")]
+    public bool Saltando;
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
@@ -20,9 +23,16 @@ public class MovimientoPersonaje : MonoBehaviour
     private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
+    public float PosicionZ;
     public int VelocidadSubirEscaleras;
+    public bool AtravesandoSuelo;
     public bool EnEscalera;
+    public bool PuedoSubir;
     public bool CercaEscalera;
+    public float PosicionEscalera;
+    public float EscaleraLimiteSuperior;
+    public float EscaleraLimiteInferior;
+    private Collider ColPersonaje;
 
 
 
@@ -31,6 +41,7 @@ public class MovimientoPersonaje : MonoBehaviour
         Controles = GetComponent<ControlesPersonaje>();
         RBPersonaje = GetComponent<Rigidbody>();
         Personaje = GetComponent<SistemasPersonaje>();
+        ColPersonaje = GetComponent<Collider>();
     }
 
 
@@ -41,15 +52,13 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Update()
     {
-        if ((CercaEscalera && Controles.EjeZ != 0) || EnEscalera)
-        {
-            SubirEscaleras();
-        }
-        else
+        SubirEscaleras(PuedoSubir);
+
+        if (!EnEscalera)
         {
             Movimiento();
         }
-
+        
         ReiniciarSaltos();
         
     }
@@ -70,7 +79,8 @@ public class MovimientoPersonaje : MonoBehaviour
         {
             return;
         }
-        Personaje.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * Personaje.Gravedad.Gravedad); 
+        Personaje.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * Personaje.Gravedad.Gravedad);
+        Saltando = true;
     }
 
     public bool PuedoSaltar()
@@ -95,6 +105,13 @@ public class MovimientoPersonaje : MonoBehaviour
         if (Personaje.Gravedad.EnSuelo)
         {
             SaltosEnElAire = 0;
+
+            if (RBPersonaje.linearVelocity.y > 0.1f)
+            {
+                return;
+            }
+
+            Saltando = false;
         }
     }
 
@@ -116,14 +133,34 @@ public class MovimientoPersonaje : MonoBehaviour
         VelocidadFinal = VelocidadBase * VelocidadModificador;
     }
 
-    public void SubirEscaleras()
+    public void SubirEscaleras(bool puedoSubir)
     {
-        //MODIFICACIONES: Sistema gravedad pone EjeY = 0 cuando EnEscalera = true; Funcion PuedoSaltar ahora devuelve true si esta EnEscalera;
-        EnEscalera = true;
-        Personaje.Ataque.PuedoAtacar = false;
+        if (CercaEscalera && puedoSubir && Personaje.Controles.EjeX == 0 && !Saltando || EnEscalera)
+        {
+            ColPersonaje.isTrigger = true;
+            EnEscalera = true;
+            Personaje.Ataque.PuedoAtacar = false;
 
-        MovimientoXZ = new Vector3(Controles.EjeX, Controles.EjeZ, 0).normalized;
-        MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
-        RBPersonaje.linearVelocity = MovimientoFinal;
+            Personaje.transform.position = new Vector3(PosicionEscalera, transform.position.y, transform.position.z);
+
+            MovimientoXZ = new Vector3(Personaje.Controles.EjeX, Personaje.Controles.EjeZ, 0).normalized;
+            MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
+            RBPersonaje.linearVelocity = MovimientoFinal;
+
+            if (Saltando || Controles.EjeX != 0 && !AtravesandoSuelo|| (Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0) || transform.position.y >= EscaleraLimiteSuperior || (transform.position.y - (Personaje.Tamaño.Tamaño / 2)) < EscaleraLimiteInferior)
+            {
+                SoltarEscalera();
+            }
+        }
+
+        PuedoSubir = false;
+
+    }
+
+    public void SoltarEscalera()
+    {
+        Personaje.Movimiento.EnEscalera = false;
+        Personaje.Ataque.PuedoAtacar = true;
+        ColPersonaje.isTrigger = false;
     }
 }

@@ -11,8 +11,7 @@ public class VariablesGlobales : MonoBehaviour
     [Header("Transiciones")]
     public float TiempoCambioHabitacion;    // Tiempo de duracíón del fundido negro -> transparente
     [Header("IAEnemigo")]
-    public float RadioDeteccion;            // Distancia en la que un enemigo cambia a Perseguir
-    public float RadioCombate;              // Distancia en la que un enemigo cambia a Ataque
+    public float RadioDeteccion;            // Distancia en la que un enemigo cambia a Combate
     public int MemoriaAtencion;             // Cantidad de objetivos que puede recordar un enemigo
     void Awake()
     {
