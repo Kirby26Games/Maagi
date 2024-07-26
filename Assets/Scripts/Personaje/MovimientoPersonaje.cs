@@ -15,7 +15,6 @@ public class MovimientoPersonaje : MonoBehaviour
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
     [Header("Salto")]
-    public bool Saltando;
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
@@ -23,7 +22,6 @@ public class MovimientoPersonaje : MonoBehaviour
     private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
-    public float PosicionZ;
     public int VelocidadSubirEscaleras;
     public bool AtravesandoSuelo;
     public bool EnEscalera;
@@ -65,7 +63,6 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Movimiento()
     {
-        
         MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
@@ -80,7 +77,6 @@ public class MovimientoPersonaje : MonoBehaviour
             return;
         }
         Personaje.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * Personaje.Gravedad.Gravedad);
-        Saltando = true;
     }
 
     public bool PuedoSaltar()
@@ -105,13 +101,6 @@ public class MovimientoPersonaje : MonoBehaviour
         if (Personaje.Gravedad.EnSuelo)
         {
             SaltosEnElAire = 0;
-
-            if (RBPersonaje.linearVelocity.y > 0.1f)
-            {
-                return;
-            }
-
-            Saltando = false;
         }
     }
 
@@ -135,7 +124,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
     public void SubirEscaleras(bool puedoSubir)
     {
-        if (CercaEscalera && puedoSubir && Personaje.Controles.EjeX == 0 && !Saltando || EnEscalera)
+        if ((CercaEscalera && puedoSubir) || EnEscalera)
         {
             ColPersonaje.isTrigger = true;
             EnEscalera = true;
@@ -147,7 +136,7 @@ public class MovimientoPersonaje : MonoBehaviour
             MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
             RBPersonaje.linearVelocity = MovimientoFinal;
 
-            if (Saltando || Controles.EjeX != 0 && !AtravesandoSuelo|| (Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0) || transform.position.y >= EscaleraLimiteSuperior || (transform.position.y - (Personaje.Tamaño.Tamaño / 2)) < EscaleraLimiteInferior)
+            if ((Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0) || transform.position.y >= EscaleraLimiteSuperior || (transform.position.y - (Personaje.Tamaño.Tamaño / 2)) < EscaleraLimiteInferior)
             {
                 SoltarEscalera();
             }
