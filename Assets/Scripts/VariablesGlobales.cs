@@ -14,6 +14,7 @@ public class VariablesGlobales : MonoBehaviour
     public float RadioDeteccion;            // Distancia en la que un enemigo cambia a Perseguir
     public float RadioCombate;              // Distancia en la que un enemigo cambia a Ataque
     public int MemoriaAtencion;             // Cantidad de objetivos que puede recordar un enemigo
+    public float FuerzaSalto;               // Fuerza inicial del salto en los enemigos
     void Awake()
     {
         Instancia = this;

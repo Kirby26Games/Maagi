@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class EnemigoDeteccion : MonoBehaviour
+public class DeteccionEnemigo : MonoBehaviour
 {
     [Header("Interactuables")]
     private SphereCollider _EsferaDeteccion;
@@ -12,29 +12,32 @@ public class EnemigoDeteccion : MonoBehaviour
     [Header("Parametros")]
     public Vector3 DireccionMirada;
     public float AmplitudMirada;
+
+    private void Awake()
+    {
+        _EsferaDeteccion = GetComponent<SphereCollider>();
+        _EstadoActual = GetComponentInParent<EstadoEnemigo>();
+    }
     private void Start()
     {
         // Inicializar todas las variables
-        _EsferaDeteccion = GetComponent<SphereCollider>();
         _EsferaDeteccion.radius = VariablesGlobales.Instancia.RadioDeteccion;
-        
+
         Objetivos = new GameObject[VariablesGlobales.Instancia.MemoriaAtencion];
         _MemoriaUsada = 0;
-
-        _EstadoActual = GetComponentInParent<EstadoEnemigo>();
     }
 
     private void Update()
     {
         // No revisa nada si aún no ha detectado a nadie
-        if( _MemoriaUsada < 1 )
+        if (_MemoriaUsada < 1)
         {
             return;
         }
         // Revisa la distancia de cada objetivo para evaluar la prioridad
         Objetivos = OrdenarMemoria(Objetivos);
         // Revisa que el objetivo no esté a rango de ataque
-        if(_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        if (_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
         {
             _EstadoActual.Estado = "Combate";
         }
@@ -43,7 +46,7 @@ public class EnemigoDeteccion : MonoBehaviour
             _EstadoActual.Estado = string.Empty;
         }
         // Si no está en combate, revisa su estado
-        if(_EstadoActual.Estado != "Combate")
+        if (_EstadoActual.Estado != "Combate")
         {
             CambiarEstadoEnemigo();
         }
@@ -115,11 +118,11 @@ public class EnemigoDeteccion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Si el objeto tiene Movimiento Simple (cambiar más adelante)
-        if(other.gameObject.GetComponent<MovimientoSimple>() != null)
+        if (other.gameObject.GetComponent<MovimientoSimple>() != null)
         {
             // Y si no lo habíamos detectado ya antes y tenemos espacio en memoria
             int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
-            if(indice < 0 && _MemoriaUsada < Objetivos.Length)
+            if (indice < 0 && _MemoriaUsada < Objetivos.Length)
             {
                 // Recuérdalo
                 Objetivos[_MemoriaUsada] = other.gameObject;
@@ -132,7 +135,7 @@ public class EnemigoDeteccion : MonoBehaviour
     {
         // Si lo habíamos detectado ya antes
         int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
-        if(indice > -1)
+        if (indice > -1)
         {
             // Olvídalo
             Objetivos[indice] = null;
@@ -147,7 +150,7 @@ public class EnemigoDeteccion : MonoBehaviour
     {
         for (int i = 0; i < vector.Length; i++)
         {
-            if(buscado == vector[i])
+            if (buscado == vector[i])
             {
                 return i;
             }
@@ -178,7 +181,7 @@ public class EnemigoDeteccion : MonoBehaviour
         GameObject[] ordenada = new GameObject[memoria.Length];
         for (int i = 0; i < memoria.Length; i++)
         {
-            if(memoria[i] == null)
+            if (memoria[i] == null)
             {
                 ordenada[memoria.Length - cuentaVacios - 1] = null;
                 cuentaVacios++;

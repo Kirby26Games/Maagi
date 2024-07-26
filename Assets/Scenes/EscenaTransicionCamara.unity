@@ -948,6 +948,7 @@ GameObject:
   - component: {fileID: 992498172}
   - component: {fileID: 992498170}
   - component: {fileID: 992498176}
+  - component: {fileID: 992498177}
   m_Layer: 2
   m_Name: Enemigo
   m_TagString: Untagged
@@ -1089,6 +1090,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Estado: 
   ObjetivoFijado: {fileID: 0}
+--- !u!114 &992498177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992498169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc8fa7c661b6c74bbf1a1d5358576eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PuedeSaltar: 1
+  PuedeUsarEscaleras: 0
+  VelocidadMovimiento: 2
 --- !u!1 &1251447958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,7 +1223,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1251447958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e33a7bd5580dfc04d94d431082a53c65, type: 3}
+  m_Script: {fileID: 11500000, guid: 92fa7a57d6a2f474d814b337f9c14b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Objetivos: []
@@ -2776,6 +2792,7 @@ MonoBehaviour:
   RadioDeteccion: 4
   RadioCombate: 1.5
   MemoriaAtencion: 3
+  FuerzaSalto: 2
 --- !u!1001 &2753246623351320618
 PrefabInstance:
   m_ObjectHideFlags: 0
