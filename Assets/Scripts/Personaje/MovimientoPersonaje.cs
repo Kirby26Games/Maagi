@@ -136,7 +136,7 @@ public class MovimientoPersonaje : MonoBehaviour
             MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
             RBPersonaje.linearVelocity = MovimientoFinal;
 
-            if ((Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0) || transform.position.y >= EscaleraLimiteSuperior || (transform.position.y - (Personaje.Tamaño.Tamaño / 2)) < EscaleraLimiteInferior)
+            if (Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0)
             {
                 SoltarEscalera();
             }
