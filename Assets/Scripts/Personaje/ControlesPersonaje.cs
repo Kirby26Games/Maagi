@@ -21,6 +21,8 @@ public class ControlesPersonaje : MonoBehaviour
         EjeZ = Input.GetAxisRaw("Vertical");
         RatonHorizontal = Input.GetAxis("Mouse X");
         RatonVertical = Input.GetAxis("Mouse Y");
+        
+
         if (Input.GetKeyDown(Controles.Saltar))
         {
             Personaje.Movimiento.Saltar();
@@ -33,23 +35,17 @@ public class ControlesPersonaje : MonoBehaviour
         {
             Personaje.Movimiento.Correr(false);
         }
-        if (Input.GetKeyDown(Controles.Subir))
+
+
+        if ((Input.GetKeyDown(Controles.Subir) || Input.GetKeyDown(Controles.Bajar)) && Personaje.Movimiento.CercaEscalera)
         {
-            if (Personaje.Movimiento.CercaEscalera)
-            {
-                Personaje.Movimiento.PuedoSubir = true;
-            }
+            Personaje.Movimiento.PuedoSubir = true;
         }
-        if (Input.GetKeyDown(Controles.Bajar))
+
+        if ((Input.GetKeyDown(Controles.Derecha) || Input.GetKeyDown(Controles.Izquierda)) && !Personaje.Movimiento.AtravesandoSuelo)
         {
-            if (Personaje.Movimiento.CercaEscalera)
-            {
-                Personaje.Movimiento.PuedoSubir = true;
-            }
+            Personaje.Movimiento.SoltarEscalera();
         }
-        if (Input.GetKeyDown(Controles.Salir))
-        {
-        
-        }
+
     }
 }
