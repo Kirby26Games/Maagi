@@ -22,8 +22,6 @@ public class ColisionesPersonaje : MonoBehaviour
             Personaje.Movimiento.CercaEscalera = true;
             Personaje.Movimiento.PosicionEscalera = escaleras.transform.position.x;
             Personaje.Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
-            Personaje.Movimiento.EscaleraLimiteSuperior = escaleras.YLimiteSuperior;
-            Personaje.Movimiento.EscaleraLimiteInferior = escaleras.YLimiteInferior;
         }
 
         if (other.TryGetComponent(out Suelo suelo))
