@@ -14,42 +14,71 @@ public class MovimientoEnemigo : MonoBehaviour
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int _SaltosEnElAire;
+    private SistemaGravedad _Gravedad;
 
     private void Awake()
     {
         _EstadoActual = GetComponent<EstadoEnemigo>();
         _Cuerpo = GetComponent<Rigidbody>();
+        _Gravedad = GetComponent<SistemaGravedad>();
     }
 
     private void Update()
     {
-        Perseguir(_EstadoActual.Estado == "Alerta");
+        if(_EstadoActual.Estado == "Alerta")
+        {
+            Perseguir();
+        }
+        if(PuedeSaltar && _Gravedad.EnSuelo)
+        {
+            ReiniciarSaltos();
+        }
     }
 
-    private void Perseguir(bool debePerseguir)
+    private void Perseguir()
     {
         Vector3 velocidadFinal = Vector3.zero;
-        if(debePerseguir)
+        velocidadFinal += (_EstadoActual.ObjetivoFijado.transform.position - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
+        if(PuedeSaltar)
         {
-            velocidadFinal += (_EstadoActual.ObjetivoFijado.transform.position - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
-            if(PuedeSaltar)
-            {
-                velocidadFinal += Salto();
-            }
+            Saltar();
         }
-        else
-        {
-            return;
-        }
+        print(velocidadFinal);
+        velocidadFinal.y += _Gravedad.EjeY;
         _Cuerpo.linearVelocity = velocidadFinal;
     }
 
-    private Vector3 Salto()
+    private void Saltar()
     {
-        if(true) // Aquí debe ir la comprobación de si no está en el suelo o le quedan saltos en el aire 
+        if (!PuedoSaltar())
         {
-            return Vector3.zero;
+            return;
         }
-        return Vector3.up * VariablesGlobales.Instancia.FuerzaSalto;
+        _Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * VariablesGlobales.Instancia.Gravedad);
+    }
+
+    private bool PuedoSaltar()
+    {
+        bool puedo = false;
+        //Si estoy en el suelo, siempre puedo saltar
+        if (_Gravedad.EnSuelo)
+        {
+            puedo = true;
+        }
+        //Si estoy en el aire, puedo saltar si no he llegado a los saltos maximos
+        else if (_SaltosEnElAire < SaltosEnElAireMaximos)
+        {
+            puedo = true;
+            _SaltosEnElAire++;
+        }
+        return puedo;
+    }
+
+    public void ReiniciarSaltos()
+    {
+        if(_Gravedad.EnSuelo)
+        {
+            _SaltosEnElAire = 0;
+        }
     }
 }

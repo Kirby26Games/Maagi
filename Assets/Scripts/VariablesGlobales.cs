@@ -4,6 +4,8 @@ using UnityEngine.Rendering;
 public class VariablesGlobales : MonoBehaviour
 {
     public static VariablesGlobales Instancia;
+    [Header("Física")]
+    public float Gravedad = -9.82f;
     [Header("Ubicación Habitaciones")]
     public Vector3 TamañoHabitacion;        // Tamaño en 3 dimensiones de la habitación mínima
     public float EspacioEntreHabitaciones;  // Espacio después de los bordes de una habitación
