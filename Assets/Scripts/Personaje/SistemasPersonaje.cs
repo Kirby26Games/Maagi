@@ -2,7 +2,8 @@ using TreeEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(MovimientoPersonaje), typeof(SistemaGravedad), typeof(SistemaRaycast))]
-[RequireComponent(typeof(ControlesPersonaje), typeof(TamañoPersonaje))]
+[RequireComponent(typeof(ControlesPersonaje), typeof(TamañoPersonaje), typeof(ColisionesPersonaje))]
+[RequireComponent(typeof(AtaquePersonaje))]
 
 public class SistemasPersonaje : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class SistemasPersonaje : MonoBehaviour
     public SistemaRaycast Raycast;
     public ControlesPersonaje Controles;
     public TamañoPersonaje Tamaño;
+    public ColisionesPersonaje Colisiones;
+    public AtaquePersonaje Ataque;
 
 
     private void Awake()
@@ -20,6 +23,8 @@ public class SistemasPersonaje : MonoBehaviour
         Gravedad = GetComponent<SistemaGravedad>();      
         Raycast = GetComponent<SistemaRaycast>();
         Controles = GetComponent<ControlesPersonaje>();      
-        Tamaño = GetComponent<TamañoPersonaje>();     
+        Tamaño = GetComponent<TamañoPersonaje>(); 
+        Colisiones = GetComponent<ColisionesPersonaje>();
+        Ataque = GetComponent<AtaquePersonaje>();
     }
 }
