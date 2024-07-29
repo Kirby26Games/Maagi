@@ -810,8 +810,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VelocidadSubirEscalera: 3
-  YLimiteSuperior: 0
-  YLimiteInferior: 0
 --- !u!65 &1162553745
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1214,13 +1212,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680752491}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
   m_LocalPosition: {x: -5, y: 5.5, z: 0}
-  m_LocalScale: {x: 1, y: 15, z: 6}
+  m_LocalScale: {x: 1, y: 9, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!1 &1701164194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,13 +1287,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701164194}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -6.5, y: 6, z: 0}
-  m_LocalScale: {x: 1, y: 15, z: 6}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.5, y: 5.5, z: 0}
+  m_LocalScale: {x: 1, y: 9, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1754001549
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,8 +1327,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VelocidadSubirEscalera: 3
-  YLimiteSuperior: 0
-  YLimiteInferior: 0
 --- !u!65 &1754001551
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1428,14 +1424,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 405719642357843963, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: DireccionSalto
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 405719642357843963, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: DistanciaSalto
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -1476,41 +1464,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5065448684150115686, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: AngulacionSuelo
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5065448684150115686, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: AnguloEscaladaMaximo
-      value: 35
-      objectReference: {fileID: 0}
     - target: {fileID: 5577602945081306605, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_Name
       value: Personaje
-      objectReference: {fileID: 0}
-    - target: {fileID: 5577602945081306605, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5588199316284667521, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Size.x
-      value: 1.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 5588199316284667521, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Size.y
-      value: 1.92
-      objectReference: {fileID: 0}
-    - target: {fileID: 6523635149077786332, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: DistanciaSalto
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: SaltosEnElAireMaximos
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
