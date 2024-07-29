@@ -66,7 +66,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Movimiento()
     {
-        if (!Saltando)
+        if (!Saltando || CercaEscalera)
         {
             MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
         }
