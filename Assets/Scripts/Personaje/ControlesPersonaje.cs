@@ -30,7 +30,7 @@ public class ControlesPersonaje : MonoBehaviour
         if (Input.GetKey(Controles.Saltar) && (Input.GetKeyDown(Controles.Derecha) || Input.GetKeyDown(Controles.Izquierda)) && Personaje.Movimiento.EnEscalera)
         {
             Personaje.Movimiento.SoltarEscalera();
-            Personaje.Movimiento.Saltar(.3f);
+            Personaje.Movimiento.Saltar(.1f);
         }
 
 
