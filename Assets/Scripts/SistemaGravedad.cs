@@ -21,7 +21,7 @@ public class SistemaGravedad : MonoBehaviour
     }
     public void CalcularGravedad()
     {
-        if ((EnSuelo && EjeY <= 0) || Personaje.Movimiento.EnEscalera)
+        if (EnSuelo && EjeY <= 0)
         {
             EjeY = 0;
             DireccionGravedad = transform.up * EjeY;

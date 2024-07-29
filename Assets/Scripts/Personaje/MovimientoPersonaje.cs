@@ -69,11 +69,6 @@ public class MovimientoPersonaje : MonoBehaviour
         if (Personaje.Gravedad.EjeY <= 0 || CercaEscalera)
         {
             MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
-
-            if (Saltando)
-            {
-                MovimientoXZ = new Vector3(RBPersonaje.linearVelocity.x + Controles.EjeX, 0, 0).normalized;
-            }
         }
         else
         {
@@ -160,6 +155,8 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         if ((CercaEscalera && puedoSubir) || EnEscalera)
         {
+            Personaje.Gravedad.enabled = false;
+
             ColPersonaje.isTrigger = true;
             EnEscalera = true;
             Personaje.Ataque.PuedoAtacar = false;
@@ -182,6 +179,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
     public void SoltarEscalera()
     {
+        Personaje.Gravedad.enabled = true;
         Personaje.Movimiento.EnEscalera = false;
         Personaje.Ataque.PuedoAtacar = true;
         ColPersonaje.isTrigger = false;
