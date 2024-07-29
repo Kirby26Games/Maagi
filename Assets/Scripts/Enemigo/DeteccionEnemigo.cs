@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class EnemigoDeteccion : MonoBehaviour
+public class DeteccionEnemigo : MonoBehaviour
 {
     [Header("Interactuables")]
     private SphereCollider _EsferaDeteccion;
@@ -11,18 +11,56 @@ public class EnemigoDeteccion : MonoBehaviour
     [Header("Parametros")]
     public Vector3 DireccionMirada;
     public float AmplitudMirada;
+
+    private void Awake()
+    {
+        _EsferaDeteccion = GetComponent<SphereCollider>();
+        _EstadoActual = GetComponentInParent<EstadoEnemigo>();
+    }
     private void Start()
     {
         // Inicializar todas las variables
-        _EsferaDeteccion = GetComponent<SphereCollider>();
         _EsferaDeteccion.radius = VariablesGlobales.Instancia.RadioDeteccion;
+<<<<<<< HEAD:Assets/Scripts/Enemigo/EnemigoDeteccion.cs
         
         Objetivo = new GameObject[VariablesGlobales.Instancia.MemoriaAtencion];
+=======
+
+        Objetivos = new GameObject[VariablesGlobales.Instancia.MemoriaAtencion];
+>>>>>>> origin/Noah:Assets/Scripts/Enemigo/DeteccionEnemigo.cs
         _MemoriaUsada = 0;
     }
 
     private void Update()
     {
+<<<<<<< HEAD:Assets/Scripts/Enemigo/EnemigoDeteccion.cs
+=======
+        // No revisa nada si aún no ha detectado a nadie
+        if (_MemoriaUsada < 1)
+        {
+            return;
+        }
+        // Revisa la distancia de cada objetivo para evaluar la prioridad
+        Objetivos = OrdenarMemoria(Objetivos);
+        // Revisa que el objetivo no esté a rango de ataque
+        if (_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        {
+            _EstadoActual.Estado = "Combate";
+        }
+        else
+        {
+            _EstadoActual.Estado = string.Empty;
+        }
+        // Si no está en combate, revisa su estado
+        if (_EstadoActual.Estado != "Combate")
+        {
+            CambiarEstadoEnemigo();
+        }
+    }
+
+    private void CambiarEstadoEnemigo()
+    {
+>>>>>>> origin/Noah:Assets/Scripts/Enemigo/DeteccionEnemigo.cs
         for (int i = 0; i < _MemoriaUsada; i++)
         {
             if(ComprobarVisibilidad(i))
@@ -69,11 +107,16 @@ public class EnemigoDeteccion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Si el objeto tiene Movimiento Simple (cambiar más adelante)
-        if(other.gameObject.GetComponent<MovimientoSimple>() != null)
+        if (other.gameObject.GetComponent<MovimientoSimple>() != null)
         {
             // Y si no lo habíamos detectado ya antes y tenemos espacio en memoria
+<<<<<<< HEAD:Assets/Scripts/Enemigo/EnemigoDeteccion.cs
             int indice = EncontrarEnPosicion(Objetivo, other.gameObject);
             if(indice < 0 && _MemoriaUsada < Objetivo.Length)
+=======
+            int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
+            if (indice < 0 && _MemoriaUsada < Objetivos.Length)
+>>>>>>> origin/Noah:Assets/Scripts/Enemigo/DeteccionEnemigo.cs
             {
                 // Recuérdalo
                 Objetivo[_MemoriaUsada] = other.gameObject;
@@ -85,8 +128,13 @@ public class EnemigoDeteccion : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         // Si lo habíamos detectado ya antes
+<<<<<<< HEAD:Assets/Scripts/Enemigo/EnemigoDeteccion.cs
         int indice = EncontrarEnPosicion(Objetivo, other.gameObject);
         if(indice > -1)
+=======
+        int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
+        if (indice > -1)
+>>>>>>> origin/Noah:Assets/Scripts/Enemigo/DeteccionEnemigo.cs
         {
             // Olvídalo
             Objetivo[indice] = null;
@@ -101,7 +149,7 @@ public class EnemigoDeteccion : MonoBehaviour
     {
         for (int i = 0; i < vector.Length; i++)
         {
-            if(buscado == vector[i])
+            if (buscado == vector[i])
             {
                 return i;
             }
@@ -124,4 +172,38 @@ public class EnemigoDeteccion : MonoBehaviour
             }
         }
     }
+<<<<<<< HEAD:Assets/Scripts/Enemigo/EnemigoDeteccion.cs
+=======
+
+    private GameObject[] OrdenarMemoria(GameObject[] memoria)
+    {
+        // Revisa cuantos espacios vacíos hay en la memoria para tenerlos en cuenta
+        int cuentaVacios = 0;
+        GameObject[] ordenada = new GameObject[memoria.Length];
+        for (int i = 0; i < memoria.Length; i++)
+        {
+            if (memoria[i] == null)
+            {
+                ordenada[memoria.Length - cuentaVacios - 1] = null;
+                cuentaVacios++;
+            }
+        }
+
+        // Ordena por proximidad los objetivos no vacíos detectados
+        for (int i = 0; i < memoria.Length - cuentaVacios; i++)
+        {
+            int posicion = 0;
+            for (int j = 0; j < memoria.Length - cuentaVacios; j++)
+            {
+                if (Vector3.Distance(memoria[i].transform.position, transform.position) > Vector3.Distance(memoria[j].transform.position, transform.position))
+                {
+                    posicion++;
+                }
+            }
+            ordenada[posicion] = memoria[i];
+        }
+
+        return ordenada;
+    }
+>>>>>>> origin/Noah:Assets/Scripts/Enemigo/DeteccionEnemigo.cs
 }
