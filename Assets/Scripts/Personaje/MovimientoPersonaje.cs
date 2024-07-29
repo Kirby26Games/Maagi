@@ -15,6 +15,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
     [Header("Salto")]
+    public bool Saltando;
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
@@ -50,6 +51,8 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Update()
     {
+        FlipDireccion();
+        
         SubirEscaleras(PuedoSubir);
 
         if (!EnEscalera)
@@ -63,11 +66,31 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Movimiento()
     {
-        MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
+        if (!Saltando || CercaEscalera)
+        {
+            MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
+        }
+        else
+        {
+            MovimientoXZ = new Vector3(RBPersonaje.linearVelocity.x, 0, 0).normalized;
+        }
+        
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         RBPersonaje.linearVelocity = MovimientoFinal;
+    }
+
+    void FlipDireccion()
+    {
+        if (Controles.EjeX > 0) 
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (Controles.EjeX < 0)
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     public void Saltar(float porcentajeSalto)
@@ -76,6 +99,7 @@ public class MovimientoPersonaje : MonoBehaviour
         {
             return;
         }
+        Saltando = true;
         Personaje.Gravedad.EjeY = Mathf.Sqrt((DistanciaSalto * porcentajeSalto) * -2 * Personaje.Gravedad.Gravedad);
     }
 
@@ -101,6 +125,11 @@ public class MovimientoPersonaje : MonoBehaviour
         if (Personaje.Gravedad.EnSuelo)
         {
             SaltosEnElAire = 0;
+
+            if (Personaje.Gravedad.EjeY < 1)
+            {
+                Saltando = false;
+            }
         }
     }
 
