@@ -949,6 +949,8 @@ GameObject:
   - component: {fileID: 992498170}
   - component: {fileID: 992498176}
   - component: {fileID: 992498177}
+  - component: {fileID: 992498178}
+  - component: {fileID: 992498179}
   m_Layer: 2
   m_Name: Enemigo
   m_TagString: Untagged
@@ -1105,6 +1107,38 @@ MonoBehaviour:
   PuedeSaltar: 1
   PuedeUsarEscaleras: 0
   VelocidadMovimiento: 2
+  DistanciaSalto: 2
+  SaltosEnElAireMaximos: 1
+--- !u!114 &992498178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992498169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233a06c71821d304087f218781a8a1aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gravedad: -9.82
+  EnSuelo: 0
+  EjeY: 0
+--- !u!114 &992498179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992498169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 072583fa169c88c4d9bab9111b3c4e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ColorDeteccionSuelo: {r: 0, g: 0, b: 0, a: 0}
+  AnguloEscaladaMaximo: 45
+  Radio: 0
 --- !u!1 &1251447958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2785,6 +2819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84eea600a082e54781e9f0f3630946d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Gravedad: -9.82
   "Tama\xF1oHabitacion": {x: 22, y: 11, z: 0}
   EspacioEntreHabitaciones: 1
   MargenCambioHabitacion: 2

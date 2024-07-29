@@ -43,7 +43,6 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             Saltar();
         }
-        print(velocidadFinal);
         velocidadFinal.y += _Gravedad.EjeY;
         _Cuerpo.linearVelocity = velocidadFinal;
     }
