@@ -810,8 +810,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VelocidadSubirEscalera: 3
-  YLimiteSuperior: 0
-  YLimiteInferior: 0
 --- !u!65 &1162553745
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1329,8 +1327,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VelocidadSubirEscalera: 3
-  YLimiteSuperior: 0
-  YLimiteInferior: 0
 --- !u!65 &1754001551
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1442,7 +1438,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.5
+      value: 6.25
       objectReference: {fileID: 0}
     - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1476,6 +1472,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3572153109131290950, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: AnguloEscaladaMaximo
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5065448684150115686, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: AngulacionSuelo
       value: 0
@@ -1502,6 +1502,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6523635149077786332, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7918498663416027673, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: EjeY
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}

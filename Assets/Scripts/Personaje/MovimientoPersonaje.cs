@@ -14,6 +14,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private float VelocidadFinal;
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
+    private float UltimoEjeX;
     [Header("Salto")]
     public bool Saltando;
     public float DistanciaSalto;
@@ -29,8 +30,6 @@ public class MovimientoPersonaje : MonoBehaviour
     public bool PuedoSubir;
     public bool CercaEscalera;
     public float PosicionEscalera;
-    public float EscaleraLimiteSuperior;
-    public float EscaleraLimiteInferior;
     private Collider ColPersonaje;
 
 
@@ -69,16 +68,18 @@ public class MovimientoPersonaje : MonoBehaviour
         if (Personaje.Gravedad.EjeY <= 0 || CercaEscalera)
         {
             MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
+            UltimoEjeX = Controles.EjeX;
         }
         else
         {
-            MovimientoXZ = new Vector3(RBPersonaje.linearVelocity.x, 0, 0).normalized;
+            MovimientoXZ = new Vector3(UltimoEjeX, 0, 0).normalized;
         }
-        
+
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         RBPersonaje.linearVelocity = MovimientoFinal;
+
     }
 
     void FlipDireccion()

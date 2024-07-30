@@ -3,7 +3,6 @@ using UnityEngine;
 public class ZonasGravedad : MonoBehaviour
 {
     private Quaternion RotacionObjetivo;
-    private int VelocidadRotacion = 3;
 
     public void CalcularCambioGravedad(GameObject objeto)
     {
