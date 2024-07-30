@@ -1070,7 +1070,7 @@ Transform:
   m_GameObject: {fileID: 992498169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: -0.5, z: 6}
+  m_LocalPosition: {x: 8, y: -0.5, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1090,8 +1090,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de7c444abdbdce141a5931d530e8e60a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Estado: 
+  Estado: 0
   ObjetivoFijado: {fileID: 0}
+  DistanciaAObstaculo: 0
 --- !u!114 &992498177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1108,6 +1109,7 @@ MonoBehaviour:
   PuedeUsarEscaleras: 0
   VelocidadMovimiento: 2
   DistanciaSalto: 2
+  CriterioSalto: 2
   SaltosEnElAireMaximos: 1
 --- !u!114 &992498178
 MonoBehaviour:
@@ -1261,7 +1263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Objetivos: []
-  DireccionMirada: {x: 1, y: 0, z: 0}
+  DireccionMirada: {x: -1, y: 0, z: 0}
   AmplitudMirada: 90
 --- !u!1 &1306764632
 GameObject:
@@ -1283,13 +1285,15 @@ GameObject:
   - component: {fileID: 1306764641}
   - component: {fileID: 1306764640}
   - component: {fileID: 1306764639}
+  - component: {fileID: 1306764646}
+  - component: {fileID: 1306764645}
   m_Layer: 0
   m_Name: Personaje
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1306764633
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1440,6 +1444,8 @@ MonoBehaviour:
   Raycast: {fileID: 0}
   Controles: {fileID: 0}
   "Tama\xF1o": {fileID: 0}
+  Colisiones: {fileID: 0}
+  Ataque: {fileID: 0}
 --- !u!114 &1306764640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1484,6 +1490,7 @@ MonoBehaviour:
   RangoDeteccionSuelo: 0
   ColorDeteccionSuelo: {r: 0, g: 0, b: 0, a: 0}
   AnguloEscaladaMaximo: 0
+  AngulacionSuelo: 0
   Radio: 0
 --- !u!114 &1306764643
 MonoBehaviour:
@@ -1514,8 +1521,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VelocidadBase: 3
   MultiplicadorAlCorrer: 2
+  Saltando: 0
   DistanciaSalto: 0
   SaltosEnElAireMaximos: 0
+  VelocidadSubirEscaleras: 0
+  AtravesandoSuelo: 0
+  EnEscalera: 0
+  PuedoSubir: 0
+  CercaEscalera: 0
+  PosicionEscalera: 0
+  EscaleraLimiteSuperior: 0
+  EscaleraLimiteInferior: 0
+--- !u!114 &1306764645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627f82e7e1e56bd4d99e2df391294d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PuedoAtacar: 0
+--- !u!114 &1306764646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c9c5d1f45de26f42b69d43eb1c186cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CercaEscalera: 0
 --- !u!1 &1363848892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1745,6 +1787,75 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1001 &1413265224
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5577602945081306605, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: m_Name
+      value: Personaje (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: DistanciaSalto
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: SaltosEnElAireMaximos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: VelocidadSubirEscaleras
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
 --- !u!1 &1439607165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,8 +1958,8 @@ Transform:
   m_GameObject: {fileID: 1439607165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.5, z: 6}
-  m_LocalScale: {x: 1, y: 2, z: 3}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: 6}
+  m_LocalScale: {x: 4, y: 2, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2828,6 +2939,15 @@ MonoBehaviour:
   RadioCombate: 1.5
   MemoriaAtencion: 3
   FuerzaSalto: 2
+  Bolita:
+    rid: 6567983979964661760
+  references:
+    version: 2
+    RefIds:
+    - rid: 6567983979964661760
+      type: {class: BolaDeFuego, ns: , asm: Assembly-CSharp}
+      data:
+        Patata: 0
 --- !u!1001 &2753246623351320618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2905,4 +3025,5 @@ SceneRoots:
   - {fileID: 768158503}
   - {fileID: 404378942}
   - {fileID: 1306764636}
+  - {fileID: 1413265224}
   - {fileID: 992498175}

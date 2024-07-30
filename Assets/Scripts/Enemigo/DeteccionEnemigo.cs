@@ -32,45 +32,46 @@ public class DeteccionEnemigo : MonoBehaviour
         // No revisa nada si aún no ha detectado a nadie
         if (_MemoriaUsada < 1)
         {
+            if(_EstadoActual.ObjetivoFijado != null)
+            {
+                _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
+                _EstadoActual.ObjetivoFijado = null;
+                _EstadoActual.DistanciaAObstaculo = -1f;
+            }
             return;
         }
         // Revisa la distancia de cada objetivo para evaluar la prioridad
         Objetivos = OrdenarMemoria(Objetivos);
-        // Revisa que el objetivo no esté a rango de ataque
-        if (_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
-        {
-            _EstadoActual.Estado = "Combate";
-        }
-        else
-        {
-            _EstadoActual.Estado = string.Empty;
-        }
-        // Si no está en combate, revisa su estado
-        if (_EstadoActual.Estado != "Combate")
-        {
-            CambiarEstadoEnemigo();
-        }
+        CambiarEstadoEnemigo();
     }
 
     private void CambiarEstadoEnemigo()
     {
+        // Revisa que el objetivo no esté a rango de ataque
+        if (_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        {
+            _EstadoActual.Estado = EstadoEnemigo.Estados.Combate;
+            return;
+        }
+
         for (int i = 0; i < _MemoriaUsada; i++)
         {
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad
             if (ComprobarVisibilidad(i))
             {
-                _EstadoActual.Estado = "Alerta";
+                _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
                 _EstadoActual.ObjetivoFijado = Objetivos[i];
                 return;
             }
         }
         // Si nadie está visible vuelve a vigilar
-        _EstadoActual.Estado = "Vigilante";
+        _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
         _EstadoActual.ObjetivoFijado = null;
     }
 
     private bool ComprobarVisibilidad(int iteracion)
     {
+        bool detectadoObjetivo = false;
         // Comprueba si el ángulo entre su mirada y donde está el objetivo se sale por cualquiera de los lados de la amplitud
         if (Mathf.Abs(Vector2.SignedAngle(Objetivos[iteracion].transform.position - transform.position, DireccionMirada)) > AmplitudMirada / 2)
         {
@@ -85,7 +86,7 @@ public class DeteccionEnemigo : MonoBehaviour
         // Si solo choca con un mismo objeto devuelve true
         if (SonTodosIguales(detectados))
         {
-            return true;
+            detectadoObjetivo = true;
         }
         // Detecta todos los objetos entre él y la parte inferior del objetivo
         detectados = Physics.RaycastAll(transform.position, minimoObjetivo - transform.position, Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
@@ -93,10 +94,33 @@ public class DeteccionEnemigo : MonoBehaviour
         // Si solo choca con un mismo objeto devuelve true
         if (SonTodosIguales(detectados))
         {
-            return true;
+            detectadoObjetivo = true;
+            _EstadoActual.DistanciaAObstaculo = -1f;
+        }
+        else if(detectadoObjetivo == true) // Si se detecta la parte de arriba pero no la de abajo se puede saltar
+        {
+            _EstadoActual.DistanciaAObstaculo = BuscarMasCercano(detectados);
         }
         // De otra forma, devuelve false
-        return false;
+        return detectadoObjetivo;
+    }
+
+    public float BuscarMasCercano(RaycastHit[] detectados)
+    {
+        if(detectados.Length < 0)
+        {
+            return -1f;
+        }
+
+        float menorDistancia = detectados[0].distance;
+        for (int i = 0; i < detectados.Length; i++)
+        {
+            if(menorDistancia > detectados[i].distance)
+            {
+                menorDistancia = detectados[i].distance;
+            }
+        }
+        return menorDistancia;
     }
 
     // Coprueba si todas las instancias de objetos detectados por un Raycast son iguales o no
@@ -118,7 +142,7 @@ public class DeteccionEnemigo : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Si el objeto tiene Movimiento Simple (cambiar más adelante)
-        if (other.gameObject.GetComponent<MovimientoSimple>() != null)
+        if (other.gameObject.GetComponent<SistemasPersonaje>() != null)
         {
             // Y si no lo habíamos detectado ya antes y tenemos espacio en memoria
             int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
