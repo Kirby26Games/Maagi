@@ -15,11 +15,9 @@ public class VariablesGlobales : MonoBehaviour
     [Header("IAEnemigo")]
     public float RadioDeteccion;            // Distancia en la que un enemigo cambia a Combate
     public int MemoriaAtencion;             // Cantidad de objetivos que puede recordar un enemigo
-<<<<<<< HEAD
-=======
     public float FuerzaSalto;               // Fuerza inicial del salto en los enemigos
     [SerializeReference] public BolaDeFuego Bolita = new BolaDeFuego(); // Ejemplo de SerializeReference
->>>>>>> Noah
+
     void Awake()
     {
         Instancia = this;

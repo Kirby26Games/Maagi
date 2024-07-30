@@ -52,11 +52,6 @@ public class MovimientoPersonaje : MonoBehaviour
     void Update()
     {
         FlipDireccion();
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> Noah
         SubirEscaleras(PuedoSubir);
 
         if (!EnEscalera)
@@ -78,11 +73,7 @@ public class MovimientoPersonaje : MonoBehaviour
         {
             MovimientoXZ = new Vector3(RBPersonaje.linearVelocity.x, 0, 0).normalized;
         }
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> Noah
         MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
@@ -91,11 +82,8 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void FlipDireccion()
     {
-<<<<<<< HEAD
-        if (Controles.EjeX > 0) 
-=======
+
         if (Controles.EjeX > 0)
->>>>>>> Noah
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
