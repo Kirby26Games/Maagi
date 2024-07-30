@@ -808,6 +808,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EsencialesEscena (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8744015717023480389, guid: 49a8b8db39cca274cae599168c9bd25c, type: 3}
+      propertyPath: direccion
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -825,11 +829,17 @@ GameObject:
   - component: {fileID: 1306764635}
   - component: {fileID: 1306764634}
   - component: {fileID: 1306764633}
-  - component: {fileID: 1306764637}
   - component: {fileID: 1306764638}
+  - component: {fileID: 1306764639}
+  - component: {fileID: 1306764645}
+  - component: {fileID: 1306764644}
+  - component: {fileID: 1306764643}
+  - component: {fileID: 1306764642}
+  - component: {fileID: 1306764641}
+  - component: {fileID: 1306764640}
   m_Layer: 0
   m_Name: Personaje
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -926,20 +936,6 @@ Transform:
   - {fileID: 1388499400}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1306764637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1306764632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5afbc3bc6c0d594da83c4dd3182ec5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Camara: {fileID: 2122889843}
-  Velocidad: 10
 --- !u!54 &1306764638
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -967,6 +963,112 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &1306764639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5afbc3bc6c0d594da83c4dd3182ec5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Velocidad: 2
+--- !u!114 &1306764640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4ca4ae9d9a32b45aca01e5eff333d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  "Tama\xF1o": 1.5
+--- !u!114 &1306764641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a26e319cc7b9fa4e997c84b78e9c18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EjeX: 0
+  EjeZ: 0
+  RatonHorizontal: 0
+  RatonVertical: 0
+--- !u!114 &1306764642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ddb7cc9dcbdc341a275833c4aee633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RangoDeteccionSuelo: 0
+  ColorDeteccionSuelo: {r: 0, g: 0, b: 0, a: 0}
+  AnguloEscaladaMaximo: 0
+  Radio: 0
+--- !u!114 &1306764643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233a06c71821d304087f218781a8a1aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gravedad: -9.82
+  EnSuelo: 0
+  EjeY: 0
+--- !u!114 &1306764644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a018be98d91b31c42916aa37cd626f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VelocidadBase: 3
+  MultiplicadorAlCorrer: 2
+  DistanciaSalto: 0
+  SaltosEnElAireMaximos: 0
+--- !u!114 &1306764645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306764632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe873a943554b694aa97def19236016b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Movimiento: {fileID: 0}
+  Gravedad: {fileID: 0}
+  Raycast: {fileID: 0}
+  Controles: {fileID: 0}
+  "Tama\xF1o": {fileID: 0}
 --- !u!1 &1363848892
 GameObject:
   m_ObjectHideFlags: 0
@@ -2174,6 +2276,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2271745610472273150, guid: 49a8b8db39cca274cae599168c9bd25c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3731096226475709709, guid: 49a8b8db39cca274cae599168c9bd25c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
