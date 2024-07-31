@@ -84,7 +84,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
             case Criterios.DetectaBorde:
                 if(_EstadoActual.DistanciaAObstaculo < VelocidadMovimiento &&
-                    _EstadoActual.DistanciaAObstaculo > 0f &&
+                    _EstadoActual.DistanciaAObstaculo > -1f &&
                     _EstadoActual.ObjetivoFijado.transform.position.y > transform.position.y)
                 {
                     return true;
