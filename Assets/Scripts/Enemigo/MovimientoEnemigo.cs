@@ -12,6 +12,8 @@ public class MovimientoEnemigo : MonoBehaviour
     public float VelocidadMovimiento;
     [Header("Salto")]
     public float DistanciaSalto;
+    public enum Criterios { Siempre, Nunca, DetectaBorde }
+    public Criterios CriterioSalto;
     public int SaltosEnElAireMaximos;
     private int _SaltosEnElAire;
     private SistemaGravedad _Gravedad;
@@ -25,7 +27,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Update()
     {
-        if(_EstadoActual.Estado == "Alerta")
+        if(_EstadoActual.Estado == EstadoEnemigo.Estados.Alerta)
         {
             Perseguir();
         }
@@ -49,7 +51,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Saltar()
     {
-        if (!PuedoSaltar())
+        if (!PuedoSaltar() || !QuieroSaltar())
         {
             return;
         }
@@ -71,6 +73,28 @@ public class MovimientoEnemigo : MonoBehaviour
             _SaltosEnElAire++;
         }
         return puedo;
+    }
+
+    private bool QuieroSaltar()
+    {
+        switch(CriterioSalto)
+        {
+            case Criterios.Siempre:
+                return true;
+
+            case Criterios.DetectaBorde:
+                if(_EstadoActual.DistanciaAObstaculo < VelocidadMovimiento &&
+                    _EstadoActual.DistanciaAObstaculo > 0f &&
+                    _EstadoActual.ObjetivoFijado.transform.position.y > transform.position.y)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+        }
+        return false;
     }
 
     public void ReiniciarSaltos()

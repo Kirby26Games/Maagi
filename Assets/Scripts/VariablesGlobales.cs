@@ -13,11 +13,11 @@ public class VariablesGlobales : MonoBehaviour
     [Header("Transiciones")]
     public float TiempoCambioHabitacion;    // Tiempo de duracíón del fundido negro -> transparente
     [Header("IAEnemigo")]
-    public float RadioDeteccion;            // Distancia en la que un enemigo cambia a Combate
+    public float RadioDeteccion;            // Distancia en la que un enemigo cambia a Perseguir
+    public float RadioCombate;              // Distancia en la que un enemigo cambia a Ataque
     public int MemoriaAtencion;             // Cantidad de objetivos que puede recordar un enemigo
     public float FuerzaSalto;               // Fuerza inicial del salto en los enemigos
     [SerializeReference] public BolaDeFuego Bolita = new BolaDeFuego(); // Ejemplo de SerializeReference
-
     void Awake()
     {
         Instancia = this;
