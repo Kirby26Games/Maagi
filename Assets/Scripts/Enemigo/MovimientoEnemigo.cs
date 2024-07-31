@@ -125,7 +125,7 @@ public class MovimientoEnemigo : MonoBehaviour
             // Detecta borde se fija en la distancia al obstáculo más cercano (si existe) y si el objetivo está por encima de su posición
             case CriteriosSalto.DetectaBorde:
                 if(_EstadoActual.DistanciaAObstaculo < VelocidadMovimiento &&
-                    _EstadoActual.DistanciaAObstaculo > 0f &&
+                    _EstadoActual.DistanciaAObstaculo > -1f &&
                     _EstadoActual.ObjetivoFijado.transform.position.y > transform.position.y)
                 {
                     return true;

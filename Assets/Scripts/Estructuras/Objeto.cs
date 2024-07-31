@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 [Serializable]
-public class Objeto
+public struct Objeto
 {
     public string Nombre;
     

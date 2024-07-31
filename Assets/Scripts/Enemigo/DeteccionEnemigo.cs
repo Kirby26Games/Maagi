@@ -32,6 +32,7 @@ public class DeteccionEnemigo : MonoBehaviour
         // No revisa nada si aún no ha detectado a nadie
         if (_MemoriaUsada < 1)
         {
+            // Reset si ya ha visto a alguien antes
             if(_EstadoActual.ObjetivoFijado != null)
             {
                 _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
@@ -42,6 +43,7 @@ public class DeteccionEnemigo : MonoBehaviour
         }
         // Revisa la distancia de cada objetivo para evaluar la prioridad
         Objetivos = OrdenarMemoria(Objetivos);
+        // Lógica del enemigo
         CambiarEstadoEnemigo();
     }
 
@@ -78,26 +80,31 @@ public class DeteccionEnemigo : MonoBehaviour
             return false;
         }
         RaycastHit[] detectados;
-        Vector3 maximoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.max.y - 0.01f, Objetivos[iteracion].transform.position.z);
-        Vector3 minimoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.min.y + 0.01f, Objetivos[iteracion].transform.position.z);
+
+        // Puntos a detectar del objetivo
+        Vector3 maximoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.max.y - 0.05f, Objetivos[iteracion].transform.position.z);
+        Vector3 minimoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.min.y + 0.05f, Objetivos[iteracion].transform.position.z);
+        
         // Detecta todos los objetos entre él y la parte superior del objetivo
-        detectados = Physics.RaycastAll(transform.position, maximoObjetivo - transform.position, Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
-        Debug.DrawRay(transform.position, maximoObjetivo - transform.position);
+        detectados = Physics.RaycastAll(transform.position + 0.1f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
+        Debug.DrawRay(transform.position + 0.1f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (SonTodosIguales(detectados))
         {
             detectadoObjetivo = true;
         }
+        
         // Detecta todos los objetos entre él y la parte inferior del objetivo
-        detectados = Physics.RaycastAll(transform.position, minimoObjetivo - transform.position, Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
-        Debug.DrawRay(transform.position, maximoObjetivo - transform.position);
+        detectados = Physics.RaycastAll(transform.position - 0.1f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
+        Debug.DrawRay(transform.position - 0.1f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (SonTodosIguales(detectados))
         {
             detectadoObjetivo = true;
             _EstadoActual.DistanciaAObstaculo = -1f;
         }
-        else if(detectadoObjetivo == true) // Si se detecta la parte de arriba pero no la de abajo se puede saltar
+        // Si se detecta la parte de arriba pero no la de abajo se puede saltar
+        else if (detectadoObjetivo)
         {
             _EstadoActual.DistanciaAObstaculo = BuscarMasCercano(detectados);
         }
@@ -105,6 +112,7 @@ public class DeteccionEnemigo : MonoBehaviour
         return detectadoObjetivo;
     }
 
+    // Devuelve la menor distancia entre los objetos detectados al mirar al objetivo
     public float BuscarMasCercano(RaycastHit[] detectados)
     {
         if(detectados.Length < 0)
