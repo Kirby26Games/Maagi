@@ -5,7 +5,7 @@ public class EstadoEnemigo : MonoBehaviour
     public enum Estados { Vigilante, Alerta, Combate }
     public Estados Estado;
     public GameObject ObjetivoFijado;
-    public float DistanciaAObstaculo;
+    [HideInInspector] public float DistanciaAObstaculo;
 
     private void Start()
     {
