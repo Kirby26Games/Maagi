@@ -51,7 +51,6 @@ public class MovimientoPersonaje : MonoBehaviour
     void Update()
     {
         FlipDireccion();
-        
         SubirEscaleras(PuedoSubir);
 
         if (!EnEscalera)
@@ -84,7 +83,8 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void FlipDireccion()
     {
-        if (Controles.EjeX > 0) 
+
+        if (Controles.EjeX > 0)
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }

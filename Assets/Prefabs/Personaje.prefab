@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 1478096177629473854}
   m_Layer: 0
   m_Name: Personaje
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,7 +209,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VelocidadBase: 3
   MultiplicadorAlCorrer: 2
-  Saltando: 0
   DistanciaSalto: 1
   SaltosEnElAireMaximos: 1
   VelocidadSubirEscaleras: 0
@@ -218,6 +217,8 @@ MonoBehaviour:
   PuedoSubir: 0
   CercaEscalera: 0
   PosicionEscalera: 0
+  EscaleraLimiteSuperior: 0
+  EscaleraLimiteInferior: 0
 --- !u!114 &7918498663416027673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,7 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Gravedad: -9.82
   EnSuelo: 0
-  EjeY: 0
+  EjeY: 1
   LimiteVelocidadCaida: -20
   DireccionGravedad: {x: 0, y: 0, z: 0}
 --- !u!114 &3572153109131290950
