@@ -121,9 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a791608d388354f9df68f0a483b9be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direccion: 1
   MovimientoDeCamara: {x: 0, y: 0, z: 0}
   ModMovimientoDePersonaje: {x: 0, y: 0, z: 0}
+  _ModBorde: {x: 0, y: -1, z: 0}
 --- !u!1 &2870913146088565342
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,9 +388,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a791608d388354f9df68f0a483b9be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direccion: 3
   MovimientoDeCamara: {x: 0, y: 0, z: 0}
   ModMovimientoDePersonaje: {x: 0, y: 0, z: 0}
+  _ModBorde: {x: -1, y: 0, z: 0}
 --- !u!1 &5963991449654649240
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,9 +512,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a791608d388354f9df68f0a483b9be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direccion: 0
   MovimientoDeCamara: {x: 0, y: 0, z: 0}
   ModMovimientoDePersonaje: {x: 0, y: 0, z: 0}
+  _ModBorde: {x: 0, y: 1, z: 0}
 --- !u!1 &6652884757206684670
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,9 +636,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a791608d388354f9df68f0a483b9be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direccion: 2
   MovimientoDeCamara: {x: 0, y: 0, z: 0}
   ModMovimientoDePersonaje: {x: 0, y: 0, z: 0}
+  _ModBorde: {x: 1, y: 0, z: 0}
 --- !u!1 &8027438301982398479
 GameObject:
   m_ObjectHideFlags: 0
