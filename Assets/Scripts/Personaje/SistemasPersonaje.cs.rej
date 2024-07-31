@@ -1,0 +1,9 @@
+diff a/Assets/Scripts/Personaje/SistemasPersonaje.cs b/Assets/Scripts/Personaje/SistemasPersonaje.cs	(rejected hunks)
+@@ -28,6 +28,7 @@
+         Tama�o = GetComponent<Tama�oPersonaje>(); 
+         Colisiones = GetComponent<ColisionesPersonaje>();
+         Ataque = GetComponent<AtaquePersonaje>();
++<<<<<<< HEAD
+         Apuntar = GetComponent<ApuntarPersonaje>();
+     }
+ }

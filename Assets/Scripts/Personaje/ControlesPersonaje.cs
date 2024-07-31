@@ -21,10 +21,19 @@ public class ControlesPersonaje : MonoBehaviour
         EjeZ = Input.GetAxisRaw("Vertical");
         RatonHorizontal = Input.GetAxis("Mouse X");
         RatonVertical = Input.GetAxis("Mouse Y");
+        
+
         if (Input.GetKeyDown(Controles.Saltar))
         {
-            Personaje.Movimiento.Saltar();
+            Personaje.Movimiento.Saltar(1);
         }
+        if (Input.GetKey(Controles.Saltar) && (Input.GetKeyDown(Controles.Derecha) || Input.GetKeyDown(Controles.Izquierda)) && Personaje.Movimiento.EnEscalera)
+        {
+            Personaje.Movimiento.SoltarEscalera();
+            Personaje.Movimiento.Saltar(.1f);
+        }
+
+
         if (Input.GetKeyDown(Controles.Correr))
         {
             Personaje.Movimiento.Correr(true);
@@ -33,13 +42,22 @@ public class ControlesPersonaje : MonoBehaviour
         {
             Personaje.Movimiento.Correr(false);
         }
-        if (Input.GetKeyDown(Controles.Salir))
-        {
-        
-        }
-        if (Input.GetKeyDown(Controles.Apuntar))
+
+
+        if (Input.GetKeyUp(Controles.Apuntar))
         {
             Personaje.Apuntar.DetectarObjetivos();
+        }
+
+
+        if ((Input.GetKeyDown(Controles.Subir) || Input.GetKeyDown(Controles.Bajar)) && Personaje.Movimiento.CercaEscalera)
+        {
+            Personaje.Movimiento.PuedoSubir = true;
+        }
+
+        if ((Input.GetKeyDown(Controles.Derecha) || Input.GetKeyDown(Controles.Izquierda)) && !Personaje.Movimiento.AtravesandoSuelo)
+        {
+            Personaje.Movimiento.SoltarEscalera();
         }
     }
 }

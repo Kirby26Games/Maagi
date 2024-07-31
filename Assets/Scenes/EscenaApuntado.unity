@@ -1135,7 +1135,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5ddd08a6d49dc745bec0475436624e5, type: 2}
+  - {fileID: 2100000, guid: bfd6a64fe4ae7a344bbe0c075efbb591, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1948,7 +1948,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5ddd08a6d49dc745bec0475436624e5, type: 2}
+  - {fileID: 2100000, guid: bfd6a64fe4ae7a344bbe0c075efbb591, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2526,7 +2526,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5ddd08a6d49dc745bec0475436624e5, type: 2}
+  - {fileID: 2100000, guid: bfd6a64fe4ae7a344bbe0c075efbb591, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3745,10 +3745,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84eea600a082e54781e9f0f3630946d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Gravedad: -9.82
   "Tama\xF1oHabitacion": {x: 22, y: 11, z: 0}
   EspacioEntreHabitaciones: 1
   MargenCambioHabitacion: 2
   TiempoCambioHabitacion: 0.5
+  RadioDeteccion: 0
+  RadioCombate: 0
+  MemoriaAtencion: 0
+  FuerzaSalto: 0
+  Bolita:
+    rid: 6915722147715874890
+  references:
+    version: 2
+    RefIds:
+    - rid: 6915722147715874890
+      type: {class: BolaDeFuego, ns: , asm: Assembly-CSharp}
+      data:
+        Patata: 0
 --- !u!1001 &2753246623351320618
 PrefabInstance:
   m_ObjectHideFlags: 0

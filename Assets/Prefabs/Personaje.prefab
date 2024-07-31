@@ -18,9 +18,11 @@ GameObject:
   - component: {fileID: 9141048713900540063}
   - component: {fileID: 7918498663416027673}
   - component: {fileID: 3572153109131290950}
+  - component: {fileID: 6975524761259779539}
+  - component: {fileID: 1478096177629473854}
   m_Layer: 0
   m_Name: Personaje
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +141,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.08, y: 1.0105263}
+  m_Size: {x: 1.08, y: 1.92}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -162,6 +164,8 @@ MonoBehaviour:
   Raycast: {fileID: 0}
   Controles: {fileID: 0}
   "Tama\xF1o": {fileID: 0}
+  Colisiones: {fileID: 0}
+  Ataque: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,8 +209,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VelocidadBase: 3
   MultiplicadorAlCorrer: 2
-  DistanciaSalto: 0
-  SaltosEnElAireMaximos: 0
+  DistanciaSalto: 1
+  SaltosEnElAireMaximos: 1
+  VelocidadSubirEscaleras: 0
+  AtravesandoSuelo: 0
+  EnEscalera: 0
+  PuedoSubir: 0
+  CercaEscalera: 0
+  PosicionEscalera: 0
+  EscaleraLimiteSuperior: 0
+  EscaleraLimiteInferior: 0
 --- !u!114 &7918498663416027673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,6 +234,8 @@ MonoBehaviour:
   Gravedad: -9.82
   EnSuelo: 0
   EjeY: 1
+  LimiteVelocidadCaida: -20
+  DireccionGravedad: {x: 0, y: 0, z: 0}
 --- !u!114 &3572153109131290950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,4 +251,31 @@ MonoBehaviour:
   RangoDeteccionSuelo: 0
   ColorDeteccionSuelo: {r: 1, g: 0, b: 0, a: 1}
   AnguloEscaladaMaximo: 20
+  AngulacionSuelo: 0
   Radio: 0
+--- !u!114 &6975524761259779539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c9c5d1f45de26f42b69d43eb1c186cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CercaEscalera: 0
+--- !u!114 &1478096177629473854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627f82e7e1e56bd4d99e2df391294d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PuedoAtacar: 0
