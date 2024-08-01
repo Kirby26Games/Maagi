@@ -32,7 +32,12 @@ public class PuzzlePeso : MonoBehaviour
         Resuelto = (_PesoActual >= PesoNecesario);
         if (Resuelto)
         {
+            Debug.LogWarning("Resolviste los Pesos");
             //Hacer algo
+        }
+        else
+        {
+            //hacer algo
         }
     }
 }
