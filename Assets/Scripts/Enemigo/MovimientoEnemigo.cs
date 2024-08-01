@@ -45,13 +45,10 @@ public class MovimientoEnemigo : MonoBehaviour
         // A velocidadFinal se le van a añadir los distintos desplazamientos
         Vector3 velocidadFinal = Vector3.zero;
         // Añadir la velocidad correcta en la dirección correcta
-        velocidadFinal += (_EstadoActual.ObjetivoFijado.transform.position - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
+        velocidadFinal += (_EstadoActual.DestinoFijado - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
 
         // Revisar si debe saltar en caso de que sea capaz
-        if(CriterioSalto != CriteriosSalto.Nunca)
-        {
-            Saltar();
-        }
+        Saltar();
 
         // Revisar si debe usar escaleras en caso de que sea capaz
         if (PuedeUsarEscaleras)
@@ -74,11 +71,11 @@ public class MovimientoEnemigo : MonoBehaviour
             return;
         }
 
-        if(transform.position.y < _EstadoActual.ObjetivoFijado.transform.position.y)
+        if(transform.position.y < _EstadoActual.DestinoFijado.y)
         {
             // Subir escalera
         }
-        if (transform.position.y > _EstadoActual.ObjetivoFijado.transform.position.y)
+        if (transform.position.y > _EstadoActual.DestinoFijado.y)
         {
             // Bajar escalera
         }
@@ -126,7 +123,7 @@ public class MovimientoEnemigo : MonoBehaviour
             case CriteriosSalto.DetectaBorde:
                 if(_EstadoActual.DistanciaAObstaculo < VelocidadMovimiento &&
                     _EstadoActual.DistanciaAObstaculo > -1f &&
-                    _EstadoActual.ObjetivoFijado.transform.position.y > transform.position.y)
+                    _EstadoActual.DestinoFijado.y > transform.position.y)
                 {
                     return true;
                 }
