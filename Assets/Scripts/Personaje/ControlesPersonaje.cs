@@ -54,5 +54,10 @@ public class ControlesPersonaje : MonoBehaviour
             Personaje.Movimiento.SoltarEscalera();
         }
 
+        if (Input.GetKeyDown(Controles.Inventario))
+        {
+            Personaje.Inventario.ToggleInterfaz();
+        }
+
     }
 }
