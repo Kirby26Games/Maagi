@@ -13,39 +13,24 @@ public class ApuntarPersonaje : MonoBehaviour
 
     void Start()
     {
-
-    }
-
-    void Update()
-    {
-
+        GetComponent<SphereCollider>().radius = RangoVision;
     }
 
     void OnTriggerEnter(Collider other) //Incluir enemigos y aliados por colisión en la lista de posibles objetivos
     {
-        ScriptEnemigo enemigo = other.GetComponent<ScriptEnemigo>();
-        ScriptAliado aliado = other.GetComponent<ScriptAliado>();
-        if (enemigo != null)
+        Fijable fijable = other.GetComponent<Fijable>();
+        if (fijable != null)
         {
-            ObjetivosDetectados.Add(enemigo.transform);
-        }
-        if (aliado != null)
-        {
-            ObjetivosDetectados.Add(aliado.transform);
+            ObjetivosDetectados.Add(fijable.transform);
         }
     }
 
     void OnTriggerExit(Collider other) //Eliminar enemigos y aliados por colisión de la lista de posibles objetivos
     {
-        ScriptEnemigo enemigo = other.GetComponent<ScriptEnemigo>();
-        ScriptAliado aliado = other.GetComponent<ScriptAliado>();
-        if (enemigo != null)
+        Fijable fijable = other.GetComponent<Fijable>();
+        if (fijable != null)
         {
-            ObjetivosDetectados.Remove(enemigo.transform);
-        }
-        if (aliado != null)
-        {
-            ObjetivosDetectados.Remove(aliado.transform);
+            ObjetivosDetectados.Remove(fijable.transform);
         }
     }
 
@@ -63,33 +48,31 @@ public class ApuntarPersonaje : MonoBehaviour
         IndiceObjetivos++;
         Vector3 direccionObjetivo = (objetivoActual.position - transform.position).normalized;
         float anguloDeteccion = Vector3.Angle(transform.right, direccionObjetivo);
-        float anguloApuntar = 22.5f;
+        float anguloApuntar = 35f;
+        float distaciaObjetivo = Vector3.Distance(objetivoActual.position, transform.position);
 
-        Ray rayo = new();
-        rayo.origin = transform.position;
-        rayo.direction = direccionObjetivo;
-
-        RaycastHit datos;
-        if (!Physics.Raycast(rayo, out datos, RangoVision))
-        {
-            //El rayo no choca con nada
-            //intento detectar el siguiente
-            DetectarObjetivos();
-            return;
-        }
-        if (datos.transform != objetivoActual)
-        {
-            //intento detectar el siguiente
-            DetectarObjetivos();
-            return;
-        }
         if (anguloDeteccion > anguloApuntar)
         {
             //intento detectar el siguiente
             DetectarObjetivos();
             return;
         }
-        Debug.DrawRay(rayo.origin, rayo.direction * datos.distance, Color.red, 10.0f);
+
+        Ray rayo = new();
+        rayo.origin = transform.position;
+        rayo.direction = direccionObjetivo;
+
+        RaycastHit[] datos = Physics.RaycastAll(rayo, distaciaObjetivo);
+        Debug.DrawRay(rayo.origin, rayo.direction * datos[0].distance, Color.red, 10.0f);
+        
+        for (int i = 0; i < datos.Length; i++) 
+        { 
+            if (!datos[i].transform.GetComponent<Fijable>())
+            {
+                DetectarObjetivos();
+                return;
+            }
+        }
         //Encontramos el indicador de objetivo del objetivo actual
         GameObject indicadorObjetivo = objetivoActual.transform.Find("Target").gameObject;
         //Si no tiene el indicador no hace nada
