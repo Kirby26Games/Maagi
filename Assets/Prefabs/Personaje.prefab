@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 3572153109131290950}
   - component: {fileID: 6975524761259779539}
   - component: {fileID: 1478096177629473854}
+  - component: {fileID: 2133248529144290087}
   m_Layer: 0
   m_Name: Personaje
   m_TagString: Player
@@ -166,6 +167,7 @@ MonoBehaviour:
   "Tama\xF1o": {fileID: 0}
   Colisiones: {fileID: 0}
   Ataque: {fileID: 0}
+  Inventario: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VelocidadBase: 3
   MultiplicadorAlCorrer: 2
+  Saltando: 0
   DistanciaSalto: 1
   SaltosEnElAireMaximos: 1
   VelocidadSubirEscaleras: 0
@@ -217,8 +220,6 @@ MonoBehaviour:
   PuedoSubir: 0
   CercaEscalera: 0
   PosicionEscalera: 0
-  EscaleraLimiteSuperior: 0
-  EscaleraLimiteInferior: 0
 --- !u!114 &7918498663416027673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,3 +280,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PuedoAtacar: 0
+--- !u!114 &2133248529144290087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e4e41ed5ef9a84e99e7b9eb4cf34d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjetosInventario: []
+  InventarioInterfaz: {fileID: 0}

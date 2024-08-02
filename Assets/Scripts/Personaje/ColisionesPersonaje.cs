@@ -29,6 +29,12 @@ public class ColisionesPersonaje : MonoBehaviour
             Personaje.Movimiento.AtravesandoSuelo = true;
         }
 
+        if (other.TryGetComponent(out ObjetoEscena objetoEscena))
+        {
+            Personaje.Inventario.ObjetosInventario.Add(other.gameObject.GetComponent<ObjetoEscena>().Objeto);
+            Destroy(other.gameObject);
+        }
+
     }
 
     private void OnTriggerExit(Collider other)
