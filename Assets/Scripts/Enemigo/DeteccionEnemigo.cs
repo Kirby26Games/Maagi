@@ -36,7 +36,7 @@ public class DeteccionEnemigo : MonoBehaviour
             if(_EstadoActual.ObjetivoFijado != null)
             {
                 _EstadoActual.ObjetivoFijado = null;
-                _EstadoActual.DistanciaAObstaculo = -1f;
+                _EstadoActual.DistanciaAObstaculo = new Vector2(-1f, -1f);
             }
             return;
         }
@@ -107,7 +107,7 @@ public class DeteccionEnemigo : MonoBehaviour
         if (ContieneSoloPersonaje(detectados))
         {
             detectadoObjetivo = true;
-            _EstadoActual.DistanciaAObstaculo = -1f;
+            _EstadoActual.DistanciaAObstaculo = new Vector2(-1f, -1f);
         }
         // Si se detecta la parte de arriba pero no la de abajo se puede saltar
         else if (detectadoObjetivo)
@@ -120,11 +120,11 @@ public class DeteccionEnemigo : MonoBehaviour
     }
 
     // Devuelve la menor distancia entre los objetos detectados al mirar al objetivo
-    public float BuscarMasCercano(RaycastHit[] detectados)
+    public Vector2 BuscarMasCercano(RaycastHit[] detectados)
     {
         if(detectados.Length < 0)
         {
-            return -1f;
+            return new Vector2(-1f, -1f);
         }
 
         float menorDistancia = detectados[0].distance;
@@ -135,7 +135,7 @@ public class DeteccionEnemigo : MonoBehaviour
                 menorDistancia = detectados[i].distance;
             }
         }
-        return menorDistancia;
+        return new Vector2(Mathf.Abs(detectados[0].point.x - transform.position.x), Mathf.Abs(detectados[0].point.y - transform.position.y));
     }
 
     // Coprueba si todas las instancias de objetos detectados por un Raycast son iguales o no
