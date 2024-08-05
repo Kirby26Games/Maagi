@@ -30,11 +30,11 @@ public class DeteccionEnemigo : MonoBehaviour
     private void Update()
     {
         // No revisa nada si aún no ha detectado a nadie
-        if (_MemoriaUsada < 1 && _EstadoActual.DestinoFijado == Vector3.zero)
+        if (_MemoriaUsada < 1)
         {
-            // Reset si ya ha visto a alguien antes
             if(_EstadoActual.ObjetivoFijado != null)
             {
+                _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
                 _EstadoActual.ObjetivoFijado = null;
                 _EstadoActual.DistanciaAObstaculo = -1f;
             }
@@ -42,7 +42,6 @@ public class DeteccionEnemigo : MonoBehaviour
         }
         // Revisa la distancia de cada objetivo para evaluar la prioridad
         Objetivos = OrdenarMemoria(Objetivos);
-        // Lógica del enemigo
         CambiarEstadoEnemigo();
     }
 
@@ -58,68 +57,54 @@ public class DeteccionEnemigo : MonoBehaviour
         for (int i = 0; i < _MemoriaUsada; i++)
         {
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad
-            if (ComprobarVisibilidad(Objetivos[i].transform.position,
-                Objetivos[i].GetComponent<Collider>().bounds.max.y,
-                Objetivos[i].GetComponent<Collider>().bounds.min.y))
+            if (ComprobarVisibilidad(i))
             {
                 _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
                 _EstadoActual.ObjetivoFijado = Objetivos[i];
                 return;
             }
         }
+        // Si nadie está visible vuelve a vigilar
+        _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
         _EstadoActual.ObjetivoFijado = null;
-        if (_EstadoActual.DestinoFijado != Vector3.zero)
-        {
-            if(ComprobarVisibilidad(_EstadoActual.DestinoFijado, _EstadoActual.DestinoFijado.y + 1f, _EstadoActual.DestinoFijado.y - 1f))
-            {
-                return;
-            }
-        }
     }
 
-    private bool ComprobarVisibilidad(Vector3 posicion, float alturaMaxima, float alturaMinima)
+    private bool ComprobarVisibilidad(int iteracion)
     {
         bool detectadoObjetivo = false;
         // Comprueba si el ángulo entre su mirada y donde está el objetivo se sale por cualquiera de los lados de la amplitud
-        if (Mathf.Abs(Vector2.SignedAngle(posicion - transform.position, DireccionMirada)) > AmplitudMirada / 2)
+        if (Mathf.Abs(Vector2.SignedAngle(Objetivos[iteracion].transform.position - transform.position, DireccionMirada)) > AmplitudMirada / 2)
         {
             return false;
         }
         RaycastHit[] detectados;
-
-        // Puntos a detectar del objetivo
-        Vector3 maximoObjetivo = new(posicion.x, alturaMaxima - 0.05f, posicion.z);
-        Vector3 minimoObjetivo = new(posicion.x, alturaMinima + 0.05f, posicion.z);
-        
+        Vector3 maximoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.max.y - 0.01f, Objetivos[iteracion].transform.position.z);
+        Vector3 minimoObjetivo = new(Objetivos[iteracion].transform.position.x, Objetivos[iteracion].GetComponent<Collider>().bounds.min.y + 0.01f, Objetivos[iteracion].transform.position.z);
         // Detecta todos los objetos entre él y la parte superior del objetivo
-        detectados = Physics.RaycastAll(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
-        Debug.DrawRay(transform.position + 0.1f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up));
+        detectados = Physics.RaycastAll(transform.position, maximoObjetivo - transform.position, Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
+        Debug.DrawRay(transform.position, maximoObjetivo - transform.position);
         // Si solo choca con un mismo objeto devuelve true
-        if (ContieneSoloPersonaje(detectados))
+        if (SonTodosIguales(detectados))
         {
             detectadoObjetivo = true;
         }
-        
         // Detecta todos los objetos entre él y la parte inferior del objetivo
-        detectados = Physics.RaycastAll(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
-        Debug.DrawRay(transform.position - 0.1f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up));
+        detectados = Physics.RaycastAll(transform.position, minimoObjetivo - transform.position, Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
+        Debug.DrawRay(transform.position, maximoObjetivo - transform.position);
         // Si solo choca con un mismo objeto devuelve true
-        if (ContieneSoloPersonaje(detectados))
+        if (SonTodosIguales(detectados))
         {
             detectadoObjetivo = true;
             _EstadoActual.DistanciaAObstaculo = -1f;
         }
-        // Si se detecta la parte de arriba pero no la de abajo se puede saltar
-        else if (detectadoObjetivo)
+        else if(detectadoObjetivo == true) // Si se detecta la parte de arriba pero no la de abajo se puede saltar
         {
             _EstadoActual.DistanciaAObstaculo = BuscarMasCercano(detectados);
         }
-
         // De otra forma, devuelve false
         return detectadoObjetivo;
     }
 
-    // Devuelve la menor distancia entre los objetos detectados al mirar al objetivo
     public float BuscarMasCercano(RaycastHit[] detectados)
     {
         if(detectados.Length < 0)
@@ -139,13 +124,16 @@ public class DeteccionEnemigo : MonoBehaviour
     }
 
     // Coprueba si todas las instancias de objetos detectados por un Raycast son iguales o no
-    private bool ContieneSoloPersonaje(RaycastHit[] detectados)
+    private bool SonTodosIguales(RaycastHit[] detectados)
     {
         for (int i = 0; i < detectados.Length; i++)
         {
-            if (detectados[i].collider.gameObject.GetComponent<SistemasPersonaje>() == null)
+            for (int j = i + 1; j < detectados.Length; j++)
             {
-                return false;
+                if (detectados[i].collider.gameObject.name != detectados[j].collider.gameObject.name)
+                {
+                    return false;
+                }
             }
         }
         return true;
