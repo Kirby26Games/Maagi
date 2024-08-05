@@ -5,7 +5,13 @@ public class PuzzlePeso : MonoBehaviour
     public float PesoNecesario;
     float _PesoActual;
     public bool Resuelto;
+    //resultado para ver
+    public GameObject Puerta;
 
+    private void Start()
+    {
+        ComprobarPeso();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Peso peso))
@@ -34,10 +40,12 @@ public class PuzzlePeso : MonoBehaviour
         {
             Debug.LogWarning("Resolviste los Pesos");
             //Hacer algo
+            Puerta.SetActive(false);
         }
         else
         {
             //hacer algo
+            Puerta.SetActive(true);
         }
     }
 }

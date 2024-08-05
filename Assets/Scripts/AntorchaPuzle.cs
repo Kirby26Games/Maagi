@@ -6,11 +6,11 @@ public class AntorchaPuzle : Antorcha
 
     private void Start()
     {
-        PuertaAbrir.TotalAntorchasNecesarias(this);
+        PuertaAbrir.TotalAntorchas(this);
     }
     public override void Interactuar()
     {
         base.Interactuar();
-        PuertaAbrir.ComprobarAntorchas(this);
+        PuertaAbrir.ComprobarAntorchas();
     }
 }

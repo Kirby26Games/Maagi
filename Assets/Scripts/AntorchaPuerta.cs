@@ -3,56 +3,51 @@ using UnityEngine;
 
 public class AntorchaPuerta : MonoBehaviour
 {
-    public int AntorchasNecesarias;
+    public int AntorchasEncendidas;
     public bool Resuelto;
-    public List<AntorchaPuzle> Antorchas;
-
-    private void Awake()
-    {
-        AntorchasNecesarias = 0;
-    }
+    List<AntorchaPuzle> Antorchas = new();
+    //temporal
+    public GameObject Puerta;
     private void Start()
     {
-        if (Resuelto)
-        {
-            // algo
-        }
+        ComprobarPuzzle();
     }
-    public void TotalAntorchasNecesarias(AntorchaPuzle Antorcha)
+    public void TotalAntorchas(AntorchaPuzle nt)
     {
-        AntorchasNecesarias += 1;
-        Antorchas.Add(Antorcha);
+        Antorchas.Add(nt);
         if (Resuelto)
         {
             //algo lista
         }
     }
 
-    public void ComprobarAntorchas(AntorchaPuzle Antorcha)
+    public void ComprobarAntorchas()
     {
-        if (Antorcha.Encendida)
+        AntorchasEncendidas = 0;
+        for (int i = 0; i < Antorchas.Count; i++)
         {
-            AntorchasNecesarias -= 1;
+            if (Antorchas[i].Prendida == true)
+            {
+                AntorchasEncendidas++;
+            }
         }
-        else
-        {
-            AntorchasNecesarias += 1;
-        }
-
         ComprobarPuzzle();
     }
 
     void ComprobarPuzzle()
     {
-        if (AntorchasNecesarias < 1)
+        Debug.Log(Antorchas.Count);
+        if (AntorchasEncendidas >= Antorchas.Count)
         {
             Resuelto = true;
             Debug.LogWarning("Resolviste las Antorchas");
             //Hacer algo
+            Puerta.SetActive(false);
         }
         else
         {
             Resuelto = false;
+            Puerta.SetActive(true);
             //hacer algo
         }
     }

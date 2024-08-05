@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2260340639806594522}
   - component: {fileID: 8905940627804752459}
+  - component: {fileID: 6626351627563782984}
   - component: {fileID: 6523635149077786332}
   - component: {fileID: 5588199316284667521}
   - component: {fileID: 102133088144530437}
@@ -20,7 +21,8 @@ GameObject:
   - component: {fileID: 3572153109131290950}
   - component: {fileID: 6975524761259779539}
   - component: {fileID: 1478096177629473854}
-  - component: {fileID: 2133248529144290087}
+  - component: {fileID: 7280032123139267448}
+  - component: {fileID: 4375316662008964144}
   m_Layer: 0
   m_Name: Personaje
   m_TagString: Player
@@ -65,6 +67,27 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &6626351627563782984
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6523635149077786332
 Rigidbody:
@@ -167,7 +190,7 @@ MonoBehaviour:
   "Tama\xF1o": {fileID: 0}
   Colisiones: {fileID: 0}
   Ataque: {fileID: 0}
-  Inventario: {fileID: 0}
+  Apuntar: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PuedoAtacar: 0
---- !u!114 &2133248529144290087
+--- !u!114 &7280032123139267448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,8 +312,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 5577602945081306605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84e4e41ed5ef9a84e99e7b9eb4cf34d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8067fa28bd271044f99288987449139f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjetosInventario: []
-  InventarioInterfaz: {fileID: 0}
+  ObjetivosDetectados: []
+  IndiceObjetivos: 0
+  RangoVision: 20
+--- !u!114 &4375316662008964144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f96be4acc9031c49be798d9294b8b93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
