@@ -93,7 +93,7 @@ public class DeteccionEnemigo : MonoBehaviour
         
         // Detecta todos los objetos entre él y la parte superior del objetivo
         detectados = Physics.RaycastAll(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
-        Debug.DrawRay(transform.position + 0.1f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up));
+        Debug.DrawRay(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (ContieneSoloPersonaje(detectados))
         {
@@ -102,7 +102,7 @@ public class DeteccionEnemigo : MonoBehaviour
         
         // Detecta todos los objetos entre él y la parte inferior del objetivo
         detectados = Physics.RaycastAll(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
-        Debug.DrawRay(transform.position - 0.1f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up));
+        Debug.DrawRay(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (ContieneSoloPersonaje(detectados))
         {

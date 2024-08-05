@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovimientoEnemigo : MonoBehaviour
@@ -10,6 +11,7 @@ public class MovimientoEnemigo : MonoBehaviour
     private EstadoEnemigo _EstadoActual;
     [Header("Propiedades")]
     private Rigidbody _Cuerpo;
+    private Collider _Colision;
     public float VelocidadMovimiento;
     [Header("Salto")]
     public float DistanciaSalto;
@@ -18,12 +20,16 @@ public class MovimientoEnemigo : MonoBehaviour
     private SistemaGravedad _Gravedad;
     [Header("Escaleras")]
     private bool _CercaEscalera;
+    private float _PosicionEscalera;
+    private float _VelocidadSubirEscaleras;
+    private bool _EnEscalera;
 
     private void Awake()
     {
         _EstadoActual = GetComponent<EstadoEnemigo>();
         _Cuerpo = GetComponent<Rigidbody>();
         _Gravedad = GetComponent<SistemaGravedad>();
+        _Colision = GetComponent<Collider>();
     }
 
     private void Update()
@@ -50,34 +56,77 @@ public class MovimientoEnemigo : MonoBehaviour
         // Revisar si debe saltar en caso de que sea capaz
         Saltar();
 
+        // Añadir la gravedad que le afecta
+        velocidadFinal.y += _Gravedad.EjeY;
+
         // Revisar si debe usar escaleras en caso de que sea capaz
         if (PuedeUsarEscaleras)
         {
-            UsarEscalera();
+            if(UsarEscalera())
+            {
+                velocidadFinal.y = _VelocidadSubirEscaleras;
+            }
         }
-
-        // Añadir la gravedad que le afecta
-        velocidadFinal.y += _Gravedad.EjeY;
 
         // Mandar la velocidad resultante al cuerpo
         _Cuerpo.linearVelocity = velocidadFinal;
     }
 
-    private void UsarEscalera()
+    private bool UsarEscalera()
     {
         // Si no está cerca de escaleras no las puede usar
-        if(!_CercaEscalera)
+        if (!_CercaEscalera && !_EnEscalera)
         {
-            return;
+            return false;
         }
 
-        if(transform.position.y < _EstadoActual.DestinoFijado.y)
+        // Si no es necesario coger la escalera la ignora
+        if (_Gravedad.EnSuelo && Mathf.Abs(_EstadoActual.DestinoFijado.y - transform.position.y) < 5f)
+        {
+           return false;
+        }
+
+        _EnEscalera = true;
+        transform.position = new Vector3(_PosicionEscalera, transform.position.y, transform.position.z);
+        _Colision.isTrigger = true;
+
+        if (transform.position.y < _EstadoActual.DestinoFijado.y)
         {
             // Subir escalera
+            return true;
         }
         if (transform.position.y > _EstadoActual.DestinoFijado.y)
         {
             // Bajar escalera
+            _VelocidadSubirEscaleras *= -1;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void SoltarEscalera()
+    {
+        _Colision.isTrigger = false;
+        _EnEscalera = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out Escaleras escaleras))
+        {
+            _CercaEscalera = true;
+            _PosicionEscalera = escaleras.transform.position.x;
+            _VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out Escaleras escaleras))
+        {
+            SoltarEscalera();
+            _CercaEscalera = false;
         }
     }
 
