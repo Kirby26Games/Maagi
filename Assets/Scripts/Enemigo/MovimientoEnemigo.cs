@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class MovimientoEnemigo : MonoBehaviour
 {
+    public enum CriteriosSalto { Siempre, Nunca, DetectaBorde }
     [Header("Capacidades")]
-    public bool PuedeSaltar;
+    public CriteriosSalto CriterioSalto;
     public bool PuedeUsarEscaleras;
     [Header("Memoria")]
     private EstadoEnemigo _EstadoActual;
@@ -12,11 +13,11 @@ public class MovimientoEnemigo : MonoBehaviour
     public float VelocidadMovimiento;
     [Header("Salto")]
     public float DistanciaSalto;
-    public enum Criterios { Siempre, Nunca, DetectaBorde }
-    public Criterios CriterioSalto;
     public int SaltosEnElAireMaximos;
     private int _SaltosEnElAire;
     private SistemaGravedad _Gravedad;
+    [Header("Escaleras")]
+    private bool _CercaEscalera;
 
     private void Awake()
     {
@@ -27,11 +28,13 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Update()
     {
+        // Si está alerta persigue al objetivo
         if(_EstadoActual.Estado == EstadoEnemigo.Estados.Alerta)
         {
             Perseguir();
         }
-        if(PuedeSaltar && _Gravedad.EnSuelo)
+        // Si está en el suelo y puede saltar recupera sus saltos
+        if(CriterioSalto != CriteriosSalto.Nunca && _Gravedad.EnSuelo)
         {
             ReiniciarSaltos();
         }
@@ -39,22 +42,54 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Perseguir()
     {
+        // A velocidadFinal se le van a añadir los distintos desplazamientos
         Vector3 velocidadFinal = Vector3.zero;
-        velocidadFinal += (_EstadoActual.ObjetivoFijado.transform.position - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
-        if(PuedeSaltar)
+        // Añadir la velocidad correcta en la dirección correcta
+        velocidadFinal += (_EstadoActual.DestinoFijado - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
+
+        // Revisar si debe saltar en caso de que sea capaz
+        Saltar();
+
+        // Revisar si debe usar escaleras en caso de que sea capaz
+        if (PuedeUsarEscaleras)
         {
-            Saltar();
+            UsarEscalera();
         }
+
+        // Añadir la gravedad que le afecta
         velocidadFinal.y += _Gravedad.EjeY;
+
+        // Mandar la velocidad resultante al cuerpo
         _Cuerpo.linearVelocity = velocidadFinal;
+    }
+
+    private void UsarEscalera()
+    {
+        // Si no está cerca de escaleras no las puede usar
+        if(!_CercaEscalera)
+        {
+            return;
+        }
+
+        if(transform.position.y < _EstadoActual.DestinoFijado.y)
+        {
+            // Subir escalera
+        }
+        if (transform.position.y > _EstadoActual.DestinoFijado.y)
+        {
+            // Bajar escalera
+        }
     }
 
     private void Saltar()
     {
+        // Si no puede o no quiere saltar no lo hace
         if (!PuedoSaltar() || !QuieroSaltar())
         {
             return;
         }
+
+        // En caso contrario, calcula lo que debe saltar
         _Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * VariablesGlobales.Instancia.Gravedad);
     }
 
@@ -77,15 +112,18 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private bool QuieroSaltar()
     {
+        // Dependiendo del criterio, devuelve true si quiere saltar o false si no
         switch(CriterioSalto)
         {
-            case Criterios.Siempre:
+            // Siempre devuelve true siempre
+            case CriteriosSalto.Siempre:
                 return true;
 
-            case Criterios.DetectaBorde:
+            // Detecta borde se fija en la distancia al obstáculo más cercano (si existe) y si el objetivo está por encima de su posición
+            case CriteriosSalto.DetectaBorde:
                 if(_EstadoActual.DistanciaAObstaculo < VelocidadMovimiento &&
-                    _EstadoActual.DistanciaAObstaculo > 0f &&
-                    _EstadoActual.ObjetivoFijado.transform.position.y > transform.position.y)
+                    _EstadoActual.DistanciaAObstaculo > -1f &&
+                    _EstadoActual.DestinoFijado.y > transform.position.y)
                 {
                     return true;
                 }
@@ -94,6 +132,7 @@ public class MovimientoEnemigo : MonoBehaviour
                     return false;
                 }
         }
+        // Nunca devuelve false siempre
         return false;
     }
 
