@@ -6,24 +6,32 @@ public class InventarioPersonaje : InventarioBase
 {
     public GameObject InventarioInterfaz;
     public List<ContenedorObjeto> ContenedorObjetos;
+    public Vector3 PosicionOculta;
+    public Vector3 PosicionAbierta;
 
     private void Start()
     {
         ObjetosInventario = new List<Objeto>(new Objeto[ContenedorObjetos.Count]);
+        PosicionOculta = InventarioInterfaz.transform.position;
     }
 
     public void ToggleInterfaz()
     {
-        if (InventarioInterfaz.activeSelf)
+        if (InventarioInterfaz.transform.position == PosicionAbierta)
         {
-            InventarioInterfaz.SetActive(false);
+            ActivarInterfaz(PosicionOculta);
         }
         else
         {
-            InventarioInterfaz.SetActive(true);
+            ActivarInterfaz(PosicionAbierta);
             ActualizarInterfaz();
         }
 
+    }
+
+    public void ActivarInterfaz(Vector3 posicion) 
+    {
+        InventarioInterfaz.transform.position = posicion;
     }
 
     public void ActualizarInterfaz() 
