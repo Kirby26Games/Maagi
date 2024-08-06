@@ -330,3 +330,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f96be4acc9031c49be798d9294b8b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjetosInventario: []
+  InventarioInterfaz: {fileID: 0}
+  ContenedorObjetos:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  PosicionOculta: {x: -336, y: 727.2, z: 0}
+  PosicionAbierta: {x: 400, y: 727.2, z: 0}
+  InterfazAbierta: 0
