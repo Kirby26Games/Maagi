@@ -31,8 +31,11 @@ public class ColisionesPersonaje : MonoBehaviour
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            Personaje.Inventario.ObjetosInventario.Add(other.gameObject.GetComponent<ObjetoEscena>().Objeto);
-            Destroy(other.gameObject);
+            if (Personaje.Inventario.AgregarAInventario(objetoEscena.Objeto))
+            {
+                Destroy(other.gameObject);
+            }
+            
         }
 
     }

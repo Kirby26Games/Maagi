@@ -294,3 +294,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjetosInventario: []
   InventarioInterfaz: {fileID: 0}
+  ContenedorObjetos:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  PosicionOculta: {x: -336, y: 727.2, z: 0}
+  PosicionAbierta: {x: 400, y: 727.2, z: 0}
+  InterfazAbierta: 0
