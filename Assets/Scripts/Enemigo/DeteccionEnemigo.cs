@@ -57,6 +57,13 @@ public class DeteccionEnemigo : MonoBehaviour
 
         for (int i = 0; i < _MemoriaUsada; i++)
         {
+            // Comprueba si el objetivo está subiendo una escalera
+            if (Objetivos[i].transform.GetComponent<Collider>().isTrigger)
+            {
+                _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
+                _EstadoActual.ObjetivoFijado = Objetivos[i];
+                return;
+            }
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad
             if (ComprobarVisibilidad(Objetivos[i].transform.position,
                 Objetivos[i].GetComponent<Collider>().bounds.max.y,

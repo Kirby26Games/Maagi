@@ -64,7 +64,7 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             if(UsarEscalera())
             {
-                velocidadFinal.y = _VelocidadSubirEscaleras;
+                velocidadFinal = _VelocidadSubirEscaleras * Vector3.up;
             }
         }
 
@@ -81,7 +81,7 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // Si no es necesario coger la escalera la ignora
-        if (_Gravedad.EnSuelo && Mathf.Abs(_EstadoActual.DestinoFijado.y - transform.position.y) < 5f)
+        if (_Gravedad.EnSuelo && Mathf.Abs(_EstadoActual.DestinoFijado.y - transform.position.y) < 3f)
         {
            return false;
         }
@@ -93,12 +93,13 @@ public class MovimientoEnemigo : MonoBehaviour
         if (transform.position.y < _EstadoActual.DestinoFijado.y)
         {
             // Subir escalera
+            _VelocidadSubirEscaleras = Mathf.Abs(_VelocidadSubirEscaleras);
             return true;
         }
         if (transform.position.y > _EstadoActual.DestinoFijado.y)
         {
             // Bajar escalera
-            _VelocidadSubirEscaleras *= -1;
+            _VelocidadSubirEscaleras = -1 * Mathf.Abs(_VelocidadSubirEscaleras);
             return true;
         }
 
@@ -125,8 +126,8 @@ public class MovimientoEnemigo : MonoBehaviour
     {
         if (other.TryGetComponent(out Escaleras escaleras))
         {
-            SoltarEscalera();
             _CercaEscalera = false;
+            SoltarEscalera();
         }
     }
 
