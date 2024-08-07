@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class Antorcha : MonoBehaviour
 {
-    public bool Encendida = false;
+    public bool Prendida = false;
     bool _PuedoInteractuar;
-    Renderer _MiRenderer;
-    public Material MatEncendida, MatApagada;
+    SpriteRenderer _MiRenderer;
+    public Sprite Encendida, Apagada;
 
     private void Awake()
     {
-        _MiRenderer = GetComponent<Renderer>();
+        _MiRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
-        if (Encendida)
+        if (Prendida)
         {
             Debug.Log("pp");
             //algo
@@ -33,14 +33,14 @@ public class Antorcha : MonoBehaviour
     }
     public virtual void Interactuar()
     {
-        Encendida = !Encendida;
-        if (Encendida)
+        Prendida = !Prendida;
+        if (Prendida)
         {
-            _MiRenderer.material = MatEncendida;
+            _MiRenderer.sprite = Encendida;
         }
         else
         {
-            _MiRenderer.material = MatApagada;
+            _MiRenderer.sprite = Apagada;
         }
     }
 
