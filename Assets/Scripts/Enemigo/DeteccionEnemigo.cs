@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class DeteccionEnemigo : MonoBehaviour
 {
@@ -58,7 +59,8 @@ public class DeteccionEnemigo : MonoBehaviour
         for (int i = 0; i < _MemoriaUsada; i++)
         {
             // Comprueba si el objetivo está subiendo una escalera
-            if (Objetivos[i].transform.GetComponent<Collider>().isTrigger)
+            if (Objetivos[i].transform.GetComponent<Collider>().isTrigger && 
+                Mathf.Abs(Vector2.SignedAngle(Objetivos[i].transform.position - transform.position, DireccionMirada)) <= 120f)
             {
                 _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
                 _EstadoActual.ObjetivoFijado = Objetivos[i];

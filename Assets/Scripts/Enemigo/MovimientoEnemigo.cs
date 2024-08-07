@@ -19,9 +19,9 @@ public class MovimientoEnemigo : MonoBehaviour
     private int _SaltosEnElAire;
     private SistemaGravedad _Gravedad;
     [Header("Escaleras")]
-    private bool _CercaEscalera;
-    private float _PosicionEscalera;
-    private float _VelocidadSubirEscaleras;
+    [HideInInspector] public bool CercaEscalera;
+    [HideInInspector] public float PosicionEscalera;
+    [HideInInspector] public float VelocidadSubirEscaleras;
     private bool _EnEscalera;
 
     private void Awake()
@@ -41,6 +41,10 @@ public class MovimientoEnemigo : MonoBehaviour
         }
         else if(_EstadoActual.Estado == EstadoEnemigo.Estados.Vigilante)
         {
+            if(_EnEscalera)
+            {
+                SoltarEscalera();
+            }
             Patrullar();
         }
         // Si está en el suelo y puede saltar recupera sus saltos
@@ -80,7 +84,7 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             if(UsarEscalera())
             {
-                velocidadFinal = _VelocidadSubirEscaleras * Vector3.up;
+                velocidadFinal = VelocidadSubirEscaleras * Vector3.up;
             }
         }
 
@@ -91,7 +95,7 @@ public class MovimientoEnemigo : MonoBehaviour
     private bool UsarEscalera()
     {
         // Si no está cerca de escaleras no las puede usar
-        if (!_CercaEscalera && !_EnEscalera)
+        if (!CercaEscalera && !_EnEscalera)
         {
             return false;
         }
@@ -103,48 +107,29 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         _EnEscalera = true;
-        transform.position = new Vector3(_PosicionEscalera, transform.position.y, transform.position.z);
+        transform.position = new Vector3(PosicionEscalera, transform.position.y, transform.position.z);
         _Colision.isTrigger = true;
 
         if (transform.position.y < _EstadoActual.DestinoFijado.y)
         {
             // Subir escalera
-            _VelocidadSubirEscaleras = Mathf.Abs(_VelocidadSubirEscaleras);
+            VelocidadSubirEscaleras = Mathf.Abs(VelocidadSubirEscaleras);
             return true;
         }
         if (transform.position.y > _EstadoActual.DestinoFijado.y)
         {
             // Bajar escalera
-            _VelocidadSubirEscaleras = -1 * Mathf.Abs(_VelocidadSubirEscaleras);
+            VelocidadSubirEscaleras = -1 * Mathf.Abs(VelocidadSubirEscaleras);
             return true;
         }
 
         return false;
     }
 
-    private void SoltarEscalera()
+    public void SoltarEscalera()
     {
         _Colision.isTrigger = false;
         _EnEscalera = false;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out Escaleras escaleras))
-        {
-            _CercaEscalera = true;
-            _PosicionEscalera = escaleras.transform.position.x;
-            _VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent(out Escaleras escaleras))
-        {
-            _CercaEscalera = false;
-            SoltarEscalera();
-        }
     }
 
     private void Saltar()
