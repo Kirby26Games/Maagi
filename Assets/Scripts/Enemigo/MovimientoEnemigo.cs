@@ -39,11 +39,27 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             Perseguir();
         }
+        else if(_EstadoActual.Estado == EstadoEnemigo.Estados.Vigilante)
+        {
+            Patrullar();
+        }
         // Si está en el suelo y puede saltar recupera sus saltos
         if(CriterioSalto != CriteriosSalto.Nunca && _Gravedad.EnSuelo)
         {
             ReiniciarSaltos();
         }
+    }
+
+    private void Patrullar()
+    {
+        // A velocidadFinal se le van a añadir los distintos desplazamientos
+        Vector3 velocidadFinal = Vector3.zero;
+
+        // Añadir la gravedad que le afecta
+        velocidadFinal.y += _Gravedad.EjeY;
+
+        // Mandar la velocidad resultante al cuerpo
+        _Cuerpo.linearVelocity = velocidadFinal;
     }
 
     private void Perseguir()

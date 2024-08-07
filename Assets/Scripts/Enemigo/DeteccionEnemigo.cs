@@ -161,15 +161,18 @@ public class DeteccionEnemigo : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Si el objeto tiene Movimiento Simple (cambiar más adelante)
-        if (other.gameObject.GetComponent<SistemasPersonaje>() != null)
+        if (other.gameObject.TryGetComponent(out SistemasPersonaje sistemaPersonaje))
         {
-            // Y si no lo habíamos detectado ya antes y tenemos espacio en memoria
-            int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
-            if (indice < 0 && _MemoriaUsada < Objetivos.Length)
+            if(other == sistemaPersonaje.Colisiones.ColisionPersonaje)
             {
-                // Recuérdalo
-                Objetivos[_MemoriaUsada] = other.gameObject;
-                _MemoriaUsada++;
+                // Y si no lo habíamos detectado ya antes y tenemos espacio en memoria
+                int indice = EncontrarEnPosicion(Objetivos, other.gameObject);
+                if (indice < 0 && _MemoriaUsada < Objetivos.Length)
+                {
+                    // Recuérdalo
+                    Objetivos[_MemoriaUsada] = other.gameObject;
+                    _MemoriaUsada++;
+                }
             }
         }
     }
