@@ -39,7 +39,6 @@ public class ColisionesPersonaje : MonoBehaviour
             }
             
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -55,5 +54,4 @@ public class ColisionesPersonaje : MonoBehaviour
             Personaje.Movimiento.AtravesandoSuelo = false;
         }
     }
-
 }
