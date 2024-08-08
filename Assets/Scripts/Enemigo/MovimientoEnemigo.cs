@@ -35,11 +35,11 @@ public class MovimientoEnemigo : MonoBehaviour
     private void Update()
     {
         // Si está alerta persigue al objetivo
-        if(_EstadoActual.Estado == EstadoEnemigo.Estados.Alerta)
+        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
         {
             Perseguir();
         }
-        else if(_EstadoActual.Estado == EstadoEnemigo.Estados.Vigilante)
+        else if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Idle)
         {
             if(_EnEscalera)
             {
