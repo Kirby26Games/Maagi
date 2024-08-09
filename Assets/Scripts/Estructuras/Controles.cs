@@ -13,5 +13,9 @@ public struct Controles
     public static KeyCode Bajar = KeyCode.S;
     public static KeyCode Izquierda = KeyCode.A;
     public static KeyCode Derecha = KeyCode.D;
+
+    public static KeyCode Inventario = KeyCode.E;
+
     public static KeyCode Apuntar = KeyCode.Tab;
+
 }

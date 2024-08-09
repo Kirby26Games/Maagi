@@ -7,34 +7,55 @@ public class ApuntarPersonaje : MonoBehaviour
     public List<Transform> ObjetivosDetectados = new List<Transform>();
     public int IndiceObjetivos = 0;
     public float RangoVision = 20f;
+    public float AnguloApuntar = 35f;
+    public SphereCollider VisionCollider;
+    public GameObject Target;
+    GameObject _TargetScene;
+
+    [Header("Referencias")]
+    private ControlesPersonaje Controles;
+    private SistemasPersonaje Personaje;
 
     void Start()
     {
-        GetComponent<SphereCollider>().radius = RangoVision;
+        VisionCollider.radius = RangoVision;
+        if (_TargetScene == null)
+        {
+            _TargetScene = Instantiate(Target);
+            _TargetScene.SetActive(false);
+        }
     }
 
     void OnTriggerEnter(Collider other) //Incluir enemigos y aliados por colisión en la lista de posibles objetivos
     {
-        Fijable fijable = other.GetComponent<Fijable>();
-        if (fijable != null)
+        if (other.TryGetComponent(out Fijable fijable))
         {
             ObjetivosDetectados.Add(fijable.transform);
+
         }
     }
 
     void OnTriggerExit(Collider other) //Eliminar enemigos y aliados por colisión de la lista de posibles objetivos
     {
-        Fijable fijable = other.GetComponent<Fijable>();
-        if (fijable != null)
+        if (other.TryGetComponent(out Fijable fijable))
         {
             ObjetivosDetectados.Remove(fijable.transform);
+
         }
     }
 
     public void DetectarObjetivos()
     {
+        //mejorprevenir que lamentar 
+        //if (_TargetScene == null)
+        //{
+        //    _TargetScene = Instantiate(Target);
+        //    _TargetScene.SetActive(false);
+        //}
+
         if (IndiceObjetivos >= ObjetivosDetectados.Count)
         {
+            _TargetScene.SetActive(false);
             // Resetear al principio de la lista
             IndiceObjetivos = 0;
             //aquí desfijo
@@ -45,10 +66,9 @@ public class ApuntarPersonaje : MonoBehaviour
         IndiceObjetivos++;
         Vector3 direccionObjetivo = (objetivoActual.position - transform.position).normalized;
         float anguloDeteccion = Vector3.Angle(transform.right, direccionObjetivo);
-        float anguloApuntar = 35f;
         float distaciaObjetivo = Vector3.Distance(objetivoActual.position, transform.position);
 
-        if (anguloDeteccion > anguloApuntar)
+        if (anguloDeteccion > AnguloApuntar)
         {
             //intento detectar el siguiente
             DetectarObjetivos();
@@ -70,22 +90,11 @@ public class ApuntarPersonaje : MonoBehaviour
                 return;
             }
         }
-        //Encontramos el indicador de objetivo del objetivo actual
-        GameObject indicadorObjetivo = objetivoActual.transform.Find("Target").gameObject;
-        //Si no tiene el indicador no hace nada
-        if (indicadorObjetivo == null)
+        //Movemos el indicador de objetivo del objetivo actual
+        _TargetScene.transform.position = objetivoActual.position - Vector3.forward;
+        if (_TargetScene.activeInHierarchy==false)
         {
-            return;
+            _TargetScene.SetActive(true);
         }
-        //Desactivamos todos los indicadores y se activa solo el de objetivo actual
-        foreach (var objetivo in ObjetivosDetectados)
-        {
-            GameObject selectorObjetivos = objetivo.transform.Find("Target").gameObject;
-            if (selectorObjetivos != null)
-            {
-                selectorObjetivos.SetActive(false);
-            }
-        }
-        indicadorObjetivo.SetActive(true);
     }
 }

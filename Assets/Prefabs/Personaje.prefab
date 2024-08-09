@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2260340639806594522}
   - component: {fileID: 8905940627804752459}
-  - component: {fileID: 6626351627563782984}
   - component: {fileID: 6523635149077786332}
   - component: {fileID: 5588199316284667521}
   - component: {fileID: 102133088144530437}
@@ -23,6 +22,7 @@ GameObject:
   - component: {fileID: 1478096177629473854}
   - component: {fileID: 7280032123139267448}
   - component: {fileID: 4375316662008964144}
+  - component: {fileID: 2133248529144290087}
   m_Layer: 0
   m_Name: Personaje
   m_TagString: Player
@@ -42,7 +42,8 @@ Transform:
   m_LocalPosition: {x: 1.45, y: 1.33, z: -0.29102242}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5603000656670007632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &8905940627804752459
@@ -67,27 +68,6 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &6626351627563782984
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577602945081306605}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6523635149077786332
 Rigidbody:
@@ -190,6 +170,7 @@ MonoBehaviour:
   "Tama\xF1o": {fileID: 0}
   Colisiones: {fileID: 0}
   Ataque: {fileID: 0}
+  Inventario: {fileID: 0}
   Apuntar: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
@@ -290,6 +271,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CercaEscalera: 0
+  ColisionDeteccion: {fileID: 0}
+  ColisionPersonaje: {fileID: 8905940627804752459}
 --- !u!114 &1478096177629473854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,6 +301,7 @@ MonoBehaviour:
   ObjetivosDetectados: []
   IndiceObjetivos: 0
   RangoVision: 20
+  VisionCollider: {fileID: 636509548816668287}
 --- !u!114 &4375316662008964144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,3 +314,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f96be4acc9031c49be798d9294b8b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2133248529144290087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e4e41ed5ef9a84e99e7b9eb4cf34d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjetosInventario: []
+  InventarioInterfaz: {fileID: 0}
+  ContenedorObjetos: []
+  PosicionOculta: {x: 0, y: 0, z: 0}
+  PosicionAbierta: {x: 0, y: 0, z: 0}
+  InterfazAbierta: 0
+--- !u!1 &8319080664039406530
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5603000656670007632}
+  - component: {fileID: 636509548816668287}
+  m_Layer: 0
+  m_Name: ZonaDeteccion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5603000656670007632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8319080664039406530}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2260340639806594522}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &636509548816668287
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8319080664039406530}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 20
+  m_Center: {x: 0, y: 0, z: 0}

@@ -3,7 +3,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(MovimientoPersonaje), typeof(SistemaGravedad), typeof(SistemaRaycast))]
 [RequireComponent(typeof(ControlesPersonaje), typeof(TamañoPersonaje), typeof(ColisionesPersonaje))]
-[RequireComponent(typeof(AtaquePersonaje), typeof(ApuntarPersonaje))]
+
+[RequireComponent(typeof(AtaquePersonaje), typeof(InventarioPersonaje), typeof(ApuntarPersonaje))]
+
 
 public class SistemasPersonaje : MonoBehaviour
 {
@@ -15,7 +17,9 @@ public class SistemasPersonaje : MonoBehaviour
     public TamañoPersonaje Tamaño;
     public ColisionesPersonaje Colisiones;
     public AtaquePersonaje Ataque;
+    public InventarioPersonaje Inventario;
     public ApuntarPersonaje Apuntar;
+
 
 
     private void Awake()
@@ -27,6 +31,7 @@ public class SistemasPersonaje : MonoBehaviour
         Tamaño = GetComponent<TamañoPersonaje>(); 
         Colisiones = GetComponent<ColisionesPersonaje>();
         Ataque = GetComponent<AtaquePersonaje>();
+        Inventario = GetComponent<InventarioPersonaje>();
         Apuntar = GetComponent<ApuntarPersonaje>();
     }
 }

@@ -18,7 +18,8 @@ public class VariablesGlobales : MonoBehaviour
     public int MemoriaAtencion;             // Cantidad de objetivos que puede recordar un enemigo
     public float FuerzaSalto;               // Fuerza inicial del salto en los enemigos
     [SerializeReference] public BolaDeFuego Bolita = new BolaDeFuego(); // Ejemplo de SerializeReference
-    public int TamañoColaAccion;
+    public int TamañoInventario;            // La cantidad de objetos que puede coger un enemigo
+    public int TamañoColaAccion;            // La cantidad de acciones que puede recordar para hacer un enemigo
     void Awake()
     {
         Instancia = this;
