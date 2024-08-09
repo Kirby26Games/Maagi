@@ -17,7 +17,7 @@ public class EstadoEnemigo : MonoBehaviour
         Estado = Estados.Vigilante; // null -> Vigilante -> Alerta -> Combate
         ObjetivoFijado = null;
         DistanciaAObstaculo = new Vector2(-1f,-1f);
-        DestinoFijado = Vector3.zero + transform.position.z * Vector3.forward;
+        DestinoFijado = Vector3.zero;
 
         ColaDeAccion = new Acciones[VariablesGlobales.Instancia.TamañoColaAccion];
 
@@ -26,28 +26,32 @@ public class EstadoEnemigo : MonoBehaviour
 
     private void Update()
     {
-        RecordarPosicion();
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            InsertarAccion(Acciones.Curar, 0, true);
+        }
     }
 
-    public void RecordarPosicion()
+    public bool RecordarPosicion()
     {
-        if(ObjetivoFijado != null)
+        if(ObjetivoFijado != null && Estado != Estados.Combate)
         {
             DestinoFijado = ObjetivoFijado.transform.position;
-            return;
+            return false;
         }
         else if(Mathf.Abs(transform.position.x - DestinoFijado.x) < .5f && Mathf.Abs(transform.position.y - DestinoFijado.y) < 3f)
         {
-            DestinoFijado = Vector3.zero;
             Estado = Estados.Vigilante;
-            return;
+            return true;
         }
+        return true;
     }
 
     // TODO
     async public void ResolverColaAccion()
     {
         bool realizada = false;
+        Acciones buffer = ColaDeAccion[0];
         switch(ColaDeAccion[0])
         {
             case Acciones.Idle:
@@ -66,11 +70,15 @@ public class EstadoEnemigo : MonoBehaviour
                 break;
 
             case Acciones.Mover:
+                realizada = RecordarPosicion();
                 await Task.Delay(100);
-                realizada = true;
                 break;
         }
 
+        if(buffer != ColaDeAccion[0])
+        {
+            realizada = false;
+        }
         if(realizada)
         {
             for (int i = 0; i < ColaDeAccion.Length - 1; i++)
@@ -78,20 +86,15 @@ public class EstadoEnemigo : MonoBehaviour
                 ColaDeAccion[i] = ColaDeAccion[i + 1];
             }
             ColaDeAccion[ColaDeAccion.Length - 1] = Acciones.Idle;
-            DecidirSiguienteAccion(ColaDeAccion.Length - 1, false);
+            DecidirSiguienteAccion();
         }
 
         ResolverColaAccion();
     }
 
     // TODO
-    public void DecidirSiguienteAccion(int posicionNueva, bool forzarCambio)
+    private void DecidirSiguienteAccion()
     {
-        if(posicionNueva >= ColaDeAccion.Length || posicionNueva < 0)
-        {
-            Debug.Log("Posición para nueva acción incorrecta");
-            return;
-        }
 
         Acciones accionDecidida = Acciones.Idle;
         if (Estado == Estados.Combate)
@@ -101,6 +104,16 @@ public class EstadoEnemigo : MonoBehaviour
         else if (Estado == Estados.Alerta)
         {
             accionDecidida = Acciones.Mover;
+        }
+        InsertarAccion(accionDecidida, ColaDeAccion.Length - 1, false);
+    }
+
+    public void InsertarAccion(Acciones accionInsertada, int posicionNueva, bool forzarCambio)
+    {
+        if (posicionNueva >= ColaDeAccion.Length || posicionNueva < 0)
+        {
+            Debug.Log("Posición para nueva acción incorrecta");
+            return;
         }
 
 
@@ -114,13 +127,17 @@ public class EstadoEnemigo : MonoBehaviour
                     break;
                 }
             }
-            if (ColaDeAccion[posicionNueva] != Acciones.Idle && ColaDeAccion[posicionNueva] != accionDecidida)
+            if (ColaDeAccion[posicionNueva] != Acciones.Idle && ColaDeAccion[posicionNueva] != accionInsertada)
             {
                 Debug.Log("El cambio no se produjo porque no se puede forzar el cambio");
                 return;
             }
         }
 
-        ColaDeAccion[posicionNueva] = accionDecidida;
+        for (int i = ColaDeAccion.Length - 1; i > posicionNueva; i--)
+        {
+            ColaDeAccion[i] = ColaDeAccion[i - 1];
+        }
+        ColaDeAccion[posicionNueva] = accionInsertada;
     }
 }

@@ -39,13 +39,17 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             Perseguir();
         }
-        else if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Idle)
+        else
+        {
+            Patrullar();
+        }
+
+        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Idle)
         {
             if(_EnEscalera)
             {
                 SoltarEscalera();
             }
-            Patrullar();
         }
         // Si está en el suelo y puede saltar recupera sus saltos
         if(CriterioSalto != CriteriosSalto.Nunca && _Gravedad.EnSuelo)
