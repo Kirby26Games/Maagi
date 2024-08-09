@@ -7,9 +7,6 @@ public class ApuntarPersonaje : MonoBehaviour
     public List<Transform> ObjetivosDetectados = new List<Transform>();
     public int IndiceObjetivos = 0;
     public float RangoVision = 20f;
-    [Header("Referencias")]
-    private ControlesPersonaje Controles;
-    private SistemasPersonaje Personaje;
 
     void Start()
     {
@@ -83,10 +80,10 @@ public class ApuntarPersonaje : MonoBehaviour
         //Desactivamos todos los indicadores y se activa solo el de objetivo actual
         foreach (var objetivo in ObjetivosDetectados)
         {
-            GameObject SelectorObjetivos = objetivo.transform.Find("Target").gameObject;
-            if (SelectorObjetivos != null)
+            GameObject selectorObjetivos = objetivo.transform.Find("Target").gameObject;
+            if (selectorObjetivos != null)
             {
-                SelectorObjetivos.SetActive(false);
+                selectorObjetivos.SetActive(false);
             }
         }
         indicadorObjetivo.SetActive(true);
