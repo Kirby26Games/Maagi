@@ -3,8 +3,6 @@ using UnityEngine;
 public class ColisionesPersonaje : MonoBehaviour
 {
     public bool CercaEscalera;
-    public bool PuedoCogerObjeto;
-    public GameObject Objeto;
     private SistemasPersonaje Personaje;
     public SphereCollider ColisionDeteccion;
     public CapsuleCollider ColisionPersonaje;
@@ -35,8 +33,7 @@ public class ColisionesPersonaje : MonoBehaviour
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            PuedoCogerObjeto = true;
-            Objeto = other.gameObject;
+            Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 
@@ -55,8 +52,7 @@ public class ColisionesPersonaje : MonoBehaviour
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            PuedoCogerObjeto = false;
-            Objeto = null;
+            Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 }

@@ -7,6 +7,7 @@ public class InventarioPersonaje : InventarioBase
 {
     public GameObject InventarioInterfaz;
     public List<ContenedorObjeto> ContenedorObjetos;
+    public List<ObjetoEscena> ObjetosCogibles;
     public GameObject MenuInventario;
     public Vector3 PosicionOculta;
     public bool InterfazAbierta;
@@ -38,6 +39,28 @@ public class InventarioPersonaje : InventarioBase
         }
     }
 
+    public void GestorObjetosCogibles(ObjetoEscena objetoTrigger)
+    {
+        if (ObjetosCogibles.Contains(objetoTrigger))
+        {
+            ObjetosCogibles.Remove(objetoTrigger);
+        }
+        else
+        {
+            ObjetosCogibles.Add(objetoTrigger);
+        }
+    }
+
+    public void SortObjetosCogibles()
+    {
+        ObjetosCogibles.Sort((a, b) =>
+        {
+            float distanciaA = Vector3.Distance(a.gameObject.transform.position, transform.position);
+            float distanciaB = Vector3.Distance(b.gameObject.transform.position, transform.position);
+            return distanciaA.CompareTo(distanciaB);
+        });
+    }
+
     public bool AgregarAInventario(ObjetoEscena objetoTrigger)
     {
         //Al agregar un objeto nuevo primero verifica si ya existe un contenedor con su objeto y si aun no ha llegado a su limite de espacio
@@ -48,6 +71,7 @@ public class InventarioPersonaje : InventarioBase
                 if (ContenedorObjetos[i].Cantidad + objetoTrigger.Cantidad <= GestorObjetos.Instancia.DiccionarioObjeto[objetoTrigger.Nombre].MaximoAcumulable)
                 {
                     ContenedorObjetos[i].Cantidad += objetoTrigger.Cantidad;
+                    ObjetosCogibles.Remove(ObjetosCogibles[0]);
                     return true;
                 }
                 else
@@ -65,6 +89,7 @@ public class InventarioPersonaje : InventarioBase
                 ObjetosInventario[i] = objetoTrigger.ID;
                 ContenedorObjetos[i].Nombre = objetoTrigger.Nombre;
                 ContenedorObjetos[i].Cantidad = objetoTrigger.Cantidad;
+                ObjetosCogibles.Remove(ObjetosCogibles[0]);
                 return true;
             }
         }
