@@ -66,5 +66,15 @@ public class ControlesPersonaje : MonoBehaviour
             Personaje.Inventario.ToggleInterfaz();
         }
 
+        if (Input.GetKeyDown(Controles.Interactuar) && Personaje.Colisiones.PuedoCogerObjeto)
+        {
+            if (Personaje.Inventario.AgregarAInventario(Personaje.Colisiones.Objeto.GetComponent<ObjetoEscena>()))
+            {
+                Destroy(Personaje.Colisiones.Objeto);
+                Personaje.Colisiones.Objeto = null;
+                Personaje.Colisiones.PuedoCogerObjeto = false;
+            }
+        }
+
     }
 }

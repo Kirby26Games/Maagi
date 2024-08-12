@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50dbd28e5e52367409a09f6dcebcc1aa, type: 3}
+  m_Name: ListaDeObjetos
+  m_EditorClassIdentifier: 
+  Objetos:
+  - rid: 4498443068036612214
+  - rid: 4498443068036612215
+  - rid: 4498443068036612216
+  - rid: 4498443068036612217
+  references:
+    version: 2
+    RefIds:
+    - rid: 4498443068036612214
+      type: {class: ObjetoVacio, ns: , asm: Assembly-CSharp}
+      data:
+        Nombre: ObjetoVacio
+        ID: 0
+        MaximoAcumulable: 1
+        Prefab: {fileID: 0}
+        Imagen: {fileID: 0}
+    - rid: 4498443068036612215
+      type: {class: Moneda, ns: , asm: Assembly-CSharp}
+      data:
+        Nombre: Moneda
+        ID: 1
+        MaximoAcumulable: 9999
+        Prefab: {fileID: 645076526835749322, guid: 90babdf893e719a4699dd9bdc90283d1, type: 3}
+        Imagen: {fileID: 0}
+    - rid: 4498443068036612216
+      type: {class: Antorcha, ns: , asm: Assembly-CSharp}
+      data:
+        Nombre: Antorcha
+        ID: 2
+        MaximoAcumulable: 1
+        Prefab: {fileID: 7065755384453971603, guid: e4fff12a581f8b64da82c600a6933b94, type: 3}
+        Imagen: {fileID: 0}
+    - rid: 4498443068036612217
+      type: {class: EspadaCorta, ns: , asm: Assembly-CSharp}
+      data:
+        Nombre: EspadaCorta
+        ID: 3
+        MaximoAcumulable: 1
+        Prefab: {fileID: 6416728105665947128, guid: 8befbbca4f77fe9409f590215022bfa8, type: 3}
+        Imagen: {fileID: 0}
