@@ -15054,7 +15054,7 @@ GameObject:
   - component: {fileID: 422211518}
   - component: {fileID: 422211520}
   - component: {fileID: 422211519}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Escaleras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60148,6 +60148,7 @@ MonoBehaviour:
     rid: 6567983979964661760
   "Tama\xF1oInventario": 3
   "Tama\xF1oColaAccion": 3
+  MaximoTiempoInalcanzable: 5
   references:
     version: 2
     RefIds:

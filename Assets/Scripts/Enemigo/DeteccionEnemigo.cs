@@ -63,7 +63,8 @@ public class DeteccionEnemigo : MonoBehaviour
                 Mathf.Abs(Vector2.SignedAngle(Objetivos[i].transform.position - transform.position, DireccionMirada)) <= 120f)
             {
                 _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
-                _EstadoActual.ObjetivoFijado = Objetivos[i];
+                _EstadoActual.DestinoFijado = Objetivos[i].transform.position;
+                _EstadoActual.DestinoFijado.y += Mathf.Sign(_EstadoActual.DestinoFijado.y - transform.position.y) * 2f;
                 return;
             }
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad

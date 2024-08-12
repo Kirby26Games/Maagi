@@ -10,6 +10,7 @@ public class EstadoEnemigo : MonoBehaviour
     public GameObject ObjetivoFijado;
     public Vector3 DestinoFijado;
     public Vector2 DistanciaAObstaculo;
+    private float _ContadorObjetivoInalcanzable;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class EstadoEnemigo : MonoBehaviour
 
     private void Update()
     {
+        // EJEMPLO DE ACCESO EXTERNO A LA COLA DE ACCIÓN
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             InsertarAccion(Acciones.Curar, 0, true);
@@ -36,18 +38,20 @@ public class EstadoEnemigo : MonoBehaviour
     {
         if(ObjetivoFijado != null && Estado != Estados.Combate)
         {
+            _ContadorObjetivoInalcanzable = 0f;
             DestinoFijado = ObjetivoFijado.transform.position;
             return false;
         }
         else if(Mathf.Abs(transform.position.x - DestinoFijado.x) < .5f && Mathf.Abs(transform.position.y - DestinoFijado.y) < 3f)
         {
+            _ContadorObjetivoInalcanzable = 0f;
             Estado = Estados.Vigilante;
             return true;
         }
-        return true;
+        _ContadorObjetivoInalcanzable += Time.deltaTime;
+        return false;
     }
 
-    // TODO
     async public void ResolverColaAccion()
     {
         bool realizada = false;
@@ -92,7 +96,6 @@ public class EstadoEnemigo : MonoBehaviour
         ResolverColaAccion();
     }
 
-    // TODO
     private void DecidirSiguienteAccion()
     {
 
@@ -101,8 +104,9 @@ public class EstadoEnemigo : MonoBehaviour
         {
             accionDecidida = Acciones.Atacar;
         }
-        else if (Estado == Estados.Alerta)
+        else if (Estado == Estados.Alerta && _ContadorObjetivoInalcanzable < VariablesGlobales.Instancia.MaximoTiempoInalcanzable)
         {
+            _ContadorObjetivoInalcanzable = 0f;
             accionDecidida = Acciones.Mover;
         }
         InsertarAccion(accionDecidida, ColaDeAccion.Length - 1, false);

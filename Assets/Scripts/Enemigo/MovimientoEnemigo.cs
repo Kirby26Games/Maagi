@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovimientoEnemigo : MonoBehaviour
@@ -23,6 +22,8 @@ public class MovimientoEnemigo : MonoBehaviour
     [HideInInspector] public float PosicionEscalera;
     [HideInInspector] public float VelocidadSubirEscaleras;
     private bool _EnEscalera;
+    private float _CooldownEscalera;
+    private float _MinimoCooldownEscalera;
 
     private void Awake()
     {
@@ -30,6 +31,12 @@ public class MovimientoEnemigo : MonoBehaviour
         _Cuerpo = GetComponent<Rigidbody>();
         _Gravedad = GetComponent<SistemaGravedad>();
         _Colision = GetComponent<Collider>();
+    }
+
+    private void Start()
+    {
+        _MinimoCooldownEscalera = 2f;
+        _CooldownEscalera = _MinimoCooldownEscalera;
     }
 
     private void Update()
@@ -44,17 +51,15 @@ public class MovimientoEnemigo : MonoBehaviour
             Patrullar();
         }
 
-        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Idle)
-        {
-            if(_EnEscalera)
-            {
-                SoltarEscalera();
-            }
-        }
         // Si está en el suelo y puede saltar recupera sus saltos
         if(CriterioSalto != CriteriosSalto.Nunca && _Gravedad.EnSuelo)
         {
             ReiniciarSaltos();
+        }
+
+        if(PuedeUsarEscaleras && _CooldownEscalera < _MinimoCooldownEscalera * 2)
+        {
+            _CooldownEscalera += Time.deltaTime;
         }
     }
 
@@ -86,7 +91,7 @@ public class MovimientoEnemigo : MonoBehaviour
         // Revisar si debe usar escaleras en caso de que sea capaz
         if (PuedeUsarEscaleras)
         {
-            if(UsarEscalera())
+            if (UsarEscalera() && _CooldownEscalera > _MinimoCooldownEscalera)
             {
                 velocidadFinal = VelocidadSubirEscaleras * Vector3.up;
             }
@@ -104,9 +109,10 @@ public class MovimientoEnemigo : MonoBehaviour
             return false;
         }
 
-        // Si no es necesario coger la escalera la ignora
+        // Si no es necesario coger la escalera la suelta (o la ignora)
         if (_Gravedad.EnSuelo && Mathf.Abs(_EstadoActual.DestinoFijado.y - transform.position.y) < 3f)
         {
+           SoltarEscalera();
            return false;
         }
 
@@ -127,13 +133,15 @@ public class MovimientoEnemigo : MonoBehaviour
             return true;
         }
 
-        return false;
+        return true;
     }
 
     public void SoltarEscalera()
     {
         _Colision.isTrigger = false;
         _EnEscalera = false;
+        VelocidadSubirEscaleras = 0f;
+        _CooldownEscalera = 0f;
     }
 
     private void Saltar()
