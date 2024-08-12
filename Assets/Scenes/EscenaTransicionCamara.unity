@@ -37075,14 +37075,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc8fa7c661b6c74bbf1a1d5358576eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CriterioSalto: 2
-  PuedeUsarEscaleras: 1
+  CriterioSalto: 1
+  PuedeUsarEscaleras: 0
+  EsVolador: 1
   VelocidadMovimiento: 3
   DistanciaSalto: 5.5
   SaltosEnElAireMaximos: 1
   CercaEscalera: 0
   PosicionEscalera: 0
   VelocidadSubirEscaleras: 0
+  VelocidadVuelo: 3
+  DireccionVuelo: {x: 0, y: 0, z: 0}
 --- !u!114 &992498178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60149,6 +60152,7 @@ MonoBehaviour:
   "Tama\xF1oInventario": 3
   "Tama\xF1oColaAccion": 3
   MaximoTiempoInalcanzable: 5
+  MaximosMurosGolpeados: 0
   references:
     version: 2
     RefIds:

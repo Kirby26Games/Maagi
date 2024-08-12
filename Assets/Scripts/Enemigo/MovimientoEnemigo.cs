@@ -6,6 +6,7 @@ public class MovimientoEnemigo : MonoBehaviour
     [Header("Capacidades")]
     public CriteriosSalto CriterioSalto;
     public bool PuedeUsarEscaleras;
+    public bool EsVolador;
     [Header("Memoria")]
     private EstadoEnemigo _EstadoActual;
     [Header("Propiedades")]
@@ -24,6 +25,10 @@ public class MovimientoEnemigo : MonoBehaviour
     private bool _EnEscalera;
     private float _CooldownEscalera;
     private float _MinimoCooldownEscalera;
+    [Header("Vuelo")]
+    public float VelocidadVuelo;
+    private int _MurosGolpeados;
+    [HideInInspector] public Vector3 DireccionVuelo;
 
     private void Awake()
     {
@@ -35,12 +40,26 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Start()
     {
+        if(EsVolador && (PuedeUsarEscaleras || CriterioSalto != CriteriosSalto.Nunca))
+        {
+            throw new System.Exception("Un enemigo no puede ser volador y tener otras capacidades activas");
+        }
         _MinimoCooldownEscalera = 2f;
         _CooldownEscalera = _MinimoCooldownEscalera;
+
+        // Esto es equivalente a Idle para voladores
+        _MurosGolpeados = -1;
     }
 
     private void Update()
     {
+        if(EsVolador)
+        {
+            Volar();
+            return;
+        }
+
+        // COMPORTAMIENTO HABITUAL: Sobre este deben ir comportamientos específicos con sus condiciones y return al final
         // Si está alerta persigue al objetivo
         if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
         {
@@ -207,5 +226,26 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             _SaltosEnElAire = 0;
         }
+    }
+
+    private void Volar()
+    {
+        // Una vez detectado un objetivo comienza la rutina del volador
+        if(_MurosGolpeados < 0)
+        {
+            if(_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
+            {
+                _MurosGolpeados = 0;
+                DireccionVuelo = Vector3.one;
+            }
+            else
+            {
+                return;
+            }
+        }
+        Vector3 velocidadFinal = Vector3.zero;
+        velocidadFinal = DireccionVuelo;
+        velocidadFinal.z = 0f;
+        _Cuerpo.linearVelocity = VelocidadVuelo * velocidadFinal.normalized;
     }
 }
