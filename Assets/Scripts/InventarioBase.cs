@@ -3,7 +3,15 @@ using UnityEngine;
 
 public class InventarioBase : MonoBehaviour
 {
-    public List<Objeto> ObjetosInventario;
+    [SerializeReference] public List<int> ObjetosInventario;
+    private int _ObjetosMaximos = 16;
 
-    //Operaciones para InventarioPersonaje
+    //Crea una lista vacia de los objetos de inventario
+    public void CrearInventario()
+    {
+        for (int i = 0; i < _ObjetosMaximos; i++)
+        {
+            ObjetosInventario.Add(0);
+        }   
+    }
 }

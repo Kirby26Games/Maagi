@@ -5,13 +5,18 @@ using UnityEngine.UI;
 
 public class ContenedorObjeto : MonoBehaviour
 {
-    public Objeto Objeto;
-    public TMP_Text Cantidad;
+    public int ID;
+    public string Nombre;
+    public int Cantidad;
+    public TMP_Text CantidadTxt;
     public Image Imagen;
 
     public void Actualizar()
-    {
-        Imagen.gameObject.SetActive(!Objeto.Nombre.IsNullOrWhitespace());
-        Cantidad.gameObject.SetActive(!Objeto.Nombre.IsNullOrWhitespace());
+    {   
+        CantidadTxt.text = Cantidad.ToString();
+
+        //Si el contenedor del inventario no tiene un objeto asignado pues se desactiva
+        Imagen.gameObject.SetActive(ID != 0);
+        CantidadTxt.gameObject.SetActive(ID != 0);
     }
 }
