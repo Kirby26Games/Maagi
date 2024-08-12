@@ -6,7 +6,7 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class MovimientoPersonaje : MonoBehaviour
 {
-
+    Camera cam;
     [Header("Movimiento")]
     public float VelocidadBase = 3;
     public float MultiplicadorAlCorrer = 2;
@@ -14,14 +14,13 @@ public class MovimientoPersonaje : MonoBehaviour
     private float VelocidadFinal;
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
-    private float UltimoEjeX;
+    //private float UltimoEjeX;
     [Header("Salto")]
     public bool Saltando;
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
     private Rigidbody RBPersonaje;
-    private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
     public int VelocidadSubirEscaleras;
@@ -36,7 +35,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
     private void Awake()
     {
-        Controles = GetComponent<ControlesPersonaje>();
+        cam = Camera.main;
         RBPersonaje = GetComponent<Rigidbody>();
         Personaje = GetComponent<SistemasPersonaje>();
         ColPersonaje = GetComponent<Collider>();
@@ -50,14 +49,14 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Update()
     {
-        FlipDireccion();
         SubirEscaleras(PuedoSubir);
 
         if (!EnEscalera)
         {
             Movimiento();
         }
-        
+
+        FlipDireccion();
         ReiniciarSaltos();
         
     }
@@ -66,15 +65,20 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         if (Personaje.Gravedad.EjeY <= 0 || CercaEscalera)
         {
-            MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
-            UltimoEjeX = Controles.EjeX;
-        }
-        else
-        {
-            MovimientoXZ = new Vector3(UltimoEjeX, 0, 0).normalized;
+            //MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
+            MovimientoXZ = (cam.transform.right * Personaje.Controles.EjeX).normalized;
+            //UltimoEjeX = Personaje.Controles.EjeX;
         }
 
-        MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
+        //Esto esta de mas, borrar a discrcion
+        //else
+        //{
+        //    MovimientoXZ = (cam.transform.right * UltimoEjeX).normalized;
+        //    //MovimientoXZ = new Vector3(UltimoEjeX, 0, 0).normalized;
+        //}
+
+        //MovimientoFinal = MovimientoXZ * VelocidadFinal;
+        MovimientoFinal = cam.transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         RBPersonaje.linearVelocity = MovimientoFinal;
@@ -83,18 +87,19 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void FlipDireccion()
     {
-
-        if (Controles.EjeX > 0)
+        //como rota el personaje
+        if (Personaje.Controles.EjeX > 0)
         {
-            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            transform.rotation = Quaternion.LookRotation(cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.TransformDirection(transform.up));
+            //transform.rotation = Quaternion.Euler(transform.localEulerAngles.x, 0 - transform.localEulerAngles.z * (cam.transform.TransformDirection(transform.up).y), transform.localEulerAngles.z);
         }
-        else if (Controles.EjeX < 0)
+        else if (Personaje.Controles.EjeX < 0)
         {
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            transform.rotation = Quaternion.LookRotation(-cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.TransformDirection(transform.up));
         }
     }
 
-    public void Saltar(float porcentajeSalto)
+    public void Saltar(float porcentajeSalto = .1f)
     {
         if (!PuedoSaltar())
         {
@@ -168,7 +173,7 @@ public class MovimientoPersonaje : MonoBehaviour
             MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
             RBPersonaje.linearVelocity = MovimientoFinal;
 
-            if (Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0)
+            if (Personaje.Gravedad.EnSuelo && Personaje.Controles.EjeZ == 0)
             {
                 SoltarEscalera();
             }
