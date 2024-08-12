@@ -5,7 +5,7 @@ public class EstadoEnemigo : MonoBehaviour
 {
     public enum Estados { Vigilante, Alerta, Combate }
     public Estados Estado;
-    public enum Acciones { Mover, Atacar, Curar }     // TODO: Temporal, serán una estructura particular
+    public enum Acciones { Idle, Mover, Atacar, Curar }     // TODO: Temporal, serán una estructura particular
     public Acciones[] ColaDeAccion;
     public GameObject ObjetivoFijado;
     public Vector3 DestinoFijado;
@@ -36,7 +36,7 @@ public class EstadoEnemigo : MonoBehaviour
             DestinoFijado = ObjetivoFijado.transform.position;
             return;
         }
-        else if(Vector3.Distance(transform.position, DestinoFijado) < .5f)
+        else if(Mathf.Abs(transform.position.x - DestinoFijado.x) < .5f && Mathf.Abs(transform.position.y - DestinoFijado.y) < 3f)
         {
             DestinoFijado = Vector3.zero;
             Estado = Estados.Vigilante;
@@ -48,11 +48,15 @@ public class EstadoEnemigo : MonoBehaviour
     async public void ResolverColaAccion()
     {
         bool realizada = false;
-        print(ColaDeAccion[0]);
         switch(ColaDeAccion[0])
         {
+            case Acciones.Idle:
+                await Task.Delay(100);
+                realizada = true;
+                break;
+
             case Acciones.Atacar:
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 realizada = true;
                 break;
 
@@ -62,26 +66,61 @@ public class EstadoEnemigo : MonoBehaviour
                 break;
 
             case Acciones.Mover:
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 realizada = true;
                 break;
         }
 
         if(realizada)
         {
-            for(int i = 0; i < ColaDeAccion.Length - 1; i++)
+            for (int i = 0; i < ColaDeAccion.Length - 1; i++)
             {
                 ColaDeAccion[i] = ColaDeAccion[i + 1];
             }
-            ColaDeAccion[ColaDeAccion.Length - 1] = DecidirSiguienteAccion();
+            ColaDeAccion[ColaDeAccion.Length - 1] = Acciones.Idle;
+            DecidirSiguienteAccion(ColaDeAccion.Length - 1, false);
         }
 
         ResolverColaAccion();
     }
 
     // TODO
-    private Acciones DecidirSiguienteAccion()
+    public void DecidirSiguienteAccion(int posicionNueva, bool forzarCambio)
     {
-        return Acciones.Mover;
+        if(posicionNueva >= ColaDeAccion.Length || posicionNueva < 0)
+        {
+            Debug.Log("Posición para nueva acción incorrecta");
+            return;
+        }
+
+        Acciones accionDecidida = Acciones.Idle;
+        if (Estado == Estados.Combate)
+        {
+            accionDecidida = Acciones.Atacar;
+        }
+        else if (Estado == Estados.Alerta)
+        {
+            accionDecidida = Acciones.Mover;
+        }
+
+
+        if (!forzarCambio)
+        {
+            for (int i = posicionNueva; i < ColaDeAccion.Length; i++)
+            {
+                if (ColaDeAccion[i] == Acciones.Idle)
+                {
+                    posicionNueva = i;
+                    break;
+                }
+            }
+            if (ColaDeAccion[posicionNueva] != Acciones.Idle && ColaDeAccion[posicionNueva] != accionDecidida)
+            {
+                Debug.Log("El cambio no se produjo porque no se puede forzar el cambio");
+                return;
+            }
+        }
+
+        ColaDeAccion[posicionNueva] = accionDecidida;
     }
 }
