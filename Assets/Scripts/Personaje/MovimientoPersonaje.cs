@@ -90,12 +90,12 @@ public class MovimientoPersonaje : MonoBehaviour
         //como rota el personaje
         if (Personaje.Controles.EjeX > 0)
         {
-            transform.rotation = Quaternion.LookRotation(cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.TransformDirection(transform.up));
+            transform.rotation = Quaternion.LookRotation(cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.up);
             //transform.rotation = Quaternion.Euler(transform.localEulerAngles.x, 0 - transform.localEulerAngles.z * (cam.transform.TransformDirection(transform.up).y), transform.localEulerAngles.z);
         }
         else if (Personaje.Controles.EjeX < 0)
         {
-            transform.rotation = Quaternion.LookRotation(-cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.TransformDirection(transform.up));
+            transform.rotation = Quaternion.LookRotation(-cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.up);
         }
     }
 
