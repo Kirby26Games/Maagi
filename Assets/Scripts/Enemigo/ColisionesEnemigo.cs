@@ -21,10 +21,10 @@ public class ColisionesEnemigo : MonoBehaviour
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            if (_Inventario.AgregarAInventario(objetoEscena.Objeto))
-            {
-                Destroy(other.gameObject);
-            }
+            //if (_Inventario.AgregarAInventario(objetoEscena.Objeto))
+            //{
+            //    Destroy(other.gameObject);
+            //}
 
         }
     }

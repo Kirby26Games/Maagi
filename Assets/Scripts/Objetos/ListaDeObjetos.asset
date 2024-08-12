@@ -15,11 +15,19 @@ MonoBehaviour:
   Objetos:
   - rid: 4498443068036612214
   - rid: 4498443068036612215
-  - rid: 4498443068036612216
+  - rid: 3911626151738998845
   - rid: 4498443068036612217
   references:
     version: 2
     RefIds:
+    - rid: 3911626151738998845
+      type: {class: AntorchaObjeto, ns: , asm: Assembly-CSharp}
+      data:
+        Nombre: 
+        ID: 0
+        MaximoAcumulable: 1
+        Prefab: {fileID: 7065755384453971603, guid: e4fff12a581f8b64da82c600a6933b94, type: 3}
+        Imagen: {fileID: 0}
     - rid: 4498443068036612214
       type: {class: ObjetoVacio, ns: , asm: Assembly-CSharp}
       data:
@@ -35,14 +43,6 @@ MonoBehaviour:
         ID: 1
         MaximoAcumulable: 9999
         Prefab: {fileID: 645076526835749322, guid: 90babdf893e719a4699dd9bdc90283d1, type: 3}
-        Imagen: {fileID: 0}
-    - rid: 4498443068036612216
-      type: {class: Antorcha, ns: , asm: Assembly-CSharp}
-      data:
-        Nombre: Antorcha
-        ID: 2
-        MaximoAcumulable: 1
-        Prefab: {fileID: 7065755384453971603, guid: e4fff12a581f8b64da82c600a6933b94, type: 3}
         Imagen: {fileID: 0}
     - rid: 4498443068036612217
       type: {class: EspadaCorta, ns: , asm: Assembly-CSharp}
