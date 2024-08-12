@@ -2,59 +2,157 @@ using UnityEngine;
 
 public class MovimientoEnemigo : MonoBehaviour
 {
+    public enum CriteriosSalto { Siempre, Nunca, DetectaBorde }
     [Header("Capacidades")]
-    public bool PuedeSaltar;
+    public CriteriosSalto CriterioSalto;
     public bool PuedeUsarEscaleras;
     [Header("Memoria")]
     private EstadoEnemigo _EstadoActual;
     [Header("Propiedades")]
     private Rigidbody _Cuerpo;
+    private Collider _Colision;
     public float VelocidadMovimiento;
     [Header("Salto")]
     public float DistanciaSalto;
-    public enum Criterios { Siempre, Nunca, DetectaBorde }
-    public Criterios CriterioSalto;
     public int SaltosEnElAireMaximos;
     private int _SaltosEnElAire;
     private SistemaGravedad _Gravedad;
+    [Header("Escaleras")]
+    [HideInInspector] public bool CercaEscalera;
+    [HideInInspector] public float PosicionEscalera;
+    [HideInInspector] public float VelocidadSubirEscaleras;
+    private bool _EnEscalera;
+    private float _CooldownEscalera;
+    private float _MinimoCooldownEscalera;
 
     private void Awake()
     {
         _EstadoActual = GetComponent<EstadoEnemigo>();
         _Cuerpo = GetComponent<Rigidbody>();
         _Gravedad = GetComponent<SistemaGravedad>();
+        _Colision = GetComponent<Collider>();
+    }
+
+    private void Start()
+    {
+        _MinimoCooldownEscalera = 2f;
+        _CooldownEscalera = _MinimoCooldownEscalera;
     }
 
     private void Update()
     {
-        if(_EstadoActual.Estado == EstadoEnemigo.Estados.Alerta)
+        // Si está alerta persigue al objetivo
+        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
         {
             Perseguir();
         }
-        if(PuedeSaltar && _Gravedad.EnSuelo)
+        else
+        {
+            Patrullar();
+        }
+
+        // Si está en el suelo y puede saltar recupera sus saltos
+        if(CriterioSalto != CriteriosSalto.Nunca && _Gravedad.EnSuelo)
         {
             ReiniciarSaltos();
         }
+
+        if(PuedeUsarEscaleras && _CooldownEscalera < _MinimoCooldownEscalera * 2)
+        {
+            _CooldownEscalera += Time.deltaTime;
+        }
+    }
+
+    private void Patrullar()
+    {
+        // A velocidadFinal se le van a añadir los distintos desplazamientos
+        Vector3 velocidadFinal = Vector3.zero;
+
+        // Añadir la gravedad que le afecta
+        velocidadFinal.y += _Gravedad.EjeY;
+
+        // Mandar la velocidad resultante al cuerpo
+        _Cuerpo.linearVelocity = velocidadFinal;
     }
 
     private void Perseguir()
     {
+        // A velocidadFinal se le van a añadir los distintos desplazamientos
         Vector3 velocidadFinal = Vector3.zero;
-        velocidadFinal += (_EstadoActual.ObjetivoFijado.transform.position - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
-        if(PuedeSaltar)
-        {
-            Saltar();
-        }
+        // Añadir la velocidad correcta en la dirección correcta
+        velocidadFinal += (_EstadoActual.DestinoFijado - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
+
+        // Revisar si debe saltar en caso de que sea capaz
+        Saltar();
+
+        // Añadir la gravedad que le afecta
         velocidadFinal.y += _Gravedad.EjeY;
+
+        // Revisar si debe usar escaleras en caso de que sea capaz
+        if (PuedeUsarEscaleras)
+        {
+            if (UsarEscalera() && _CooldownEscalera > _MinimoCooldownEscalera)
+            {
+                velocidadFinal = VelocidadSubirEscaleras * Vector3.up;
+            }
+        }
+
+        // Mandar la velocidad resultante al cuerpo
         _Cuerpo.linearVelocity = velocidadFinal;
+    }
+
+    private bool UsarEscalera()
+    {
+        // Si no está cerca de escaleras no las puede usar
+        if (!CercaEscalera && !_EnEscalera)
+        {
+            return false;
+        }
+
+        // Si no es necesario coger la escalera la suelta (o la ignora)
+        if (_Gravedad.EnSuelo && Mathf.Abs(_EstadoActual.DestinoFijado.y - transform.position.y) < 3f)
+        {
+           SoltarEscalera();
+           return false;
+        }
+
+        _EnEscalera = true;
+        transform.position = new Vector3(PosicionEscalera, transform.position.y, transform.position.z);
+        _Colision.isTrigger = true;
+
+        if (transform.position.y < _EstadoActual.DestinoFijado.y)
+        {
+            // Subir escalera
+            VelocidadSubirEscaleras = Mathf.Abs(VelocidadSubirEscaleras);
+            return true;
+        }
+        if (transform.position.y > _EstadoActual.DestinoFijado.y)
+        {
+            // Bajar escalera
+            VelocidadSubirEscaleras = -1 * Mathf.Abs(VelocidadSubirEscaleras);
+            return true;
+        }
+
+        return true;
+    }
+
+    public void SoltarEscalera()
+    {
+        _Colision.isTrigger = false;
+        _EnEscalera = false;
+        VelocidadSubirEscaleras = 0f;
+        _CooldownEscalera = 0f;
     }
 
     private void Saltar()
     {
+        // Si no puede o no quiere saltar no lo hace
         if (!PuedoSaltar() || !QuieroSaltar())
         {
             return;
         }
+
+        // En caso contrario, calcula lo que debe saltar
         _Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * VariablesGlobales.Instancia.Gravedad);
     }
 
@@ -77,15 +175,20 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private bool QuieroSaltar()
     {
+        // Dependiendo del criterio, devuelve true si quiere saltar o false si no
         switch(CriterioSalto)
         {
-            case Criterios.Siempre:
+            // Siempre devuelve true siempre
+            case CriteriosSalto.Siempre:
                 return true;
 
-            case Criterios.DetectaBorde:
-                if(_EstadoActual.DistanciaAObstaculo < VelocidadMovimiento &&
-                    _EstadoActual.DistanciaAObstaculo > 0f &&
-                    _EstadoActual.ObjetivoFijado.transform.position.y > transform.position.y)
+            // Detecta borde se fija en la distancia al obstáculo más cercano (si existe) y si el objetivo está por encima de su posición
+            case CriteriosSalto.DetectaBorde:
+                if(_EstadoActual.DistanciaAObstaculo.x < VelocidadMovimiento &&
+                    _EstadoActual.DistanciaAObstaculo.x > -1f &&
+                    _EstadoActual.DistanciaAObstaculo.y < DistanciaSalto &&
+                    _EstadoActual.DistanciaAObstaculo.y > -1f &&
+                    _EstadoActual.DestinoFijado.y > transform.position.y)
                 {
                     return true;
                 }
@@ -94,6 +197,7 @@ public class MovimientoEnemigo : MonoBehaviour
                     return false;
                 }
         }
+        // Nunca devuelve false siempre
         return false;
     }
 

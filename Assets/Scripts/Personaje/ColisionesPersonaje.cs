@@ -4,6 +4,8 @@ public class ColisionesPersonaje : MonoBehaviour
 {
     public bool CercaEscalera;
     private SistemasPersonaje Personaje;
+    public SphereCollider ColisionDeteccion;
+    public CapsuleCollider ColisionPersonaje;
 
     private void Awake()
     {
@@ -33,7 +35,6 @@ public class ColisionesPersonaje : MonoBehaviour
         {
             Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -54,5 +55,4 @@ public class ColisionesPersonaje : MonoBehaviour
             Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
-
 }

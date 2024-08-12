@@ -44,6 +44,12 @@ public class ControlesPersonaje : MonoBehaviour
         }
 
 
+        if (Input.GetKeyUp(Controles.Apuntar))
+        {
+            Personaje.Apuntar.DetectarObjetivos();
+        }
+
+
         if ((Input.GetKeyDown(Controles.Subir) || Input.GetKeyDown(Controles.Bajar)) && Personaje.Movimiento.CercaEscalera)
         {
             Personaje.Movimiento.PuedoSubir = true;
@@ -53,6 +59,7 @@ public class ControlesPersonaje : MonoBehaviour
         {
             Personaje.Movimiento.SoltarEscalera();
         }
+
 
         if (Input.GetKeyDown(Controles.Inventario))
         {

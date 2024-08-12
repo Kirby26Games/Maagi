@@ -66,6 +66,5 @@ public class RaycastEnemigo : MonoBehaviour
         Radio = Ancho / 2;
         _RangoDeteccionSuelo = Alto / 2 - Radio + 0.001f;
         DistanciaRayoEscalada = Radio / Mathf.Sin((90 - AnguloEscaladaMaximo) * Mathf.PI / 180) + Alto / 2 - Radio + 0.001f;
-        //DistanciaRayoEscalada = Radio / Mathf.Sin(Mathf.Deg2Rad * (90 - AnguloEscaladaMaximo)) + Alto / 2 - Radio + 0.001f;
     }
 }

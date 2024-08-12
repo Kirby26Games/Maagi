@@ -51,8 +51,6 @@ public class InventarioPersonaje : InventarioBase
         }
     }
 
-    //hola
-
     public void SortObjetosCogibles()
     {
         ObjetosCogibles.Sort((a, b) =>

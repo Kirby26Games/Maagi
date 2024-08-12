@@ -21,7 +21,7 @@ public class ListaDeObjetos : ScriptableObject
         Objetos = new Objeto[] {
             new ObjetoVacio(),
             new Moneda(),
-            new Antorcha(),
+            new AntorchaObjeto(),
             new EspadaCorta(),
         };
 

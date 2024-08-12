@@ -4,106 +4,97 @@ using UnityEngine;
 public class ApuntarPersonaje : MonoBehaviour
 {
     [Header("Apuntado")]
-    public Camera CamaraPrincipal;
-    public List<Transform> ObjetivosEnPantalla = new List<Transform>();
     public List<Transform> ObjetivosDetectados = new List<Transform>();
     public int IndiceObjetivos = 0;
-    [Header("Sistemas")]
+    public float RangoVision = 20f;
+    public float AnguloApuntar = 35f;
+    public SphereCollider VisionCollider;
+    public GameObject Target;
+    GameObject _TargetScene;
+
+    [Header("Referencias")]
     private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
 
     void Start()
     {
-        CamaraPrincipal = Camera.main;
-    }
-
-    void Update()
-    {
-        ActualizarObjetivosEnPantalla();
-        DetectarObjetivos();
-    }
-    bool EstaEnPantalla(GameObject objetivoEnPantalla)
-    {
-        // Comprueba si el transform del GameObject está en pantalla (MainCamera)
-        Vector3 puntoEnPantalla = CamaraPrincipal.WorldToViewportPoint(objetivoEnPantalla.transform.position);
-        return puntoEnPantalla.z > 0 && puntoEnPantalla.x > 0 && puntoEnPantalla.x < 1 && puntoEnPantalla.y > 0 && puntoEnPantalla.y < 1;
-    }
-
-    void ActualizarObjetivosEnPantalla()
-    {
-        ObjetivosEnPantalla.Clear();
-
-        // Buscamos enemigos
-        GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemigo");
-        foreach (var enemigo in enemigos)
+        VisionCollider.radius = RangoVision;
+        if (_TargetScene == null)
         {
-            //Si los enemigos estan en pantalla, los añado a la lista
-            if (EstaEnPantalla(enemigo))
-            {
-                ObjetivosEnPantalla.Add(enemigo.transform);
-            }
-        }
-
-        // Buscamos aliados
-        GameObject[] aliados = GameObject.FindGameObjectsWithTag("Aliado");
-        foreach (var aliado in aliados)
-        {
-            //Si los aliados estan en pantalla, los añado a la lista
-            if (EstaEnPantalla(aliado))
-            {
-                ObjetivosEnPantalla.Add(aliado.transform);
-            }
+            _TargetScene = Instantiate(Target);
+            _TargetScene.SetActive(false);
         }
     }
 
-    void DetectarObjetivos()
+    void OnTriggerEnter(Collider other) //Incluir enemigos y aliados por colisión en la lista de posibles objetivos
     {
-        ObjetivosDetectados.Clear();
-        foreach (Transform objetivo in ObjetivosEnPantalla)
+        if (other.TryGetComponent(out Fijable fijable))
         {
-            Vector3 direccionObjetivo = (objetivo.position - transform.position).normalized;
-            float anguloDeteccion = Vector3.Angle(transform.right, direccionObjetivo);
-            float anguloApuntar = 22.5f;
+            ObjetivosDetectados.Add(fijable.transform);
 
-            RaycastHit detectado;
-            //Hago un raycast a los ObjetivosEnPantalla, y si los golpea los añado a la lista ObjetivosDetectados,
-            //así nos aseguramos de que solo podemos CambiarObjetivo() entre esos objetivos y no entre todos los que haya en pantalla
-            if (Physics.Raycast(transform.position, objetivo.position - transform.position, out detectado))
-            {
-                if (detectado.transform == objetivo)
-                {
-                    Debug.DrawRay(transform.position, objetivo.position - transform.position, Color.red);
-                    Debug.Log("DETECTADO " + detectado.transform.name);
-                    if (anguloDeteccion <= anguloApuntar)
-                    {
-                        // Agrega a la lista de enemigos detectados
-                        ObjetivosDetectados.Add(objetivo);
-                    }
-                }
-            }
         }
     }
 
-    public void CambiarObjetivo()
+    void OnTriggerExit(Collider other) //Eliminar enemigos y aliados por colisión de la lista de posibles objetivos
     {
-        Transform objetivoActual = ObjetivosDetectados[IndiceObjetivos];
+        if (other.TryGetComponent(out Fijable fijable))
+        {
+            ObjetivosDetectados.Remove(fijable.transform);
 
-        //Contador para cambiar de objetivos
-        IndiceObjetivos++;
+        }
+    }
+
+    public void DetectarObjetivos()
+    {
+        //mejorprevenir que lamentar 
+        //if (_TargetScene == null)
+        //{
+        //    _TargetScene = Instantiate(Target);
+        //    _TargetScene.SetActive(false);
+        //}
+
         if (IndiceObjetivos >= ObjetivosDetectados.Count)
         {
+            _TargetScene.SetActive(false);
+            // Resetear al principio de la lista
             IndiceObjetivos = 0;
+            //aquí desfijo
+            return;
         }
 
-        // Activamos el indicador para el nuevo objetivo y desactivar el de los demás
-        foreach (var objetivo in ObjetivosDetectados)
+        Transform objetivoActual = ObjetivosDetectados[IndiceObjetivos];
+        IndiceObjetivos++;
+        Vector3 direccionObjetivo = (objetivoActual.position - transform.position).normalized;
+        float anguloDeteccion = Vector3.Angle(transform.right, direccionObjetivo);
+        float distaciaObjetivo = Vector3.Distance(objetivoActual.position, transform.position);
+
+        if (anguloDeteccion > AnguloApuntar)
         {
-            GameObject indicadorObjetivo = objetivo.transform.Find("Target").gameObject;
-            if (indicadorObjetivo != null)
+            //intento detectar el siguiente
+            DetectarObjetivos();
+            return;
+        }
+
+        Ray rayo = new();
+        rayo.origin = transform.position;
+        rayo.direction = direccionObjetivo;
+
+        RaycastHit[] datos = Physics.RaycastAll(rayo, distaciaObjetivo);
+        Debug.DrawRay(rayo.origin, rayo.direction * datos[0].distance, Color.red, 10.0f);
+        
+        for (int i = 0; i < datos.Length; i++) 
+        { 
+            if (!datos[i].transform.GetComponent<Fijable>())
             {
-                indicadorObjetivo.SetActive(objetivo == objetivoActual);
+                DetectarObjetivos();
+                return;
             }
         }
+        //Movemos el indicador de objetivo del objetivo actual
+        _TargetScene.transform.position = objetivoActual.position - Vector3.forward;
+        if (_TargetScene.activeInHierarchy==false)
+        {
+            _TargetScene.SetActive(true);
+        }
     }
-
 }

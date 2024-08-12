@@ -47,7 +47,7 @@ public class EspadaCorta : Objeto
 }
 
 [Serializable]
-public class Antorcha : Objeto
+public class AntorchaObjeto : Objeto
 {
     public override void Definir()
     {
