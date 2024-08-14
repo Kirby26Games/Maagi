@@ -15054,7 +15054,7 @@ GameObject:
   - component: {fileID: 422211518}
   - component: {fileID: 422211520}
   - component: {fileID: 422211519}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Escaleras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37075,7 +37075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc8fa7c661b6c74bbf1a1d5358576eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CriterioSalto: 1
+  CriterioSalto: 2
   PuedeUsarEscaleras: 1
   VelocidadMovimiento: 3
   DistanciaSalto: 5.5
@@ -60140,7 +60140,7 @@ MonoBehaviour:
   EspacioEntreHabitaciones: 1
   MargenCambioHabitacion: 2
   TiempoCambioHabitacion: 0.5
-  RadioDeteccion: 5
+  RadioDeteccion: 7
   RadioCombate: 1.5
   MemoriaAtencion: 3
   FuerzaSalto: 2
@@ -60148,6 +60148,7 @@ MonoBehaviour:
     rid: 6567983979964661760
   "Tama\xF1oInventario": 3
   "Tama\xF1oColaAccion": 3
+  MaximoTiempoInalcanzable: 5
   references:
     version: 2
     RefIds:

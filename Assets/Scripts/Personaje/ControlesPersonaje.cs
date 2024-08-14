@@ -66,6 +66,17 @@ public class ControlesPersonaje : MonoBehaviour
             Personaje.Inventario.ToggleInterfaz();
         }
 
+        if (Input.GetKeyDown(Controles.Interactuar) && Personaje.Inventario.ObjetosCogibles.Count > 0)
+        {
+            Personaje.Inventario.SortObjetosCogibles();
+            ObjetoEscena objetoAgregado = Personaje.Inventario.ObjetosCogibles[0];
+
+            if (Personaje.Inventario.AgregarAInventario(objetoAgregado))
+            {
+                Destroy(objetoAgregado.gameObject);
+            }
+        }
+
     }
 
     float EjeXTotal()

@@ -33,11 +33,7 @@ public class ColisionesPersonaje : MonoBehaviour
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            if (Personaje.Inventario.AgregarAInventario(objetoEscena.Objeto))
-            {
-                Destroy(other.gameObject);
-            }
-            
+            Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 
@@ -52,6 +48,11 @@ public class ColisionesPersonaje : MonoBehaviour
         if (other.TryGetComponent(out Suelo suelo))
         {
             Personaje.Movimiento.AtravesandoSuelo = false;
+        }
+
+        if (other.TryGetComponent(out ObjetoEscena objetoEscena))
+        {
+            Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 }
