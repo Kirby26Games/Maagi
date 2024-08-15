@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(ControlesPersonaje), typeof(TamañoPersonaje), typeof(ColisionesPersonaje))]
 
 [RequireComponent(typeof(AtaquePersonaje), typeof(InventarioPersonaje), typeof(ApuntarPersonaje))]
+[RequireComponent(typeof(Estadisticas))]
+
 
 
 public class SistemasPersonaje : MonoBehaviour
@@ -19,6 +21,7 @@ public class SistemasPersonaje : MonoBehaviour
     public AtaquePersonaje Ataque;
     public InventarioPersonaje Inventario;
     public ApuntarPersonaje Apuntar;
+    public Estadisticas Estadisticas;
 
 
 
@@ -33,5 +36,6 @@ public class SistemasPersonaje : MonoBehaviour
         Ataque = GetComponent<AtaquePersonaje>();
         Inventario = GetComponent<InventarioPersonaje>();
         Apuntar = GetComponent<ApuntarPersonaje>();
+        Estadisticas = GetComponent<Estadisticas>();
     }
 }
