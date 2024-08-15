@@ -27,7 +27,7 @@ public class MovimientoEnemigo : MonoBehaviour
     private float _MinimoCooldownEscalera;
     [Header("Vuelo")]
     public float VelocidadVuelo;
-    private int _MurosGolpeados;
+    [HideInInspector] public int MurosGolpeados;
     [HideInInspector] public Vector3 DireccionVuelo;
 
     private void Awake()
@@ -40,19 +40,30 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Start()
     {
+        // Debug: No sucede nada malo si están todas activas, pero no es deseable
         if(EsVolador && (PuedeUsarEscaleras || CriterioSalto != CriteriosSalto.Nunca))
         {
             throw new System.Exception("Un enemigo no puede ser volador y tener otras capacidades activas");
         }
+        else if(EsVolador)
+        {
+            // Si es volador, hacemos que su percepción sea en todas direcciones
+            GetComponentInChildren<DeteccionEnemigo>().AmplitudMirada = 360f;
+            // Esto es equivalente a Idle para voladores
+            MurosGolpeados = -1;
+            // Dirección inicial que tomará al detectar a un objetivo
+            DireccionVuelo = new Vector3(Random.Range(0f,1f), Random.Range(0f,1f), 0f).normalized;
+        }
+
+        // Inicializar otras variables de apoyo
         _MinimoCooldownEscalera = 2f;
         _CooldownEscalera = _MinimoCooldownEscalera;
 
-        // Esto es equivalente a Idle para voladores
-        _MurosGolpeados = -1;
     }
 
     private void Update()
     {
+        // Voladores vuelan, es lo que suelen hacer
         if(EsVolador)
         {
             Volar();
@@ -67,6 +78,7 @@ public class MovimientoEnemigo : MonoBehaviour
         }
         else
         {
+            // Si no está persiguiendo, llamamos a otro método para que siga actualizando las fuerzas que actúan sobre el objeto
             Patrullar();
         }
 
@@ -75,7 +87,7 @@ public class MovimientoEnemigo : MonoBehaviour
         {
             ReiniciarSaltos();
         }
-
+        // Gestionamos un contador para que no use escaleras muy de seguido y pueda salir de ellas
         if(PuedeUsarEscaleras && _CooldownEscalera < _MinimoCooldownEscalera * 2)
         {
             _CooldownEscalera += Time.deltaTime;
@@ -110,8 +122,10 @@ public class MovimientoEnemigo : MonoBehaviour
         // Revisar si debe usar escaleras en caso de que sea capaz
         if (PuedeUsarEscaleras)
         {
+            // Si está todo correcto para subir escaleras y no ha subido hace muy poco dejamos que las use
             if (UsarEscalera() && _CooldownEscalera > _MinimoCooldownEscalera)
             {
+                // Las escaleras son siempre verticales. La dirección (subir / bajar) ya está incluida en VelocidadSubirEscaleras
                 velocidadFinal = VelocidadSubirEscaleras * Vector3.up;
             }
         }
@@ -135,6 +149,7 @@ public class MovimientoEnemigo : MonoBehaviour
            return false;
         }
 
+        // Cambios de variables necesarios para poder llevar a cabo el movimiento a través de la escalera
         _EnEscalera = true;
         transform.position = new Vector3(PosicionEscalera, transform.position.y, transform.position.z);
         _Colision.isTrigger = true;
@@ -157,6 +172,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
     public void SoltarEscalera()
     {
+        // Devolver al objeto a su estado natural una vez salga de la escalera. Si se llama y no está cogido, no debería suceder nada
         _Colision.isTrigger = false;
         _EnEscalera = false;
         VelocidadSubirEscaleras = 0f;
@@ -222,6 +238,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
     public void ReiniciarSaltos()
     {
+        // Una vez en el suelo, recupera la cantidad de saltos que puede realizar
         if(_Gravedad.EnSuelo)
         {
             _SaltosEnElAire = 0;
@@ -230,22 +247,54 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Volar()
     {
-        // Una vez detectado un objetivo comienza la rutina del volador
-        if(_MurosGolpeados < 0)
+        // Si la rutina no ha comenzado todavía
+        if(MurosGolpeados < 0)
         {
-            if(_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
+            // Una vez detectado un objetivo comienza la rutina del volador
+            if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
             {
-                _MurosGolpeados = 0;
-                DireccionVuelo = Vector3.one;
+                MurosGolpeados = 0;
             }
             else
             {
                 return;
             }
         }
+
+        // Una vez termina la rutina, sucede esto
+        if(MurosGolpeados >= VariablesGlobales.Instancia.MaximosMurosGolpeados)
+        {
+            // Si todavía detecta a algún objetivo, reinicia la rutina desde el principio
+            if(_EstadoActual.ObjetivoFijado != null)
+            {
+                MurosGolpeados = 0;
+            }
+            // En caso contrario, detiene la rutina y llena la cola con acciones Idle
+            else
+            {
+                _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
+                for (int i = 0; i < _EstadoActual.ColaDeAccion.Length; i++)
+                {
+                    _EstadoActual.InsertarAccion(EstadoEnemigo.Acciones.Idle, i, true);
+                }
+                MurosGolpeados = -1;
+                _Cuerpo.linearVelocity = Vector3.zero;
+                return; 
+            }
+        }
+
+        // Las acciones que realiza durante la rutina. La DireccionVuelo se modifica en ColisionesEnemigo
         Vector3 velocidadFinal = Vector3.zero;
-        velocidadFinal = DireccionVuelo;
-        velocidadFinal.z = 0f;
+        // TODO: Si el enemigo volador interrumpe el vuelo para tomar ciertas acciones, suceden aquí
+        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Atacar || _EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Curar)
+        {
+            Debug.Log("No mueve porque prefiere hacer una acción importante: " + _EstadoActual.ColaDeAccion[0]);
+        }
+        else
+        {
+            velocidadFinal = DireccionVuelo;
+            velocidadFinal.z = 0f;
+        }
         _Cuerpo.linearVelocity = VelocidadVuelo * velocidadFinal.normalized;
     }
 }

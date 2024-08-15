@@ -37085,6 +37085,7 @@ MonoBehaviour:
   PosicionEscalera: 0
   VelocidadSubirEscaleras: 0
   VelocidadVuelo: 3
+  MurosGolpeados: 0
   DireccionVuelo: {x: 0, y: 0, z: 0}
 --- !u!114 &992498178
 MonoBehaviour:
@@ -60152,7 +60153,7 @@ MonoBehaviour:
   "Tama\xF1oInventario": 3
   "Tama\xF1oColaAccion": 3
   MaximoTiempoInalcanzable: 5
-  MaximosMurosGolpeados: 0
+  MaximosMurosGolpeados: 4
   references:
     version: 2
     RefIds:

@@ -16,6 +16,7 @@ public class DeteccionEnemigo : MonoBehaviour
 
     private void Awake()
     {
+        // Guardamos los scripts necesarios
         _EsferaDeteccion = GetComponent<SphereCollider>();
         _EstadoActual = GetComponentInParent<EstadoEnemigo>();
     }
