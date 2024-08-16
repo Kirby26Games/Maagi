@@ -1,12 +1,13 @@
 using System.Globalization;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 public class MovimientoPersonaje : MonoBehaviour
 {
-    Camera cam;
+    Camera cam;  //camara para basar el moviemiento
     [Header("Movimiento")]
     public float VelocidadBase = 3;
     public float MultiplicadorAlCorrer = 2;
@@ -14,7 +15,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private float VelocidadFinal;
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
-    //private float UltimoEjeX;
+    private float UltimoEjeX;
     [Header("Salto")]
     public bool Saltando;
     public float DistanciaSalto;
@@ -63,39 +64,49 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Movimiento()
     {
-        if (Personaje.Gravedad.EjeY <= 0 || CercaEscalera)
+        //si el personaje esta en el piso
+        if (Personaje.Gravedad.EnSuelo)
         {
-            //MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
+            //utilizamos cam.transform.right pq el movimiento se base en la derecha de la camra en lugar de la nuestra
             MovimientoXZ = (cam.transform.right * Personaje.Controles.EjeX).normalized;
-            //UltimoEjeX = Personaje.Controles.EjeX;
         }
+        // si esta en el aire
+        else
+        {
+            if ((Personaje.Gravedad.EjeY < 0 || CercaEscalera))//si el personaje esta cayendo
+            {
+                //reduce/aumenta la distancia del salto dependiendo del input del jugador
+                //hacer el lerp de manera correcta
+                UltimoEjeX = Mathf.Lerp(UltimoEjeX, Personaje.Controles.EjeX, Time.deltaTime * 4);
+                MovimientoXZ = (cam.transform.right * UltimoEjeX);
+            }
+        }
+        //se creo este metodo solo para estar mas comodo al leer
+        AplicarMovimiento();
+    }
 
-        //Esto esta de mas, borrar a discrcion
-        //else
-        //{
-        //    MovimientoXZ = (cam.transform.right * UltimoEjeX).normalized;
-        //    //MovimientoXZ = new Vector3(UltimoEjeX, 0, 0).normalized;
-        //}
-
-        //MovimientoFinal = MovimientoXZ * VelocidadFinal;
+    void AplicarMovimiento()
+    {
+        //en lugar de usar mi transform usamos el de la camra pq nuestro movimiento se basa en la camara
         MovimientoFinal = cam.transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         RBPersonaje.linearVelocity = MovimientoFinal;
-
     }
 
+    //metodo de rotar personaje
     void FlipDireccion()
     {
-        //como rota el personaje
+        //como rota el personaje si es izquierda o derecha
         if (Personaje.Controles.EjeX > 0)
         {
-            transform.rotation = Quaternion.LookRotation(cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.up);
+            //esto es una fumada que funciona, aqui hago q la rotacion del personaje asi adelante sea la de la camara y se multiplica por la direccion hacia arriba de la camra en el mundo
+            transform.rotation = Quaternion.LookRotation(cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), transform.up);
             //transform.rotation = Quaternion.Euler(transform.localEulerAngles.x, 0 - transform.localEulerAngles.z * (cam.transform.TransformDirection(transform.up).y), transform.localEulerAngles.z);
         }
         else if (Personaje.Controles.EjeX < 0)
         {
-            transform.rotation = Quaternion.LookRotation(-cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), cam.transform.up);
+            transform.rotation = Quaternion.LookRotation(-cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), transform.up);
         }
     }
 
@@ -107,6 +118,7 @@ public class MovimientoPersonaje : MonoBehaviour
         }
         Saltando = true;
         Personaje.Gravedad.EjeY = Mathf.Sqrt((DistanciaSalto * porcentajeSalto) * -2 * Personaje.Gravedad.Gravedad);
+        UltimoEjeX = Personaje.Controles.EjeX;
     }
 
     public bool PuedoSaltar()

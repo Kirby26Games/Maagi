@@ -9,12 +9,13 @@ public class ApuntarPersonaje : MonoBehaviour
     public float RangoVision = 20f;
     public float AnguloApuntar = 35f;
     public SphereCollider VisionCollider;
-    public GameObject Target;
-    GameObject _TargetScene;
+    public GameObject Target; //el prefab del indicador target
+    GameObject _TargetScene; //el target que esta en la scena
 
-    [Header("Referencias")]
-    private ControlesPersonaje Controles;
-    private SistemasPersonaje Personaje;
+    //esto no lo veo necesario asi que lo comento
+    //[Header("Referencias")]
+    //private ControlesPersonaje Controles;
+    //private SistemasPersonaje Personaje;
 
     void Start()
     {
@@ -46,12 +47,12 @@ public class ApuntarPersonaje : MonoBehaviour
 
     public void DetectarObjetivos()
     {
-        //mejorprevenir que lamentar 
-        //if (_TargetScene == null)
-        //{
-        //    _TargetScene = Instantiate(Target);
-        //    _TargetScene.SetActive(false);
-        //}
+        //mejor prevenir que lamentar, confirma que existe un target en la escena
+        if (_TargetScene == null)
+        {
+            _TargetScene = Instantiate(Target);
+            _TargetScene.SetActive(false);
+        }
 
         if (IndiceObjetivos >= ObjetivosDetectados.Count)
         {
@@ -74,7 +75,7 @@ public class ApuntarPersonaje : MonoBehaviour
             DetectarObjetivos();
             return;
         }
-
+        
         Ray rayo = new();
         rayo.origin = transform.position;
         rayo.direction = direccionObjetivo;
@@ -91,6 +92,7 @@ public class ApuntarPersonaje : MonoBehaviour
             }
         }
         //Movemos el indicador de objetivo del objetivo actual
+        //la resta con el foward es para que se ponga en frente
         _TargetScene.transform.position = objetivoActual.position - Vector3.forward;
         if (_TargetScene.activeInHierarchy==false)
         {

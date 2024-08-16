@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ColisionesPersonaje : MonoBehaviour
 {
-    public bool CercaEscalera;
     private SistemasPersonaje Personaje;
     public SphereCollider ColisionDeteccion;
     public CapsuleCollider ColisionPersonaje;
