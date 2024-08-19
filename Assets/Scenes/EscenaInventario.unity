@@ -15234,6 +15234,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 595842367120652578, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: Mana
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 595842367120652578, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: Peso
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 595842367120652578, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: Vida
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 595842367120652578, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: Ataque
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2133248529144290087, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: MenuInventario
       value: 
@@ -15349,6 +15365,10 @@ PrefabInstance:
     - target: {fileID: 5577602945081306605, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_Name
       value: Personaje
+      objectReference: {fileID: 0}
+    - target: {fileID: 6975524761259779539, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: stats
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7280032123139267448, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: Target
