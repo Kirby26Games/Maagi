@@ -13,11 +13,11 @@ public class InventarioEnemigo : InventarioBase
     {
         for (int i = 0; i < ObjetosInventario.Count; i++)
         {
-            //if (ObjetosInventario[i].Nombre == null)
-            //{
-            //    ObjetosInventario[i] = objetoTrigger;
-            //    return true;
-            //}
+            if (ObjetosInventario[i].Nombre == null)
+            {
+                ObjetosInventario[i] = objetoTrigger;
+                return true;
+            }
         }
 
         return false;
