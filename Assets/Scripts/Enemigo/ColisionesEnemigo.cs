@@ -26,10 +26,10 @@ public class ColisionesEnemigo : MonoBehaviour
         // Gestiona la detección de objetos
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            if (_Inventario.AgregarAInventario(objetoEscena.Objeto))
-            {
-                Destroy(other.gameObject);
-            }
+            //if (_Inventario.AgregarAInventario(objetoEscena.Objeto))
+            //{
+            //    Destroy(other.gameObject);
+            //}
         }
     }
 
