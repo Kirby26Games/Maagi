@@ -9,7 +9,7 @@ public class InventarioPersonaje : InventarioBase
     public List<ContenedorObjeto> ContenedorObjetos;
     public List<ObjetoEscena> ObjetosCogibles;
     public GameObject MenuInventario;
-    public Vector3 PosicionOculta;
+    private Vector3 _PosicionOculta;
     public bool InterfazAbierta;
     public string ObjetoSeleccionadoNombre;
     public int ContenedorSeleccionado;
@@ -19,8 +19,8 @@ public class InventarioPersonaje : InventarioBase
         //Crea una lista vacia de los objetos de inventario
         CrearInventario();
 
-        PosicionOculta = Vector3.up * Screen.height * 4;
-        InventarioInterfaz.transform.localPosition = PosicionOculta;
+        _PosicionOculta = Vector3.up * Screen.height * 4;
+        InventarioInterfaz.transform.localPosition = _PosicionOculta;
         MenuInventario.SetActive(false);
     }
 
@@ -118,7 +118,7 @@ public class InventarioPersonaje : InventarioBase
         //Definir posicion de la interfaz de inventario segun el tamaño de pantalla
         if (InterfazAbierta)
         {
-            InventarioInterfaz.transform.localPosition = PosicionOculta;
+            InventarioInterfaz.transform.localPosition = _PosicionOculta;
             InterfazAbierta = false;
             MenuInventario.SetActive(false);
         }

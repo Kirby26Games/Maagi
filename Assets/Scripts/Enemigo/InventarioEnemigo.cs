@@ -3,23 +3,101 @@ using UnityEngine;
 
 public class InventarioEnemigo : InventarioBase
 {
+    public List<ContenedorObjeto> ContenedorObjetos;
+    public List<ObjetoEscena> ObjetosCogibles;
+
     private void Start()
     {
-        // Carga el inventario del enemigo
-        // ObjetosInventario = new List<Objeto>(new Objeto[VariablesGlobales.Instancia.TamañoInventario]);
+        //Crea una lista vacia de los objetos de inventario
+        ObjetosMaximos = 3;
+        CrearInventario();
     }
 
-    public bool AgregarAInventario(Objeto objetoTrigger)
+    private void Update()
     {
-        //for (int i = 0; i < ObjetosInventario.Count; i++)
-        //{
-        //    if (ObjetosInventario[i].Nombre == null)
-        //    {
-        //        ObjetosInventario[i] = objetoTrigger;
-        //        return true;
-        //    }
-        //}
+        // TODO:Incluir criterio para coger objeto
+        if(ObjetosCogibles.Count > 0)
+        {
+            SortObjetosCogibles();
+            ObjetoEscena objetoAgregado = ObjetosCogibles[0];
+
+            if (AgregarAInventario(objetoAgregado))
+            {
+                Destroy(objetoAgregado.gameObject);
+            }
+        }
+    }
+
+    public void GestorObjetosCogibles(ObjetoEscena objetoTrigger)
+    {
+        if (ObjetosCogibles.Contains(objetoTrigger))
+        {
+            ObjetosCogibles.Remove(objetoTrigger);
+        }
+        else
+        {
+            ObjetosCogibles.Add(objetoTrigger);
+        }
+    }
+
+    public void SortObjetosCogibles()
+    {
+        ObjetosCogibles.Sort((a, b) =>
+        {
+            float distanciaA = Vector3.Distance(a.gameObject.transform.position, transform.position);
+            float distanciaB = Vector3.Distance(b.gameObject.transform.position, transform.position);
+            return distanciaA.CompareTo(distanciaB);
+        });
+    }
+
+    public bool AgregarAInventario(ObjetoEscena objetoTrigger)
+    {
+        //Al agregar un objeto nuevo primero verifica si ya existe un contenedor con su objeto y si aun no ha llegado a su limite de espacio
+        for (int i = 0; i < ObjetosInventario.Count; i++)
+        {
+            if (ObjetosInventario[i] == objetoTrigger.ID)
+            {
+                if (ContenedorObjetos[i].Cantidad + objetoTrigger.Cantidad <= GestorObjetos.Instancia.DiccionarioObjeto[objetoTrigger.Nombre].MaximoAcumulable)
+                {
+                    ContenedorObjetos[i].Cantidad += objetoTrigger.Cantidad;
+                    ObjetosCogibles.Remove(ObjetosCogibles[0]);
+                    return true;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+
+        //Si no hay un contenedor con espacio para el, pues se agrega al siguiente contenedor vacio
+        for (int i = 0; i < ObjetosInventario.Count; i++)
+        {
+            if (ObjetosInventario[i] == 0)
+            {
+                ObjetosInventario[i] = objetoTrigger.ID;
+                ContenedorObjetos[i].Nombre = objetoTrigger.Nombre;
+                ContenedorObjetos[i].Cantidad = objetoTrigger.Cantidad;
+                ObjetosCogibles.Remove(ObjetosCogibles[0]);
+                return true;
+            }
+        }
 
         return false;
+    }
+
+    public void SoltarObjetos()
+    {
+        // TODO:integrar y mejorar el código cuando el enemigo desaparezca
+        for (int i = 0; i < ContenedorObjetos.Count; i++)
+        {
+            for (int j = 0; j < ContenedorObjetos[i].Cantidad; j++)
+            {
+                GameObject objetoSoltado = Instantiate(GestorObjetos.Instancia.DiccionarioObjeto[ContenedorObjetos[i].Nombre].Prefab.gameObject);
+                objetoSoltado.transform.position = transform.position;
+            }
+            ContenedorObjetos[i].Cantidad = 0;
+            ObjetosInventario[i] = 0;
+        }
     }
 }
