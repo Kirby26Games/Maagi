@@ -17,8 +17,8 @@ public class ControlesPersonaje : MonoBehaviour
 
     private void Update()
     {
-        EjeX = EjeXTotal();
-        EjeZ = EjeZTotal();
+        EjeX = _EjeXTotal();
+        EjeZ = _EjeZTotal();
         RatonHorizontal = Input.GetAxis("Mouse X");
         RatonVertical = Input.GetAxis("Mouse Y");
         
@@ -79,7 +79,8 @@ public class ControlesPersonaje : MonoBehaviour
 
     }
 
-    float EjeXTotal()
+    //Hace el getaxisraw pero con los botones que uno elige
+    float _EjeXTotal()
     {
         if (Input.GetKey(Controles.Derecha))
         {
@@ -91,7 +92,9 @@ public class ControlesPersonaje : MonoBehaviour
         }
         return 0;
     }
-    float EjeZTotal()
+
+    //Hace el getaxisraw pero con los botones que uno elige
+    float _EjeZTotal()
     {
         if (Input.GetKey(Controles.Subir))
         {
