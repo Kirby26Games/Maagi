@@ -1,3 +1,4 @@
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,15 +7,21 @@ public class InventarioPersonaje : InventarioBase
 {
     public GameObject InventarioInterfaz;
     public List<ContenedorObjeto> ContenedorObjetos;
+    public List<ObjetoEscena> ObjetosCogibles;
+    public GameObject MenuInventario;
     public Vector3 PosicionOculta;
-    public Vector3 PosicionAbierta;
     public bool InterfazAbierta;
+    public string ObjetoSeleccionadoNombre;
+    public int ContenedorSeleccionado;
 
     private void Start()
     {
-        ObjetosInventario = new List<Objeto>(new Objeto[ContenedorObjetos.Count]);
+        //Crea una lista vacia de los objetos de inventario
+        CrearInventario();
+
         PosicionOculta = Vector3.up * Screen.height * 4;
         InventarioInterfaz.transform.localPosition = PosicionOculta;
+        MenuInventario.SetActive(false);
     }
 
     private void Update()
@@ -22,50 +29,67 @@ public class InventarioPersonaje : InventarioBase
         ActualizarInterfaz();
     }
 
-    public void ToggleInterfaz()
+    public void ActualizarInterfaz()
     {
-        if (InterfazAbierta)
+        //Por cada objeto añadido al inventario, el ID del objeto se le pasa al contenedor
+        for (int i = 0; i < ObjetosInventario.Count; i++)
         {
-            InventarioInterfaz.transform.localPosition = PosicionOculta;
-            InterfazAbierta = false;
+            ContenedorObjetos[i].ID = ObjetosInventario[i];
+            ContenedorObjetos[i].Actualizar();
+        }
+    }
+
+    public void GestorObjetosCogibles(ObjetoEscena objetoTrigger)
+    {
+        if (ObjetosCogibles.Contains(objetoTrigger))
+        {
+            ObjetosCogibles.Remove(objetoTrigger);
         }
         else
         {
-            InventarioInterfaz.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,0);
-            InterfazAbierta = true;
+            ObjetosCogibles.Add(objetoTrigger);
         }
-
     }
 
-    public bool AgregarAInventario(Objeto objetoTrigger)
+    public void SortObjetosCogibles()
     {
+        ObjetosCogibles.Sort((a, b) =>
+        {
+            float distanciaA = Vector3.Distance(a.gameObject.transform.position, transform.position);
+            float distanciaB = Vector3.Distance(b.gameObject.transform.position, transform.position);
+            return distanciaA.CompareTo(distanciaB);
+        });
+    }
+
+    public bool AgregarAInventario(ObjetoEscena objetoTrigger)
+    {
+        //Al agregar un objeto nuevo primero verifica si ya existe un contenedor con su objeto y si aun no ha llegado a su limite de espacio
         for (int i = 0; i < ObjetosInventario.Count; i++)
         {
-            if (ObjetosInventario[i].Nombre == objetoTrigger.Nombre)
+            if (ObjetosInventario[i] == objetoTrigger.ID)
             {
-                int number = int.Parse(ContenedorObjetos[i].Cantidad.text);
-                number++;
-
-                if (number <= objetoTrigger.MaximoAcumulable)
+                if (ContenedorObjetos[i].Cantidad + objetoTrigger.Cantidad <= GestorObjetos.Instancia.DiccionarioObjeto[objetoTrigger.Nombre].MaximoAcumulable)
                 {
-                    ContenedorObjetos[i].Cantidad.text = number.ToString();
+                    ContenedorObjetos[i].Cantidad += objetoTrigger.Cantidad;
+                    ObjetosCogibles.Remove(ObjetosCogibles[0]);
                     return true;
                 }
                 else
                 {
                     continue;
                 }
-
             }
         }
 
+        //Si no hay un contenedor con espacio para el, pues se agrega al siguiente contenedor vacio
         for (int i = 0; i < ObjetosInventario.Count; i++)
         {
-            if (ObjetosInventario[i].Nombre == null)
+            if (ObjetosInventario[i] == 0)
             {
-                ObjetosInventario[i] = objetoTrigger;
-                int number = 1;
-                ContenedorObjetos[i].Cantidad.text = number.ToString();
+                ObjetosInventario[i] = objetoTrigger.ID;
+                ContenedorObjetos[i].Nombre = objetoTrigger.Nombre;
+                ContenedorObjetos[i].Cantidad = objetoTrigger.Cantidad;
+                ObjetosCogibles.Remove(ObjetosCogibles[0]);
                 return true;
             }
         }
@@ -73,12 +97,52 @@ public class InventarioPersonaje : InventarioBase
         return false;
     }
 
-    public void ActualizarInterfaz() 
+    public void SoltarObjeto()
     {
-        for (int i = 0; i < ObjetosInventario.Count; i++)
+        //Al pulsar soltar, el ID del objeto seleccionado se compara con el diccionario de objetos. Se intancia el prefab con el ID que concuerde con el seleccionado.
+        GameObject objetoSoltado = Instantiate(GestorObjetos.Instancia.DiccionarioObjeto[ObjetoSeleccionadoNombre].Prefab.gameObject);
+        objetoSoltado.transform.position = transform.position;
+
+        ContenedorObjetos[ContenedorSeleccionado].Cantidad--;
+
+        //Si ya no hay mas de ese objeto en el inventario pues se elimina de la lista de ObjetosInventario
+        if (ContenedorObjetos[ContenedorSeleccionado].Cantidad == 0)
         {
-            ContenedorObjetos[i].Objeto = ObjetosInventario[i];
-            ContenedorObjetos[i].Actualizar();
+            ObjetosInventario[ContenedorSeleccionado] = 0;
+            MenuInventario.SetActive(false);
         }
     }
+
+    public void ToggleInterfaz()
+    {
+        //Definir posicion de la interfaz de inventario segun el tamaño de pantalla
+        if (InterfazAbierta)
+        {
+            InventarioInterfaz.transform.localPosition = PosicionOculta;
+            InterfazAbierta = false;
+            MenuInventario.SetActive(false);
+        }
+        else
+        {
+            InventarioInterfaz.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+            InterfazAbierta = true;
+        }
+
+    }
+
+    public void ActivarMenu(int buttonIndex)
+    {
+        if (ContenedorObjetos[buttonIndex].ID != 0)
+        {
+            MenuInventario.SetActive(true);
+            ObjetoSeleccionadoNombre = ContenedorObjetos[buttonIndex].Nombre;
+            ContenedorSeleccionado = buttonIndex;
+        }
+        else
+        {
+            MenuInventario.SetActive(false);
+        }
+        
+    }
+
 }
