@@ -16,6 +16,7 @@ public class DeteccionEnemigo : MonoBehaviour
 
     private void Awake()
     {
+        // Guardamos los scripts necesarios
         _EsferaDeteccion = GetComponent<SphereCollider>();
         _EstadoActual = GetComponentInParent<EstadoEnemigo>();
     }
@@ -63,7 +64,8 @@ public class DeteccionEnemigo : MonoBehaviour
                 Mathf.Abs(Vector2.SignedAngle(Objetivos[i].transform.position - transform.position, DireccionMirada)) <= 120f)
             {
                 _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
-                _EstadoActual.ObjetivoFijado = Objetivos[i];
+                _EstadoActual.DestinoFijado = Objetivos[i].transform.position;
+                _EstadoActual.DestinoFijado.y += Mathf.Sign(_EstadoActual.DestinoFijado.y - transform.position.y) * 2f;
                 return;
             }
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad
@@ -147,12 +149,13 @@ public class DeteccionEnemigo : MonoBehaviour
         return new Vector2(Mathf.Abs(detectados[0].point.x - transform.position.x), Mathf.Abs(detectados[0].point.y - transform.position.y));
     }
 
-    // Coprueba si todas las instancias de objetos detectados por un Raycast son iguales o no
+    // Coprueba si todas las instancias de objetos detectados por un Raycast son el personaje y/o escaleras
     private bool ContieneSoloPersonaje(RaycastHit[] detectados)
     {
         for (int i = 0; i < detectados.Length; i++)
         {
-            if (detectados[i].collider.gameObject.GetComponent<SistemasPersonaje>() == null)
+            if (detectados[i].collider.gameObject.GetComponent<SistemasPersonaje>() == null &&
+                detectados[i].collider.gameObject.GetComponent<Escaleras>() == null)
             {
                 return false;
             }
@@ -162,7 +165,7 @@ public class DeteccionEnemigo : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si el objeto tiene Movimiento Simple (cambiar más adelante)
+        // Si el objeto tiene SistemasPersonaje
         if (other.gameObject.TryGetComponent(out SistemasPersonaje sistemaPersonaje))
         {
             if(other == sistemaPersonaje.Colisiones.ColisionPersonaje)

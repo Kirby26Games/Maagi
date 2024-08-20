@@ -20,6 +20,10 @@ public class VariablesGlobales : MonoBehaviour
     [SerializeReference] public BolaDeFuego Bolita = new BolaDeFuego(); // Ejemplo de SerializeReference
     public int TamañoInventario;            // La cantidad de objetos que puede coger un enemigo
     public int TamañoColaAccion;            // La cantidad de acciones que puede recordar para hacer un enemigo
+    public float MaximoTiempoInalcanzable;  // Tiempo que dura un enemigo persiguiendo a un objeto difícil de alcanzar
+    [Header("Comportamientos Enemigo")]
+    // VUELO
+    public int MaximosMurosGolpeados;       // Cantidad máxima de muros golpeados antes de volver a Idle
     void Awake()
     {
         Instancia = this;

@@ -23,7 +23,8 @@ GameObject:
   - component: {fileID: 7280032123139267448}
   - component: {fileID: 4375316662008964144}
   - component: {fileID: 2133248529144290087}
-  m_Layer: 0
+  - component: {fileID: 595842367120652578}
+  m_Layer: 3
   m_Name: Personaje
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -142,7 +143,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 59f2f9c2e2054104dade2f3c4b7db1ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 1
   m_Size: {x: 1.08, y: 1.92}
@@ -172,6 +173,7 @@ MonoBehaviour:
   Ataque: {fileID: 0}
   Inventario: {fileID: 0}
   Apuntar: {fileID: 0}
+  Estadisticas: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c9c5d1f45de26f42b69d43eb1c186cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CercaEscalera: 0
   ColisionDeteccion: {fileID: 0}
   ColisionPersonaje: {fileID: 8905940627804752459}
 --- !u!114 &1478096177629473854
@@ -301,7 +302,9 @@ MonoBehaviour:
   ObjetivosDetectados: []
   IndiceObjetivos: 0
   RangoVision: 20
+  AnguloApuntar: 35
   VisionCollider: {fileID: 636509548816668287}
+  Target: {fileID: 7216306236905063155, guid: 46ffc8efec6a6dd4fbd73d08d30bb175, type: 3}
 --- !u!114 &4375316662008964144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,12 +329,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e4e41ed5ef9a84e99e7b9eb4cf34d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjetosInventario: []
+  ObjetosInventario: 
   InventarioInterfaz: {fileID: 0}
-  ContenedorObjetos: []
+  ContenedorObjetos:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  ObjetosCogibles: []
+  MenuInventario: {fileID: 0}
   PosicionOculta: {x: 0, y: 0, z: 0}
-  PosicionAbierta: {x: 0, y: 0, z: 0}
   InterfazAbierta: 0
+  ObjetoSeleccionadoNombre: 
+  ContenedorSeleccionado: 0
+--- !u!114 &595842367120652578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb1ff31fd0f4e624a9b66b098d7b939d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Vida: 10
+  Mana: 10
+  Ataque: 10
+  Peso: 1
+  Invulnerabilidad: 0
 --- !u!1 &8319080664039406530
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +416,7 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 119
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0

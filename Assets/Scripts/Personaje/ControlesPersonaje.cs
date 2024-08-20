@@ -16,9 +16,9 @@ public class ControlesPersonaje : MonoBehaviour
     }
 
     private void Update()
-    {     
-        EjeX = Input.GetAxisRaw("Horizontal");
-        EjeZ = Input.GetAxisRaw("Vertical");
+    {
+        EjeX = _EjeXTotal();
+        EjeZ = _EjeZTotal();
         RatonHorizontal = Input.GetAxis("Mouse X");
         RatonVertical = Input.GetAxis("Mouse Y");
         
@@ -30,7 +30,7 @@ public class ControlesPersonaje : MonoBehaviour
         if (Input.GetKey(Controles.Saltar) && (Input.GetKeyDown(Controles.Derecha) || Input.GetKeyDown(Controles.Izquierda)) && Personaje.Movimiento.EnEscalera)
         {
             Personaje.Movimiento.SoltarEscalera();
-            Personaje.Movimiento.Saltar(.1f);
+            Personaje.Movimiento.Saltar();
         }
 
 
@@ -66,5 +66,44 @@ public class ControlesPersonaje : MonoBehaviour
             Personaje.Inventario.ToggleInterfaz();
         }
 
+        if (Input.GetKeyDown(Controles.Interactuar) && Personaje.Inventario.ObjetosCogibles.Count > 0)
+        {
+            Personaje.Inventario.SortObjetosCogibles();
+            ObjetoEscena objetoAgregado = Personaje.Inventario.ObjetosCogibles[0];
+
+            if (Personaje.Inventario.AgregarAInventario(objetoAgregado))
+            {
+                Destroy(objetoAgregado.gameObject);
+            }
+        }
+
+    }
+
+    //Hace el getaxisraw pero con los botones que uno elige
+    float _EjeXTotal()
+    {
+        if (Input.GetKey(Controles.Derecha))
+        {
+            return 1;
+        }
+        if (Input.GetKey(Controles.Izquierda))
+        {
+            return -1;
+        }
+        return 0;
+    }
+
+    //Hace el getaxisraw pero con los botones que uno elige
+    float _EjeZTotal()
+    {
+        if (Input.GetKey(Controles.Subir))
+        {
+            return 1;
+        }
+        if (Input.GetKey(Controles.Bajar))
+        {
+            return -1;
+        }
+        return 0;
     }
 }

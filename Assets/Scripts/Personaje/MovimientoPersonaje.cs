@@ -1,12 +1,13 @@
 using System.Globalization;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 public class MovimientoPersonaje : MonoBehaviour
 {
-
+    Camera cam;  //camara para basar el moviemiento
     [Header("Movimiento")]
     public float VelocidadBase = 3;
     public float MultiplicadorAlCorrer = 2;
@@ -21,7 +22,6 @@ public class MovimientoPersonaje : MonoBehaviour
     public int SaltosEnElAireMaximos;
     private int SaltosEnElAire;
     private Rigidbody RBPersonaje;
-    private ControlesPersonaje Controles;
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
     public int VelocidadSubirEscaleras;
@@ -36,7 +36,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
     private void Awake()
     {
-        Controles = GetComponent<ControlesPersonaje>();
+        cam = Camera.main;
         RBPersonaje = GetComponent<Rigidbody>();
         Personaje = GetComponent<SistemasPersonaje>();
         ColPersonaje = GetComponent<Collider>();
@@ -50,51 +50,67 @@ public class MovimientoPersonaje : MonoBehaviour
 
     void Update()
     {
-        FlipDireccion();
         SubirEscaleras(PuedoSubir);
 
         if (!EnEscalera)
         {
             Movimiento();
         }
-        
+
+        FlipDireccion();
         ReiniciarSaltos();
         
     }
 
     void Movimiento()
     {
-        if (Personaje.Gravedad.EjeY <= 0 || CercaEscalera)
+        //si el personaje esta en el piso
+        if (Personaje.Gravedad.EnSuelo)
         {
-            MovimientoXZ = new Vector3(Controles.EjeX, 0, 0).normalized;
-            UltimoEjeX = Controles.EjeX;
+            //utilizamos cam.transform.right pq el movimiento se base en la derecha de la camra en lugar de la nuestra
+            MovimientoXZ = (cam.transform.right * Personaje.Controles.EjeX).normalized;
         }
+        // si esta en el aire
         else
         {
-            MovimientoXZ = new Vector3(UltimoEjeX, 0, 0).normalized;
+            if ((Personaje.Gravedad.EjeY < 0 || CercaEscalera))//si el personaje esta cayendo
+            {
+                //reduce/aumenta la distancia del salto dependiendo del input del jugador
+                //hacer el lerp de manera correcta
+                UltimoEjeX = Mathf.Lerp(UltimoEjeX, Personaje.Controles.EjeX, Time.deltaTime * 4);
+                MovimientoXZ = (cam.transform.right * UltimoEjeX);
+            }
         }
+        //se creo este metodo solo para estar mas comodo al leer
+        AplicarMovimiento();
+    }
 
-        MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
+    void AplicarMovimiento()
+    {
+        //en lugar de usar mi transform usamos el de la camra pq nuestro movimiento se basa en la camara
+        MovimientoFinal = cam.transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         RBPersonaje.linearVelocity = MovimientoFinal;
-
     }
 
+    //metodo de rotar personaje
     void FlipDireccion()
     {
-
-        if (Controles.EjeX > 0)
+        //como rota el personaje si es izquierda o derecha
+        if (Personaje.Controles.EjeX > 0)
         {
-            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            //esto es una fumada que funciona, aqui hago q la rotacion del personaje asi adelante sea la de la camara y se multiplica por la direccion hacia arriba de la camra en el mundo
+            transform.rotation = Quaternion.LookRotation(cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), transform.up);
+            //transform.rotation = Quaternion.Euler(transform.localEulerAngles.x, 0 - transform.localEulerAngles.z * (cam.transform.TransformDirection(transform.up).y), transform.localEulerAngles.z);
         }
-        else if (Controles.EjeX < 0)
+        else if (Personaje.Controles.EjeX < 0)
         {
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            transform.rotation = Quaternion.LookRotation(-cam.transform.forward * (cam.transform.TransformDirection(transform.up).y), transform.up);
         }
     }
 
-    public void Saltar(float porcentajeSalto)
+    public void Saltar(float porcentajeSalto = .1f)
     {
         if (!PuedoSaltar())
         {
@@ -102,6 +118,7 @@ public class MovimientoPersonaje : MonoBehaviour
         }
         Saltando = true;
         Personaje.Gravedad.EjeY = Mathf.Sqrt((DistanciaSalto * porcentajeSalto) * -2 * Personaje.Gravedad.Gravedad);
+        UltimoEjeX = Personaje.Controles.EjeX;
     }
 
     public bool PuedoSaltar()
@@ -168,7 +185,7 @@ public class MovimientoPersonaje : MonoBehaviour
             MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
             RBPersonaje.linearVelocity = MovimientoFinal;
 
-            if (Personaje.Gravedad.EnSuelo && Controles.EjeZ == 0)
+            if (Personaje.Gravedad.EnSuelo && Personaje.Controles.EjeZ == 0)
             {
                 SoltarEscalera();
             }
