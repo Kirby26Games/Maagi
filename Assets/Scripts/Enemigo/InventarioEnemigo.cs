@@ -41,6 +41,11 @@ public class InventarioEnemigo : InventarioBase
             {
                 Destroy(objetoAgregado.gameObject);
             }
+            else
+            {
+                // Si no puede coger objetos aún habiendo disponibles tiene el inventario lleno. Bloqueamos que intente coger más.
+                _Enemigo.Movimiento.CogeObjetos = false;
+            }
 
             // Terminar la acción de coger objeto, forzando un Idle en la primera posición
             _Enemigo.Estado.ObjetivoFijado = null;
