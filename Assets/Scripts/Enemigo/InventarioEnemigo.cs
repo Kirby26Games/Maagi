@@ -6,14 +6,12 @@ public class InventarioEnemigo : InventarioBase
 {
     public List<ContenedorObjeto> ContenedorObjetos;
     public List<ObjetoEscena> ObjetosCogibles;
-    private DeteccionEnemigo _Deteccion;
-    private EstadoEnemigo _Estado;
+    private SistemaEnemigo _Enemigo;
 
 
     private void Awake()
     {
-        _Deteccion = GetComponentInChildren<DeteccionEnemigo>();
-        _Estado = GetComponent<EstadoEnemigo>();
+        _Enemigo = GetComponent<SistemaEnemigo>();
     }
 
     private void Start()
@@ -26,7 +24,7 @@ public class InventarioEnemigo : InventarioBase
     private void Update()
     {
         // TODO:Incluir criterio para coger objeto
-        if (_Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.CogerObjeto)
+        if (_Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.CogerObjeto)
         {
             LogicaCogerObjetos();
         }
@@ -45,9 +43,9 @@ public class InventarioEnemigo : InventarioBase
             }
 
             // Terminar la acción de coger objeto, forzando un Idle en la primera posición
-            _Estado.ObjetivoFijado = null;
-            _Estado.DestinoFijado = Vector3.zero;
-            _Estado.InsertarAccion(EstadoEnemigo.Acciones.Idle, 0, true);
+            _Enemigo.Estado.ObjetivoFijado = null;
+            _Enemigo.Estado.DestinoFijado = Vector3.zero;
+            _Enemigo.Estado.InsertarAccion(EstadoEnemigo.Acciones.Idle, 0, true);
         }
     }
 

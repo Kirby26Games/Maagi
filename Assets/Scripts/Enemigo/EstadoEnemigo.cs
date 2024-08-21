@@ -11,6 +11,12 @@ public class EstadoEnemigo : MonoBehaviour
     public Vector3 DestinoFijado;
     public Vector2 DistanciaAObstaculo;
     private float _ContadorObjetivoInalcanzable;
+    private SistemaEnemigo _Enemigo;
+
+    private void Awake()
+    {
+        _Enemigo = GetComponent<SistemaEnemigo>();
+    }
 
     private void Start()
     {
@@ -80,7 +86,7 @@ public class EstadoEnemigo : MonoBehaviour
         }
         if (ObjetivoFijado == null)
         {
-            ObjetivoFijado = GetComponentInChildren<DeteccionEnemigo>().BuscarObjeto();
+            ObjetivoFijado = _Enemigo.Deteccion.BuscarObjeto();
             if(ObjetivoFijado != null)
             {
                 DestinoFijado = ObjetivoFijado.transform.position;
@@ -133,7 +139,7 @@ public class EstadoEnemigo : MonoBehaviour
 
             // Realizar un Coger Objeto
             case Acciones.CogerObjeto:
-                if(GetComponent<MovimientoEnemigo>().CogeObjetos)
+                if(_Enemigo.Movimiento.CogeObjetos)
                 {
                     // Comprobar si se ha completado el movimiento
                     realizada = RecordarObjeto();
@@ -189,7 +195,7 @@ public class EstadoEnemigo : MonoBehaviour
             accionDecidida = Acciones.Mover;
         }
         // Si es capaz de recoger objetos, irá a por el más cercano en caso de no tener nada mejor que hacer
-        else if(GetComponent<MovimientoEnemigo>().CogeObjetos && GetComponentInChildren<DeteccionEnemigo>().BuscarObjeto() != null)
+        else if(_Enemigo.Movimiento.CogeObjetos && _Enemigo.Deteccion.BuscarObjeto() != null)
         {
             accionDecidida = Acciones.CogerObjeto;
         }
