@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6134013978280477859}
   - component: {fileID: 7065755384453971603}
   - component: {fileID: 8748090315437444567}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Antorcha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6282733923803613519}
   - component: {fileID: 7802357878322517006}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

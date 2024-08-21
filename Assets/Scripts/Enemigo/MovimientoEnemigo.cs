@@ -7,6 +7,7 @@ public class MovimientoEnemigo : MonoBehaviour
     public CriteriosSalto CriterioSalto;
     public bool PuedeUsarEscaleras;
     public bool EsVolador;
+    public bool CogeObjetos;
     [Header("Memoria")]
     private EstadoEnemigo _EstadoActual;
     [Header("Propiedades")]
@@ -72,7 +73,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
         // COMPORTAMIENTO HABITUAL: Sobre este deben ir comportamientos específicos con sus condiciones y return al final
         // Si está alerta persigue al objetivo
-        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
+        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover || _EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.CogerObjeto)
         {
             Perseguir();
         }

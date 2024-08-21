@@ -5,7 +5,7 @@ public class EstadoEnemigo : MonoBehaviour
 {
     public enum Estados { Vigilante, Alerta, Combate }
     public Estados Estado;
-    public enum Acciones { Idle, Mover, Atacar, Curar }     // TODO: Temporal, tendrán una estructura particular
+    public enum Acciones { Idle, Mover, Atacar, Curar, CogerObjeto }     // TODO: Temporal, tendrán una estructura particular
     public Acciones[] ColaDeAccion;
     public GameObject ObjetivoFijado;
     public Vector3 DestinoFijado;
@@ -71,6 +71,30 @@ public class EstadoEnemigo : MonoBehaviour
         return false;
     }
 
+    public bool RecordarObjeto()
+    {
+        // Si hay algún cambio en la detección de enemigos, termina esta acción
+        if(Estado != Estados.Vigilante)
+        {
+            return true;
+        }
+        if (ObjetivoFijado == null)
+        {
+            ObjetivoFijado = GetComponentInChildren<DeteccionEnemigo>().BuscarObjeto();
+            if(ObjetivoFijado != null)
+            {
+                DestinoFijado = ObjetivoFijado.transform.position;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        // De otra forma, no completes el movimiento
+        return false;
+    }
+
     async public void ResolverColaAccion()
     {
         // Variable que evalua si hemos completado una tarea con el fin de reponerla si fuera necesario
@@ -103,6 +127,22 @@ public class EstadoEnemigo : MonoBehaviour
             case Acciones.Mover:
                 // Comprobar si se ha completado el movimiento
                 realizada = RecordarPosicion();
+                // Esperar 1 segundo
+                await Task.Delay(100);
+                break;
+
+            // Realizar un Coger Objeto
+            case Acciones.CogerObjeto:
+                if(GetComponent<MovimientoEnemigo>().CogeObjetos)
+                {
+                    // Comprobar si se ha completado el movimiento
+                    realizada = RecordarObjeto();
+                }
+                else
+                {
+                    // Si no puede recoger objetos esta acción se trata como un Idle
+                    realizada = true;
+                }
                 // Esperar 1 segundo
                 await Task.Delay(100);
                 break;
@@ -147,6 +187,11 @@ public class EstadoEnemigo : MonoBehaviour
         {
             _ContadorObjetivoInalcanzable = 0f;
             accionDecidida = Acciones.Mover;
+        }
+        // Si es capaz de recoger objetos, irá a por el más cercano en caso de no tener nada mejor que hacer
+        else if(GetComponent<MovimientoEnemigo>().CogeObjetos && GetComponentInChildren<DeteccionEnemigo>().BuscarObjeto() != null)
+        {
+            accionDecidida = Acciones.CogerObjeto;
         }
         // Añadimos la acción a la cola con el método adecuado, sin forzar y al final de la prioridad
         InsertarAccion(accionDecidida, ColaDeAccion.Length - 1, false);

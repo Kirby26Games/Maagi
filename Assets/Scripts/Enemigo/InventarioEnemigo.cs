@@ -1,10 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static EstadoEnemigo;
 
 public class InventarioEnemigo : InventarioBase
 {
     public List<ContenedorObjeto> ContenedorObjetos;
     public List<ObjetoEscena> ObjetosCogibles;
+    private DeteccionEnemigo _Deteccion;
+    private EstadoEnemigo _Estado;
+
+
+    private void Awake()
+    {
+        _Deteccion = GetComponentInChildren<DeteccionEnemigo>();
+        _Estado = GetComponent<EstadoEnemigo>();
+    }
 
     private void Start()
     {
@@ -16,7 +26,15 @@ public class InventarioEnemigo : InventarioBase
     private void Update()
     {
         // TODO:Incluir criterio para coger objeto
-        if(ObjetosCogibles.Count > 0)
+        if (_Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.CogerObjeto)
+        {
+            LogicaCogerObjetos();
+        }
+    }
+
+    private void LogicaCogerObjetos()
+    {
+        if (ObjetosCogibles.Count > 0)
         {
             SortObjetosCogibles();
             ObjetoEscena objetoAgregado = ObjetosCogibles[0];
@@ -25,6 +43,11 @@ public class InventarioEnemigo : InventarioBase
             {
                 Destroy(objetoAgregado.gameObject);
             }
+
+            // Terminar la acción de coger objeto, forzando un Idle en la primera posición
+            _Estado.ObjetivoFijado = null;
+            _Estado.DestinoFijado = Vector3.zero;
+            _Estado.InsertarAccion(EstadoEnemigo.Acciones.Idle, 0, true);
         }
     }
 

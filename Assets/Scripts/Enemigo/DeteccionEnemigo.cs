@@ -13,6 +13,7 @@ public class DeteccionEnemigo : MonoBehaviour
     [Header("Parametros")]
     public Vector3 DireccionMirada;
     public float AmplitudMirada;
+    [SerializeField] private LayerMask _CapasIgnoradasPorVision;
 
     private void Awake()
     {
@@ -51,7 +52,9 @@ public class DeteccionEnemigo : MonoBehaviour
     private void CambiarEstadoEnemigo()
     {
         // Revisa que el objetivo no esté a rango de ataque
-        if (_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        if (_EstadoActual.ObjetivoFijado != null &&
+            Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate &&
+            _EstadoActual.ColaDeAccion[0] != EstadoEnemigo.Acciones.CogerObjeto)
         {
             _EstadoActual.Estado = EstadoEnemigo.Estados.Combate;
             return;
@@ -103,7 +106,7 @@ public class DeteccionEnemigo : MonoBehaviour
         Vector3 minimoObjetivo = new(posicion.x, alturaMinima + 0.05f, posicion.z);
         
         // Detecta todos los objetos entre él y la parte superior del objetivo
-        detectados = Physics.RaycastAll(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
+        detectados = Physics.RaycastAll(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f, ~_CapasIgnoradasPorVision);
         Debug.DrawRay(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (ContieneSoloPersonaje(detectados))
@@ -112,7 +115,7 @@ public class DeteccionEnemigo : MonoBehaviour
         }
         
         // Detecta todos los objetos entre él y la parte inferior del objetivo
-        detectados = Physics.RaycastAll(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
+        detectados = Physics.RaycastAll(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f, ~_CapasIgnoradasPorVision);
         Debug.DrawRay(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (ContieneSoloPersonaje(detectados))
@@ -254,5 +257,26 @@ public class DeteccionEnemigo : MonoBehaviour
         }
 
         return ordenada;
+    }
+
+    public GameObject BuscarObjeto()
+    {
+        Collider[] listaObjetos = Physics.OverlapSphere(transform.position, VariablesGlobales.Instancia.RadioDeteccion, _CapasIgnoradasPorVision);
+        GameObject objetoObjetivo = null;
+        for (int i = 0; i < listaObjetos.Length; i++)
+        {
+            if(listaObjetos[i].gameObject.GetComponent<ObjetoEscena>() != null)
+            {
+                if(objetoObjetivo == null)
+                {
+                    objetoObjetivo = listaObjetos[i].gameObject;
+                }
+                else if(Vector3.Distance(objetoObjetivo.transform.position,transform.position) > Vector3.Distance(listaObjetos[i].gameObject.transform.position,transform.position))
+                {
+                    objetoObjetivo = listaObjetos[i].gameObject;
+                }
+            }
+        }
+        return objetoObjetivo;
     }
 }

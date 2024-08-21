@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2578022289770127244}
   - component: {fileID: 645076526835749322}
   - component: {fileID: 3368121862519170558}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Moneda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6060304675725225753}
   - component: {fileID: 6087338495042885094}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
