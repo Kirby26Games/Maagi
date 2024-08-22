@@ -71,7 +71,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
         // COMPORTAMIENTO HABITUAL: Sobre este deben ir comportamientos específicos con sus condiciones y return al final
         // Si está alerta persigue al objetivo
-        if (_Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover || _Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.CogerObjeto)
+        if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Mover"] || _Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["CogerObjeto"])
         {
             Perseguir();
         }
@@ -110,7 +110,7 @@ public class MovimientoEnemigo : MonoBehaviour
         // A velocidadFinal se le van a añadir los distintos desplazamientos
         Vector3 velocidadFinal = Vector3.zero;
         // Añadir la velocidad correcta en la dirección correcta
-        velocidadFinal += (_Enemigo.Estado.DestinoFijado - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
+        velocidadFinal += Mathf.Sign((_Enemigo.Estado.DestinoFijado - transform.position).x) * VelocidadMovimiento * Vector3.right;
 
         // Revisar si debe saltar en caso de que sea capaz
         Saltar();
@@ -250,7 +250,7 @@ public class MovimientoEnemigo : MonoBehaviour
         if(MurosGolpeados < 0)
         {
             // Una vez detectado un objetivo comienza la rutina del volador
-            if (_Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
+            if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Mover"])
             {
                 MurosGolpeados = 0;
             }
@@ -274,7 +274,7 @@ public class MovimientoEnemigo : MonoBehaviour
                 _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Vigilante;
                 for (int i = 0; i < _Enemigo.Estado.ColaDeAccion.Length; i++)
                 {
-                    _Enemigo.Estado.InsertarAccion(EstadoEnemigo.Acciones.Idle, i, true);
+                    _Enemigo.Estado.InsertarAccion(_Enemigo.DiccionarioAcciones["Idle"], i, true);
                 }
                 MurosGolpeados = -1;
                 _Cuerpo.linearVelocity = Vector3.zero;
@@ -285,7 +285,7 @@ public class MovimientoEnemigo : MonoBehaviour
         // Las acciones que realiza durante la rutina. La DireccionVuelo se modifica en ColisionesEnemigo
         Vector3 velocidadFinal = Vector3.zero;
         // TODO: Si el enemigo volador interrumpe el vuelo para tomar ciertas acciones, suceden aquí
-        if (_Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.Atacar || _Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.Curar)
+        if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Atacar"] || _Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Curar"])
         {
             Debug.Log("No mueve porque prefiere hacer una acción importante: " + _Enemigo.Estado.ColaDeAccion[0]);
         }

@@ -54,7 +54,7 @@ public class DeteccionEnemigo : MonoBehaviour
         // Revisa que el objetivo no esté a rango de ataque
         if (_Enemigo.Estado.ObjetivoFijado != null &&
             Vector3.Distance(transform.position, _Enemigo.Estado.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate &&
-            _Enemigo.Estado.ColaDeAccion[0] != EstadoEnemigo.Acciones.CogerObjeto)
+            _Enemigo.Estado.ColaDeAccion[0] != _Enemigo.DiccionarioAcciones["CogerObjeto"])
         {
             _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Combate;
             return;

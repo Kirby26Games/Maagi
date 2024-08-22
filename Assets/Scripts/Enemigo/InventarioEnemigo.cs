@@ -24,7 +24,7 @@ public class InventarioEnemigo : InventarioBase
     private void Update()
     {
         // TODO:Incluir criterio para coger objeto
-        if (_Enemigo.Estado.ColaDeAccion[0] == EstadoEnemigo.Acciones.CogerObjeto)
+        if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["CogerObjeto"])
         {
             LogicaCogerObjetos();
         }
@@ -50,7 +50,7 @@ public class InventarioEnemigo : InventarioBase
             // Terminar la acción de coger objeto, forzando un Idle en la primera posición
             _Enemigo.Estado.ObjetivoFijado = null;
             _Enemigo.Estado.DestinoFijado = Vector3.zero;
-            _Enemigo.Estado.InsertarAccion(EstadoEnemigo.Acciones.Idle, 0, true);
+            _Enemigo.Estado.InsertarAccion(_Enemigo.DiccionarioAcciones["Idle"], 0, true);
         }
     }
 
