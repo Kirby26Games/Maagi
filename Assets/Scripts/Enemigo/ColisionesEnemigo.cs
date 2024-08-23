@@ -1,16 +1,13 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ColisionesEnemigo : MonoBehaviour
 {
-    private MovimientoEnemigo _Movimiento;
-    private InventarioEnemigo _Inventario;
+    private SistemaEnemigo _Enemigo;
 
     private void Awake()
     {
         // Guarda los scripts necesarios
-        _Movimiento = GetComponent<MovimientoEnemigo>();
-
+        _Enemigo = GetComponent<SistemaEnemigo>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -18,18 +15,15 @@ public class ColisionesEnemigo : MonoBehaviour
         // Gestiona la detección de escaleras
         if (other.TryGetComponent(out Escaleras escaleras))
         {
-            _Movimiento.CercaEscalera = true;
-            _Movimiento.PosicionEscalera = escaleras.transform.position.x;
-            _Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
+            _Enemigo.Movimiento.CercaEscalera = true;
+            _Enemigo.Movimiento.PosicionEscalera = escaleras.transform.position.x;
+            _Enemigo.Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
         }
 
         // Gestiona la detección de objetos
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            //if (_Inventario.AgregarAInventario(objetoEscena.Objeto))
-            //{
-            //    Destroy(other.gameObject);
-            //}
+            _Enemigo.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 
@@ -38,15 +32,19 @@ public class ColisionesEnemigo : MonoBehaviour
         // Gestiona la detección de escaleras
         if (other.TryGetComponent(out Escaleras escaleras))
         {
-            _Movimiento.CercaEscalera = false;
-            _Movimiento.SoltarEscalera();
+            _Enemigo.Movimiento.CercaEscalera = false;
+            _Enemigo.Movimiento.SoltarEscalera();
+        }
+        if (other.TryGetComponent(out ObjetoEscena objetoEscena))
+        {
+            _Enemigo.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         // Si no es volador, no es necesario el siguiente código
-        if(!_Movimiento.EsVolador)
+        if(!_Enemigo.Movimiento.EsVolador)
         {
             return;
         }
@@ -58,13 +56,13 @@ public class ColisionesEnemigo : MonoBehaviour
             Vector3 vectorNormal = collision.GetContact(0).normal.normalized;
             if (Mathf.Abs(vectorNormal.x) > 0.5f)
             {
-                _Movimiento.DireccionVuelo.x = vectorNormal.x;
+                _Enemigo.Movimiento.DireccionVuelo.x = vectorNormal.x;
             }
             if (Mathf.Abs(vectorNormal.y) > 0.5f)
             {
-                _Movimiento.DireccionVuelo.y = vectorNormal.y;
+                _Enemigo.Movimiento.DireccionVuelo.y = vectorNormal.y;
             }
-            _Movimiento.MurosGolpeados++;
+            _Enemigo.Movimiento.MurosGolpeados++;
             // VERSION COMPLEJA para que rebote con ángulo para superficies que no sean horizontales ni verticales 
             //_Movimiento.DireccionVuelo -= 2 * Vector3.Dot(vectorNormal, _Movimiento.DireccionVuelo) * vectorNormal;
         }

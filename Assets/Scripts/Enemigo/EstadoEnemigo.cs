@@ -5,14 +5,19 @@ public class EstadoEnemigo : MonoBehaviour
 {
     public enum Estados { Vigilante, Alerta, Combate }
     public Estados Estado;
-    public enum Acciones { Idle, Mover, Atacar, Curar }     // TODO: Temporal, tendrán una estructura particular
-    public Acciones[] ColaDeAccion;
+    public SistemaEnemigo.Accion[] ColaDeAccion;
     public GameObject ObjetivoFijado;
     public Vector3 DestinoFijado;
     public Vector2 DistanciaAObstaculo;
     private float _ContadorObjetivoInalcanzable;
+    private SistemaEnemigo _Enemigo;
 
-    private void Start()
+    private void Awake()
+    {
+        _Enemigo = GetComponent<SistemaEnemigo>();
+    }
+
+    private async void Start()
     {
         // Estado inicial del enemigo
         Estado = Estados.Vigilante; // null -> Vigilante -> Alerta -> Combate
@@ -21,11 +26,21 @@ public class EstadoEnemigo : MonoBehaviour
         DestinoFijado = Vector3.zero;
 
         // Las acciones que desea realizar el objeto se incluyen aquí en orden
-        ColaDeAccion = new Acciones[VariablesGlobales.Instancia.TamañoColaAccion];
+        ColaDeAccion = new SistemaEnemigo.Accion[VariablesGlobales.Instancia.TamañoColaAccion];
+        for (int i = 0; i < VariablesGlobales.Instancia.TamañoColaAccion; i++)
+        {
+            ColaDeAccion[i] = _Enemigo.DiccionarioAcciones["Idle"];
+        }
 
-        // Inicia la gestión de la cola de acciones, que se llamará una y otra vez
-        // TODO: evitar que destruir el objeto cause un error por esta recursión. Desactivar este script en un gestor antes de destruirlo es una forma de hacerlo.
-        ResolverColaAccion();
+        // Variable de memoria que usamos para comprobar que no se ha cambiado de forma externa la acción que estamos realizando mientras la hacemos
+        SistemaEnemigo.Accion buffer = ColaDeAccion[0];
+        while (true)
+        {
+            buffer = ColaDeAccion[0];
+            ColaDeAccion[0].AlIniciarAccion();
+            await Task.Delay(ColaDeAccion[0].Duracion);
+            ReponerColaDeAccion(buffer);
+        }
     }
 
     private void Update()
@@ -33,7 +48,7 @@ public class EstadoEnemigo : MonoBehaviour
         // EJEMPLO DE ACCESO EXTERNO A LA COLA DE ACCIÓN. Se debe usar este método para añadir nuevas acciones y no acceder directamente al vector
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
-            InsertarAccion(Acciones.Curar, 0, true);
+            InsertarAccion(_Enemigo.DiccionarioAcciones["Curar"], 1, true);
         }
     }
 
@@ -50,7 +65,7 @@ public class EstadoEnemigo : MonoBehaviour
             return false;
         }
         // Si está relativamente cerca de su destino y no se cumple lo anterior
-        else if(Mathf.Abs(transform.position.x - DestinoFijado.x) < .5f && Mathf.Abs(transform.position.y - DestinoFijado.y) < 3f)
+        else if(Mathf.Abs(transform.position.x - DestinoFijado.x) < 1.5f && Mathf.Abs(transform.position.y - DestinoFijado.y) < 3f)
         {
             // Refresca su motivación
             _ContadorObjetivoInalcanzable = 0f;
@@ -71,50 +86,42 @@ public class EstadoEnemigo : MonoBehaviour
         return false;
     }
 
-    async public void ResolverColaAccion()
+    public bool RecordarObjeto()
+    {
+        // Si hay algún cambio en la detección de enemigos, termina esta acción
+        if(Estado != Estados.Vigilante || !_Enemigo.Movimiento.CogeObjetos)
+        {
+            return true;
+        }
+        if (ObjetivoFijado == null)
+        {
+            ObjetivoFijado = _Enemigo.Deteccion.BuscarObjeto();
+            if(ObjetivoFijado != null)
+            {
+                DestinoFijado = ObjetivoFijado.transform.position;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        // De otra forma, no completes el movimiento
+        return false;
+    }
+
+    public void ReponerColaDeAccion(SistemaEnemigo.Accion buffer)
     {
         // Variable que evalua si hemos completado una tarea con el fin de reponerla si fuera necesario
-        bool realizada = false;
-        // Variable de memoria que usamos para comprobar que no se ha cambiado de forma externa la acción que estamos realizando mientras la hacemos
-        Acciones buffer = ColaDeAccion[0];
-        switch(ColaDeAccion[0])
-        {
-            // Realizar un Idle
-            case Acciones.Idle:
-                // Esperar 1 segundo
-                await Task.Delay(100);
-                // Completada
-                realizada = true;
-                break;
-
-            // TODO: Realizar un Atacar
-            case Acciones.Atacar:
-                await Task.Delay(100);
-                realizada = true;
-                break;
-
-            // TODO: Realizar un Curar
-            case Acciones.Curar:
-                await Task.Delay(1000);
-                realizada = true;
-                break;
-
-            // Realizar un Mover
-            case Acciones.Mover:
-                // Comprobar si se ha completado el movimiento
-                realizada = RecordarPosicion();
-                // Esperar 1 segundo
-                await Task.Delay(100);
-                break;
-        }
+        bool realizada = ColaDeAccion[0].CriterioParada();
 
         // Si hemos cambiado la acción a ejecutar durante la ejecución de la antigua, no necesitamos reponerla
-        if(buffer != ColaDeAccion[0])
+        if (buffer != ColaDeAccion[0])
         {
             realizada = false;
         }
         // Si necesitamos reponer la acción, lo hacemos de la siguiente forma
-        if(realizada)
+        if (realizada)
         {
             // Movemos todas las acciones a una posición con mayor prioridad en la cola (la primera queda eliminada)
             for (int i = 0; i < ColaDeAccion.Length - 1; i++)
@@ -122,23 +129,20 @@ public class EstadoEnemigo : MonoBehaviour
                 ColaDeAccion[i] = ColaDeAccion[i + 1];
             }
             // La última acción pasa a ser un Idle (predefinido), que son los que menos prioridad tienen a la hora de ser cambiados
-            ColaDeAccion[ColaDeAccion.Length - 1] = Acciones.Idle;
+            ColaDeAccion[ColaDeAccion.Length - 1] = _Enemigo.DiccionarioAcciones["Idle"];
             // Elegimos una nueva acción con mayor criterio
             DecidirSiguienteAccion();
         }
-
-        // Volvemos a realizar todo el procedimiento de esta función mientras el objeto exista
-        ResolverColaAccion();
     }
 
     private void DecidirSiguienteAccion()
     {
         // Si no cambiamos nada, la nueva acción es un Idle
-        Acciones accionDecidida = Acciones.Idle;
+        SistemaEnemigo.Accion accionDecidida = _Enemigo.DiccionarioAcciones["Idle"];
         // Si el objeto quiere combatir, la nueva acción será un Combate
         if (Estado == Estados.Combate)
         {
-            accionDecidida = Acciones.Atacar;
+            accionDecidida = _Enemigo.DiccionarioAcciones["Atacar"];
             // TODO: Si en un futuro queremos que el combate sea inmediato, podemos pedir que fuerce la acción de la siguiente forma:
             // InsertarAccion(accionDecidida, 0, true);
         }
@@ -146,13 +150,18 @@ public class EstadoEnemigo : MonoBehaviour
         else if (Estado == Estados.Alerta && _ContadorObjetivoInalcanzable < VariablesGlobales.Instancia.MaximoTiempoInalcanzable)
         {
             _ContadorObjetivoInalcanzable = 0f;
-            accionDecidida = Acciones.Mover;
+            accionDecidida = _Enemigo.DiccionarioAcciones["Mover"];
+        }
+        // Si es capaz de recoger objetos, irá a por el más cercano en caso de no tener nada mejor que hacer
+        else if(_Enemigo.Movimiento.CogeObjetos && _Enemigo.Deteccion.BuscarObjeto() != null)
+        {
+            accionDecidida = _Enemigo.DiccionarioAcciones["CogerObjeto"];
         }
         // Añadimos la acción a la cola con el método adecuado, sin forzar y al final de la prioridad
         InsertarAccion(accionDecidida, ColaDeAccion.Length - 1, false);
     }
 
-    public void InsertarAccion(Acciones accionInsertada, int posicionNueva, bool forzarCambio)
+    public void InsertarAccion(SistemaEnemigo.Accion accionInsertada, int posicionNueva, bool forzarCambio)
     {
         // Comprobamos que la posición en la cola existe
         if (posicionNueva >= ColaDeAccion.Length || posicionNueva < 0)
@@ -166,14 +175,14 @@ public class EstadoEnemigo : MonoBehaviour
         {
             for (int i = posicionNueva; i < ColaDeAccion.Length; i++)
             {
-                if (ColaDeAccion[i] == Acciones.Idle)
+                if (ColaDeAccion[i] == _Enemigo.DiccionarioAcciones["Idle"])
                 {
                     posicionNueva = i;
                     break;
                 }
             }
             // Avisamos en caso de que no se haya podido añadir la nueva acción sin forzar la cola
-            if (ColaDeAccion[posicionNueva] != Acciones.Idle && ColaDeAccion[posicionNueva] != accionInsertada)
+            if (ColaDeAccion[posicionNueva] != _Enemigo.DiccionarioAcciones["Idle"] && ColaDeAccion[posicionNueva] != accionInsertada)
             {
                 Debug.Log("El cambio no se produjo porque no se puede forzar el cambio");
                 return;

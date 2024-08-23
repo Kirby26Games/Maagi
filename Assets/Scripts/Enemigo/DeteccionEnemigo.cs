@@ -7,18 +7,19 @@ public class DeteccionEnemigo : MonoBehaviour
     [Header("Interactuables")]
     private SphereCollider _EsferaDeteccion;
     [Header("Memoria")]
-    private EstadoEnemigo _EstadoActual;
+    private SistemaEnemigo _Enemigo;
     public GameObject[] Objetivos;
     private int _MemoriaUsada;
     [Header("Parametros")]
     public Vector3 DireccionMirada;
     public float AmplitudMirada;
+    [SerializeField] private LayerMask _CapasIgnoradasPorVision;
 
     private void Awake()
     {
         // Guardamos los scripts necesarios
         _EsferaDeteccion = GetComponent<SphereCollider>();
-        _EstadoActual = GetComponentInParent<EstadoEnemigo>();
+        _Enemigo = GetComponentInParent<SistemaEnemigo>();
     }
     private void Start()
     {
@@ -32,13 +33,13 @@ public class DeteccionEnemigo : MonoBehaviour
     private void Update()
     {
         // No revisa nada si aún no ha detectado a nadie
-        if (_MemoriaUsada < 1 && _EstadoActual.DestinoFijado == Vector3.zero)
+        if (_MemoriaUsada < 1 && _Enemigo.Estado.DestinoFijado == Vector3.zero)
         {
             // Reset si ya ha visto a alguien antes
-            if(_EstadoActual.ObjetivoFijado != null)
+            if(_Enemigo.Estado.ObjetivoFijado != null)
             {
-                _EstadoActual.ObjetivoFijado = null;
-                _EstadoActual.DistanciaAObstaculo = new Vector2(-1f, -1f);
+                _Enemigo.Estado.ObjetivoFijado = null;
+                _Enemigo.Estado.DistanciaAObstaculo = new Vector2(-1f, -1f);
             }
             return;
         }
@@ -51,9 +52,11 @@ public class DeteccionEnemigo : MonoBehaviour
     private void CambiarEstadoEnemigo()
     {
         // Revisa que el objetivo no esté a rango de ataque
-        if (_EstadoActual.ObjetivoFijado != null && Vector3.Distance(transform.position, _EstadoActual.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate)
+        if (_Enemigo.Estado.ObjetivoFijado != null &&
+            Vector3.Distance(transform.position, _Enemigo.Estado.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate &&
+            _Enemigo.Estado.ColaDeAccion[0] != _Enemigo.DiccionarioAcciones["CogerObjeto"])
         {
-            _EstadoActual.Estado = EstadoEnemigo.Estados.Combate;
+            _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Combate;
             return;
         }
 
@@ -63,9 +66,9 @@ public class DeteccionEnemigo : MonoBehaviour
             if (Objetivos[i].transform.GetComponent<Collider>().isTrigger && 
                 Mathf.Abs(Vector2.SignedAngle(Objetivos[i].transform.position - transform.position, DireccionMirada)) <= 120f)
             {
-                _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
-                _EstadoActual.DestinoFijado = Objetivos[i].transform.position;
-                _EstadoActual.DestinoFijado.y += Mathf.Sign(_EstadoActual.DestinoFijado.y - transform.position.y) * 2f;
+                _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Alerta;
+                _Enemigo.Estado.DestinoFijado = Objetivos[i].transform.position;
+                _Enemigo.Estado.DestinoFijado.y += Mathf.Sign(_Enemigo.Estado.DestinoFijado.y - transform.position.y) * 2f;
                 return;
             }
             // Si tiene visibilidad de un objetivo lo persigue, siguiendo el orden de prioridad
@@ -73,15 +76,15 @@ public class DeteccionEnemigo : MonoBehaviour
                 Objetivos[i].GetComponent<Collider>().bounds.max.y,
                 Objetivos[i].GetComponent<Collider>().bounds.min.y))
             {
-                _EstadoActual.Estado = EstadoEnemigo.Estados.Alerta;
-                _EstadoActual.ObjetivoFijado = Objetivos[i];
+                _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Alerta;
+                _Enemigo.Estado.ObjetivoFijado = Objetivos[i];
                 return;
             }
         }
-        _EstadoActual.ObjetivoFijado = null;
-        if (_EstadoActual.DestinoFijado != Vector3.zero)
+        _Enemigo.Estado.ObjetivoFijado = null;
+        if (_Enemigo.Estado.DestinoFijado != Vector3.zero)
         {
-            if(ComprobarVisibilidad(_EstadoActual.DestinoFijado, _EstadoActual.DestinoFijado.y + 1f, _EstadoActual.DestinoFijado.y - 1f))
+            if(ComprobarVisibilidad(_Enemigo.Estado.DestinoFijado, _Enemigo.Estado.DestinoFijado.y + 1f, _Enemigo.Estado.DestinoFijado.y - 1f))
             {
                 return;
             }
@@ -103,7 +106,7 @@ public class DeteccionEnemigo : MonoBehaviour
         Vector3 minimoObjetivo = new(posicion.x, alturaMinima + 0.05f, posicion.z);
         
         // Detecta todos los objetos entre él y la parte superior del objetivo
-        detectados = Physics.RaycastAll(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f);
+        detectados = Physics.RaycastAll(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up), Vector3.Distance(maximoObjetivo, transform.position) + 0.01f, ~_CapasIgnoradasPorVision);
         Debug.DrawRay(transform.position + 0.25f * transform.up, maximoObjetivo - (transform.position + 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (ContieneSoloPersonaje(detectados))
@@ -112,18 +115,18 @@ public class DeteccionEnemigo : MonoBehaviour
         }
         
         // Detecta todos los objetos entre él y la parte inferior del objetivo
-        detectados = Physics.RaycastAll(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f);
+        detectados = Physics.RaycastAll(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up), Vector3.Distance(minimoObjetivo, transform.position) + 0.01f, ~_CapasIgnoradasPorVision);
         Debug.DrawRay(transform.position - 0.25f * transform.up, minimoObjetivo - (transform.position - 0.1f * transform.up));
         // Si solo choca con un mismo objeto devuelve true
         if (ContieneSoloPersonaje(detectados))
         {
             detectadoObjetivo = true;
-            _EstadoActual.DistanciaAObstaculo = new Vector2(-1f, -1f);
+            _Enemigo.Estado.DistanciaAObstaculo = new Vector2(-1f, -1f);
         }
         // Si se detecta la parte de arriba pero no la de abajo se puede saltar
         else if (detectadoObjetivo)
         {
-            _EstadoActual.DistanciaAObstaculo = BuscarMasCercano(detectados);
+            _Enemigo.Estado.DistanciaAObstaculo = BuscarMasCercano(detectados);
         }
 
         // De otra forma, devuelve false
@@ -254,5 +257,26 @@ public class DeteccionEnemigo : MonoBehaviour
         }
 
         return ordenada;
+    }
+
+    public GameObject BuscarObjeto()
+    {
+        Collider[] listaObjetos = Physics.OverlapSphere(transform.position, VariablesGlobales.Instancia.RadioDeteccion, _CapasIgnoradasPorVision);
+        GameObject objetoObjetivo = null;
+        for (int i = 0; i < listaObjetos.Length; i++)
+        {
+            if(listaObjetos[i].gameObject.GetComponent<ObjetoEscena>() != null)
+            {
+                if(objetoObjetivo == null)
+                {
+                    objetoObjetivo = listaObjetos[i].gameObject;
+                }
+                else if(Vector3.Distance(objetoObjetivo.transform.position,transform.position) > Vector3.Distance(listaObjetos[i].gameObject.transform.position,transform.position))
+                {
+                    objetoObjetivo = listaObjetos[i].gameObject;
+                }
+            }
+        }
+        return objetoObjetivo;
     }
 }

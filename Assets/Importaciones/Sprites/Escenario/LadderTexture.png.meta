@@ -1,16 +1,12 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Importaciones/Sprites/Escenario/Pushed In Wall.png.meta
-guid: c0ca79d714720dd47bf617d49ed345e1
-========
-guid: 443265c15ce45a64b926e3f766eb9b64
->>>>>>>> 854fc47 (Mergeo con main, añadida escena menu):Assets/Importaciones/Sprites/Menu/button-empty.png.meta
+guid: 654b76c88be563c43b8e9a6474a79b21
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -44,23 +40,19 @@ TextureImporter:
     wrapU: 0
     wrapV: 0
     wrapW: 0
-  nPOTScale: 0
+  nPOTScale: 1
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 0
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-<<<<<<<< HEAD:Assets/Importaciones/Sprites/Escenario/Pushed In Wall.png.meta
-  spritePixelsToUnits: 32
-========
   spritePixelsToUnits: 100
->>>>>>>> 854fc47 (Mergeo con main, añadida escena menu):Assets/Importaciones/Sprites/Menu/button-empty.png.meta
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 0
   textureShape: 1
@@ -77,15 +69,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-<<<<<<<< HEAD:Assets/Importaciones/Sprites/Escenario/Pushed In Wall.png.meta
-    textureFormat: 4
-    textureCompression: 0
-========
     textureFormat: -1
     textureCompression: 1
->>>>>>>> 854fc47 (Mergeo con main, añadida escena menu):Assets/Importaciones/Sprites/Menu/button-empty.png.meta
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,7 +100,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 

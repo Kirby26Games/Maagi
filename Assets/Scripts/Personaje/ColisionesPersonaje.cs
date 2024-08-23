@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class ColisionesPersonaje : MonoBehaviour
 {
-    private SistemasPersonaje Personaje;
+    public bool CercaEscalera;
+    private SistemasPersonaje _Personaje;
     public SphereCollider ColisionDeteccion;
     public CapsuleCollider ColisionPersonaje;
 
     private void Awake()
     {
-        Personaje = GetComponent<SistemasPersonaje>();
+        _Personaje = GetComponent<SistemasPersonaje>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -20,19 +21,19 @@ public class ColisionesPersonaje : MonoBehaviour
 
         if (other.TryGetComponent(out Escaleras escaleras))
         {
-            Personaje.Movimiento.CercaEscalera = true;
-            Personaje.Movimiento.PosicionEscalera = escaleras.transform.position.x;
-            Personaje.Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
+            _Personaje.Movimiento.CercaEscalera = true;
+            _Personaje.Movimiento.PosicionEscalera = escaleras.transform.position.x;
+            _Personaje.Movimiento.VelocidadSubirEscaleras = escaleras.VelocidadSubirEscalera;
         }
 
         if (other.TryGetComponent(out Suelo suelo))
         {
-            Personaje.Movimiento.AtravesandoSuelo = true;
+            _Personaje.Movimiento.AtravesandoSuelo = true;
         }
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
+            _Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 
@@ -40,18 +41,18 @@ public class ColisionesPersonaje : MonoBehaviour
     {
         if (other.TryGetComponent(out Escaleras escaleras))
         {
-            Personaje.Movimiento.SoltarEscalera();
-            Personaje.Movimiento.CercaEscalera = false;
+            _Personaje.Movimiento.SoltarEscalera();
+            _Personaje.Movimiento.CercaEscalera = false;
         }
 
         if (other.TryGetComponent(out Suelo suelo))
         {
-            Personaje.Movimiento.AtravesandoSuelo = false;
+            _Personaje.Movimiento.AtravesandoSuelo = false;
         }
 
         if (other.TryGetComponent(out ObjetoEscena objetoEscena))
         {
-            Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
+            _Personaje.Inventario.GestorObjetosCogibles(objetoEscena);
         }
     }
 }

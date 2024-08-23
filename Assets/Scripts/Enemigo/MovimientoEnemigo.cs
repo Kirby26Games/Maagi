@@ -7,8 +7,9 @@ public class MovimientoEnemigo : MonoBehaviour
     public CriteriosSalto CriterioSalto;
     public bool PuedeUsarEscaleras;
     public bool EsVolador;
+    public bool CogeObjetos;
     [Header("Memoria")]
-    private EstadoEnemigo _EstadoActual;
+    private SistemaEnemigo _Enemigo;
     [Header("Propiedades")]
     private Rigidbody _Cuerpo;
     private Collider _Colision;
@@ -17,7 +18,6 @@ public class MovimientoEnemigo : MonoBehaviour
     public float DistanciaSalto;
     public int SaltosEnElAireMaximos;
     private int _SaltosEnElAire;
-    private SistemaGravedad _Gravedad;
     [Header("Escaleras")]
     [HideInInspector] public bool CercaEscalera;
     [HideInInspector] public float PosicionEscalera;
@@ -32,9 +32,8 @@ public class MovimientoEnemigo : MonoBehaviour
 
     private void Awake()
     {
-        _EstadoActual = GetComponent<EstadoEnemigo>();
+        _Enemigo = GetComponent<SistemaEnemigo>();
         _Cuerpo = GetComponent<Rigidbody>();
-        _Gravedad = GetComponent<SistemaGravedad>();
         _Colision = GetComponent<Collider>();
     }
 
@@ -72,7 +71,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
         // COMPORTAMIENTO HABITUAL: Sobre este deben ir comportamientos específicos con sus condiciones y return al final
         // Si está alerta persigue al objetivo
-        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
+        if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Mover"] || _Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["CogerObjeto"])
         {
             Perseguir();
         }
@@ -83,7 +82,7 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // Si está en el suelo y puede saltar recupera sus saltos
-        if(CriterioSalto != CriteriosSalto.Nunca && _Gravedad.EnSuelo)
+        if(CriterioSalto != CriteriosSalto.Nunca && _Enemigo.Gravedad.EnSuelo)
         {
             ReiniciarSaltos();
         }
@@ -100,7 +99,7 @@ public class MovimientoEnemigo : MonoBehaviour
         Vector3 velocidadFinal = Vector3.zero;
 
         // Añadir la gravedad que le afecta
-        velocidadFinal.y += _Gravedad.EjeY;
+        velocidadFinal.y += _Enemigo.Gravedad.EjeY;
 
         // Mandar la velocidad resultante al cuerpo
         _Cuerpo.linearVelocity = velocidadFinal;
@@ -111,13 +110,13 @@ public class MovimientoEnemigo : MonoBehaviour
         // A velocidadFinal se le van a añadir los distintos desplazamientos
         Vector3 velocidadFinal = Vector3.zero;
         // Añadir la velocidad correcta en la dirección correcta
-        velocidadFinal += (_EstadoActual.DestinoFijado - transform.position).normalized.x * VelocidadMovimiento * Vector3.right;
+        velocidadFinal += Mathf.Sign((_Enemigo.Estado.DestinoFijado - transform.position).x) * VelocidadMovimiento * Vector3.right;
 
         // Revisar si debe saltar en caso de que sea capaz
         Saltar();
 
         // Añadir la gravedad que le afecta
-        velocidadFinal.y += _Gravedad.EjeY;
+        velocidadFinal.y += _Enemigo.Gravedad.EjeY;
 
         // Revisar si debe usar escaleras en caso de que sea capaz
         if (PuedeUsarEscaleras)
@@ -143,7 +142,7 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // Si no es necesario coger la escalera la suelta (o la ignora)
-        if (_Gravedad.EnSuelo && Mathf.Abs(_EstadoActual.DestinoFijado.y - transform.position.y) < 3f)
+        if (_Enemigo.Gravedad.EnSuelo && Mathf.Abs(_Enemigo.Estado.DestinoFijado.y - transform.position.y) < 3f)
         {
            SoltarEscalera();
            return false;
@@ -154,13 +153,13 @@ public class MovimientoEnemigo : MonoBehaviour
         transform.position = new Vector3(PosicionEscalera, transform.position.y, transform.position.z);
         _Colision.isTrigger = true;
 
-        if (transform.position.y < _EstadoActual.DestinoFijado.y)
+        if (transform.position.y < _Enemigo.Estado.DestinoFijado.y)
         {
             // Subir escalera
             VelocidadSubirEscaleras = Mathf.Abs(VelocidadSubirEscaleras);
             return true;
         }
-        if (transform.position.y > _EstadoActual.DestinoFijado.y)
+        if (transform.position.y > _Enemigo.Estado.DestinoFijado.y)
         {
             // Bajar escalera
             VelocidadSubirEscaleras = -1 * Mathf.Abs(VelocidadSubirEscaleras);
@@ -188,14 +187,14 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // En caso contrario, calcula lo que debe saltar
-        _Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * VariablesGlobales.Instancia.Gravedad);
+        _Enemigo.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * VariablesGlobales.Instancia.Gravedad);
     }
 
     private bool PuedoSaltar()
     {
         bool puedo = false;
         //Si estoy en el suelo, siempre puedo saltar
-        if (_Gravedad.EnSuelo)
+        if (_Enemigo.Gravedad.EnSuelo)
         {
             puedo = true;
         }
@@ -219,11 +218,11 @@ public class MovimientoEnemigo : MonoBehaviour
 
             // Detecta borde se fija en la distancia al obstáculo más cercano (si existe) y si el objetivo está por encima de su posición
             case CriteriosSalto.DetectaBorde:
-                if(_EstadoActual.DistanciaAObstaculo.x < VelocidadMovimiento &&
-                    _EstadoActual.DistanciaAObstaculo.x > -1f &&
-                    _EstadoActual.DistanciaAObstaculo.y < DistanciaSalto &&
-                    _EstadoActual.DistanciaAObstaculo.y > -1f &&
-                    _EstadoActual.DestinoFijado.y > transform.position.y)
+                if(_Enemigo.Estado.DistanciaAObstaculo.x < VelocidadMovimiento &&
+                    _Enemigo.Estado.DistanciaAObstaculo.x > -1f &&
+                    _Enemigo.Estado.DistanciaAObstaculo.y < DistanciaSalto &&
+                    _Enemigo.Estado.DistanciaAObstaculo.y > -1f &&
+                    _Enemigo.Estado.DestinoFijado.y > transform.position.y)
                 {
                     return true;
                 }
@@ -239,7 +238,7 @@ public class MovimientoEnemigo : MonoBehaviour
     public void ReiniciarSaltos()
     {
         // Una vez en el suelo, recupera la cantidad de saltos que puede realizar
-        if(_Gravedad.EnSuelo)
+        if(_Enemigo.Gravedad.EnSuelo)
         {
             _SaltosEnElAire = 0;
         }
@@ -251,7 +250,7 @@ public class MovimientoEnemigo : MonoBehaviour
         if(MurosGolpeados < 0)
         {
             // Una vez detectado un objetivo comienza la rutina del volador
-            if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Mover)
+            if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Mover"])
             {
                 MurosGolpeados = 0;
             }
@@ -265,17 +264,17 @@ public class MovimientoEnemigo : MonoBehaviour
         if(MurosGolpeados >= VariablesGlobales.Instancia.MaximosMurosGolpeados)
         {
             // Si todavía detecta a algún objetivo, reinicia la rutina desde el principio
-            if(_EstadoActual.ObjetivoFijado != null)
+            if(_Enemigo.Estado.ObjetivoFijado != null)
             {
                 MurosGolpeados = 0;
             }
             // En caso contrario, detiene la rutina y llena la cola con acciones Idle
             else
             {
-                _EstadoActual.Estado = EstadoEnemigo.Estados.Vigilante;
-                for (int i = 0; i < _EstadoActual.ColaDeAccion.Length; i++)
+                _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Vigilante;
+                for (int i = 0; i < _Enemigo.Estado.ColaDeAccion.Length; i++)
                 {
-                    _EstadoActual.InsertarAccion(EstadoEnemigo.Acciones.Idle, i, true);
+                    _Enemigo.Estado.InsertarAccion(_Enemigo.DiccionarioAcciones["Idle"], i, true);
                 }
                 MurosGolpeados = -1;
                 _Cuerpo.linearVelocity = Vector3.zero;
@@ -286,9 +285,9 @@ public class MovimientoEnemigo : MonoBehaviour
         // Las acciones que realiza durante la rutina. La DireccionVuelo se modifica en ColisionesEnemigo
         Vector3 velocidadFinal = Vector3.zero;
         // TODO: Si el enemigo volador interrumpe el vuelo para tomar ciertas acciones, suceden aquí
-        if (_EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Atacar || _EstadoActual.ColaDeAccion[0] == EstadoEnemigo.Acciones.Curar)
+        if (_Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Atacar"] || _Enemigo.Estado.ColaDeAccion[0] == _Enemigo.DiccionarioAcciones["Curar"])
         {
-            Debug.Log("No mueve porque prefiere hacer una acción importante: " + _EstadoActual.ColaDeAccion[0]);
+            Debug.Log("No mueve porque prefiere hacer una acción importante: " + _Enemigo.Estado.ColaDeAccion[0]);
         }
         else
         {

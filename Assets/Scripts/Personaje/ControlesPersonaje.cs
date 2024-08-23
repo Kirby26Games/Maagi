@@ -76,7 +76,6 @@ public class ControlesPersonaje : MonoBehaviour
                 Destroy(objetoAgregado.gameObject);
             }
         }
-
     }
 
     //Hace el getaxisraw pero con los botones que uno elige
@@ -105,5 +104,7 @@ public class ControlesPersonaje : MonoBehaviour
             return -1;
         }
         return 0;
+
+
     }
 }

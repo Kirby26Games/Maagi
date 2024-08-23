@@ -15,10 +15,10 @@ public class RaycastEnemigo : MonoBehaviour
     private float Alto;
     private float Ancho;
     [HideInInspector] public float Radio;
-    private SistemaGravedad Gravedad;
+    private SistemaEnemigo _Enemigo;
     private void Awake()
     {
-        Gravedad = GetComponent<SistemaGravedad>();
+        _Enemigo = GetComponent<SistemaEnemigo>();
         Colision = GetComponent<Collider>(); //Cogemos el collider del objeto
     }
     private void Start()
@@ -47,14 +47,14 @@ public class RaycastEnemigo : MonoBehaviour
 
             }
             //Estamos en el suelo si AngulacionSuelo es menor al angulo de escalada maximo
-            Gravedad.EnSuelo = AngulacionSuelo <= AnguloEscaladaMaximo;
+            _Enemigo.Gravedad.EnSuelo = AngulacionSuelo <= AnguloEscaladaMaximo;
             //Dibujo el rayo de escalada
             Debug.DrawRay(transform.position + Vector3.forward * 0.01f, Vector3.down * DistanciaRayoEscalada, Color.magenta);
 
         }
         else
         {
-            Gravedad.EnSuelo = false;
+            _Enemigo.Gravedad.EnSuelo = false;
             Debug.DrawRay(transform.position, -transform.up * (_RangoDeteccionSuelo + Radio), Color.green);
         }
     }
