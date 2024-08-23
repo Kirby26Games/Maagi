@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/ObjetosEscena.meta
 guid: 85854de06158ec546aeeae83e8eb592d
+========
+guid: 12927e253c199724e8bdc14f9ec861d8
+>>>>>>>> 854fc47 (Mergeo con main, añadida escena menu):Assets/Importaciones/Sprites/Menu.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
