@@ -1,4 +1,3 @@
-using TreeEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(MovimientoPersonaje), typeof(SistemaGravedad), typeof(SistemaRaycast))]

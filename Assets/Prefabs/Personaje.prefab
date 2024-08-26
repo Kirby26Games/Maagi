@@ -272,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c9c5d1f45de26f42b69d43eb1c186cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CercaEscalera: 0
   ColisionDeteccion: {fileID: 0}
   ColisionPersonaje: {fileID: 8905940627804752459}
 --- !u!114 &1478096177629473854
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjetosInventario: 
+  _ObjetosMaximos: 16
   InventarioInterfaz: {fileID: 0}
   ContenedorObjetos:
   - {fileID: 0}
@@ -350,7 +352,6 @@ MonoBehaviour:
   - {fileID: 0}
   ObjetosCogibles: []
   MenuInventario: {fileID: 0}
-  PosicionOculta: {x: 0, y: 0, z: 0}
   InterfazAbierta: 0
   ObjetoSeleccionadoNombre: 
   ContenedorSeleccionado: 0
@@ -366,11 +367,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1ff31fd0f4e624a9b66b098d7b939d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Vida: 10
-  Mana: 10
-  Ataque: 10
-  Peso: 1
-  Invulnerabilidad: 0
+  Fuerza:
+    rid: -2
+  Destreza:
+    rid: -2
+  Constitucion:
+    rid: -2
+  Inteligencia:
+    rid: -2
+  Intuicion:
+    rid: -2
+  Carisma:
+    rid: -2
+  Memoria:
+    rid: -2
+  Ataque:
+    rid: -2
+  Magia:
+    rid: -2
+  VidaActual:
+    rid: -2
+  VidaMaxima:
+    rid: -2
+  ManaActual:
+    rid: -2
+  ManaMaximo:
+    rid: -2
+  Nivel:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &8319080664039406530
 GameObject:
   m_ObjectHideFlags: 0
