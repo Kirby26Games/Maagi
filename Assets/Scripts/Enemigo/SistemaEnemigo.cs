@@ -48,7 +48,7 @@ public class SistemaEnemigo : MonoBehaviour
         Accion idle = new("Idle", 100, SiempreTrue, SiempreTrue);
         Accion mover = new("Mover", 1000, Estado.RecordarPosicion, Estado.RecordarPosicion);
         Accion atacar = new("Atacar", 2000, SiempreTrue, SiempreTrue);
-        Accion cura = new("Cura", 3000, SiempreTrue, SiempreTrue);
+        Accion cura = new("Curar", 3000, SiempreTrue, SiempreTrue);
         Accion cogerObjeto = new("CogerObjeto", 1000, Estado.RecordarObjeto, Estado.RecordarObjeto);
 
         DiccionarioAcciones = new()
