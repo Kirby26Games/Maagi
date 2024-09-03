@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public class Fuerza : Estadistica
 {
-    public Fuerza() { }
     public override void Calcular()
     {
         Nombre = IdiomaEstadisticas.Fuerza;
