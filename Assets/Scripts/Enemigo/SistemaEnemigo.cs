@@ -2,13 +2,12 @@ using NUnit.Framework.Constraints;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MovimientoEnemigo), typeof(SistemaGravedad), typeof(RaycastEnemigo))]
+[RequireComponent(typeof(MovimientoEnemigo), typeof(RaycastEnemigo))]
 [RequireComponent(typeof(EstadoEnemigo), typeof(InventarioEnemigo), typeof(ColisionesEnemigo))]
-public class SistemaEnemigo : MonoBehaviour
+public class SistemaEnemigo : SistemaBase
 {
     //Este script contendra un indice de todos los scripts en uso
     public MovimientoEnemigo Movimiento;
-    public SistemaGravedad Gravedad;
     public RaycastEnemigo Raycast;
     public DeteccionEnemigo Deteccion;
     public ColisionesEnemigo Colisiones;
