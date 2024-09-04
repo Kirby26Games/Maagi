@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MovimientoPersonaje : MonoBehaviour
@@ -10,6 +11,10 @@ public class MovimientoPersonaje : MonoBehaviour
     private float VelocidadFinal;
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
+    private List<Vector3> FuerzasDinamicas;//Movimiento temporal que ira decayendo, esto es lo que deberia ser el movimiento deslizante.
+    //Esto debe ser una estructura, que guarde el Vector3, y float Tiempo, que es el tiempo en llegar a 0, esta tendra una funcion dentro que se ejecutara todos los frames desde el movimiento
+    //Esta funcion hace que ese Vector3 llegue a 0 segun la variable Tiempo. Esto permitira añadir fuerzas multiples a los objetos del juego.
+    private Vector3 ModificadorMovimiento;//Se puede multiplicar por este para añadir variaciones al movimiento
     private float UltimoEjeX;
     [Header("Salto")]
     public bool Saltando;
@@ -86,6 +91,7 @@ public class MovimientoPersonaje : MonoBehaviour
         MovimientoFinal = cam.transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
+
         RBPersonaje.linearVelocity = MovimientoFinal;
     }
 
