@@ -25769,6 +25769,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021c94257d1fe4948a0c5c3b3fd50f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlantillasEfectos:
+  - {fileID: 2822946018928164725, guid: 5f90255f2894e7848a946b6f784913c9, type: 3}
 --- !u!4 &645538397
 Transform:
   m_ObjectHideFlags: 0

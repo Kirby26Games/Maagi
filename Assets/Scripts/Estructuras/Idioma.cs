@@ -17,12 +17,14 @@ public class IdiomaHabilidades
 {
     public static string Habilidad1 = "Nombre de Habilidad 1";
     public static string Habilidad2 = "Nombre de Habilidad 2";
+    public static string AtaqueCargado = "Ataque Cargado";
 }
 
 public class IdiomaEfectos
 {
     public static string DañoFisico = "Daño Fisico";
     public static string Curacion = "Curacion";
+    public static string AreaDaño = "Area de Daño";
 }
 
 public class IdiomaEstadisticas

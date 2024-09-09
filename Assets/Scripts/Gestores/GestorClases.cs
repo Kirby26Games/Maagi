@@ -7,6 +7,7 @@ public class GestorClases : MonoBehaviour
     [SerializeReference] public Clase[] Clases;
     private Efecto[] EfectosBase;
     [SerializeReference] public Dictionary<string, Efecto> Efectos;
+    [SerializeReference] public GameObject[] PlantillasEfectos;
 
 
     private void Awake()
@@ -38,6 +39,7 @@ public class GestorClases : MonoBehaviour
         {
                 new Curacion(),
                 new DañoFisico(),
+                new AreaDañoRedonda(),
                 //añado los que quiera igual
         };
         Efectos = new();
