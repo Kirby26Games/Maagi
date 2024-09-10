@@ -33,6 +33,7 @@ public class ControlesPersonaje : MonoBehaviour
         EjeZ = _EjeZTotal();
         RatonHorizontal = Input.GetAxis("Mouse X");
         RatonVertical = Input.GetAxis("Mouse Y");
+        // Guardar la información de la posición del ratón para los lanzamientos de habilidades
         
 
         if (Input.GetKeyDown(Controles.Saltar))

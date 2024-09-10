@@ -49,8 +49,13 @@ public class AreaDañoRedonda: Efecto
         radioArea = Mathf.Clamp(radioArea,0f,10f);
         int duracion = 1;
 
-        AreaEfectoRedondaManager plantilla = GameObject.Instantiate(GestorClases.Instancia.PlantillasEfectos[0],lanzador.transform.position, lanzador.transform.rotation)
+        AreaEfectoRedondaManager plantilla = GameObject.Instantiate(
+            GestorClases.Instancia.PlantillasEfectos[0],
+            lanzador.transform.position + 100 * Vector3.up,
+            lanzador.transform.rotation
+            )
             .GetComponent<AreaEfectoRedondaManager>();
+        Debug.Log(plantilla.transform.position);
         plantilla.Radio = radioArea;
         plantilla.Duracion = duracion * 100; // segundos -> ms
         plantilla.Dañar(dañoInflingido);
