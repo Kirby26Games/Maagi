@@ -9,6 +9,7 @@ public class Guerrero : Clase
            //Defino las habilidades, no las llameis HabilidadX, ponedles nombre
             new Habilidad1(),
             new Habilidad2(),
+            new AtaqueCargado(),
        };
         //Defino todos los id y las habilidades
         for (int i = 0; i < Habilidades.Length; i++)
@@ -44,5 +45,19 @@ public class Habilidad2 : Habilidad
         };
         Coste = 3;
         Nombre = IdiomaHabilidades.Habilidad2;
+    }
+}
+[Serializable]
+public class AtaqueCargado: Habilidad
+{
+    public override void Definir()
+    {
+        Efectos = new Efecto[]
+        {
+            GestorClases.Instancia.Efectos[IdiomaEfectos.DañoFisico],
+            GestorClases.Instancia.Efectos[IdiomaEfectos.AreaDaño]
+        };
+        Coste = 5;
+        Nombre = IdiomaHabilidades.AtaqueCargado;
     }
 }

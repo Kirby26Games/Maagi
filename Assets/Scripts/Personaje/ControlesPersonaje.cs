@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ControlesPersonaje : MonoBehaviour
@@ -15,6 +16,17 @@ public class ControlesPersonaje : MonoBehaviour
         Personaje=GetComponent<SistemasPersonaje>();    
     }
 
+    private async void Start()
+    {
+        await Task.Delay(1);
+        Personaje.Clase = GestorClases.Instancia.Clases[0];
+        Personaje.Estadisticas.Fuerza.Base = 3;
+        Personaje.Estadisticas.Fuerza.Calcular();
+        Personaje.Estadisticas.Constitucion.Base = 5;
+        Personaje.Estadisticas.Constitucion.Calcular();
+        Personaje.Estadisticas.Nivel.Base = 1;
+        Personaje.Estadisticas.Nivel.Calcular();
+    }
     private void Update()
     {
         EjeX = _EjeXTotal();
@@ -79,9 +91,7 @@ public class ControlesPersonaje : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            Personaje.Clase = GestorClases.Instancia.Clases[0];
-            Personaje.Clase.Habilidades[0].Lanzar(Personaje);
-            // Debug.Log(GestorClases.Instancia.ConseguirEfecto(IdiomaEfectos.Curacion));
+            Personaje.Clase.Habilidades[2].Lanzar(Personaje);
         }
     }
 
