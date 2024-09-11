@@ -1,18 +1,16 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MovimientoPersonaje), typeof(SistemaGravedad), typeof(SistemaRaycast))]
+[RequireComponent(typeof(MovimientoPersonaje), typeof(SistemaRaycast))]
 [RequireComponent(typeof(ControlesPersonaje), typeof(TamañoPersonaje), typeof(ColisionesPersonaje))]
 
 [RequireComponent(typeof(AtaquePersonaje), typeof(InventarioPersonaje), typeof(ApuntarPersonaje))]
-[RequireComponent(typeof(Estadisticas))]
 
 
 
-public class SistemasPersonaje : MonoBehaviour
+public class SistemasPersonaje : SistemaBase
 {
     //Este script contendra un indice de todos los scripts en uso
     public MovimientoPersonaje Movimiento;
-    public SistemaGravedad Gravedad;
     public SistemaRaycast Raycast;
     public ControlesPersonaje Controles;
     public TamañoPersonaje Tamaño;
@@ -20,7 +18,6 @@ public class SistemasPersonaje : MonoBehaviour
     public AtaquePersonaje Ataque;
     public InventarioPersonaje Inventario;
     public ApuntarPersonaje Apuntar;
-    public Estadisticas Estadisticas;
 
 
 

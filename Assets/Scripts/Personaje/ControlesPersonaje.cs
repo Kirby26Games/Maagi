@@ -76,6 +76,13 @@ public class ControlesPersonaje : MonoBehaviour
                 Destroy(objetoAgregado.gameObject);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Personaje.Clase = GestorClases.Instancia.Clases[0];
+            Personaje.Clase.Habilidades[0].Lanzar(Personaje);
+            // Debug.Log(GestorClases.Instancia.ConseguirEfecto(IdiomaEfectos.Curacion));
+        }
     }
 
     //Hace el getaxisraw pero con los botones que uno elige

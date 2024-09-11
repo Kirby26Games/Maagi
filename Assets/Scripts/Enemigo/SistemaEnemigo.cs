@@ -2,13 +2,12 @@ using NUnit.Framework.Constraints;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MovimientoEnemigo), typeof(SistemaGravedad), typeof(RaycastEnemigo))]
+[RequireComponent(typeof(MovimientoEnemigo), typeof(RaycastEnemigo))]
 [RequireComponent(typeof(EstadoEnemigo), typeof(InventarioEnemigo), typeof(ColisionesEnemigo))]
-public class SistemaEnemigo : MonoBehaviour
+public class SistemaEnemigo : SistemaBase
 {
     //Este script contendra un indice de todos los scripts en uso
     public MovimientoEnemigo Movimiento;
-    public SistemaGravedad Gravedad;
     public RaycastEnemigo Raycast;
     public DeteccionEnemigo Deteccion;
     public ColisionesEnemigo Colisiones;
@@ -48,7 +47,7 @@ public class SistemaEnemigo : MonoBehaviour
         Accion idle = new("Idle", 100, SiempreTrue, SiempreTrue);
         Accion mover = new("Mover", 1000, Estado.RecordarPosicion, Estado.RecordarPosicion);
         Accion atacar = new("Atacar", 2000, SiempreTrue, SiempreTrue);
-        Accion cura = new("Cura", 3000, SiempreTrue, SiempreTrue);
+        Accion cura = new("Curar", 3000, SiempreTrue, SiempreTrue);
         Accion cogerObjeto = new("CogerObjeto", 1000, Estado.RecordarObjeto, Estado.RecordarObjeto);
 
         DiccionarioAcciones = new()

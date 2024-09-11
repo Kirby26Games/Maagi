@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 [Serializable]
 public class DañoFisico : Efecto
@@ -9,7 +10,7 @@ public class DañoFisico : Efecto
     }
 
     //Aqui habra que cambair sistemaspersonaje por algo que tenga todo lo que pueda lanzar habilidades, SistemasBase
-    public override void Lanzar(SistemasPersonaje lanzador)
+    public override void Lanzar(SistemaBase lanzador)
     {
         //Aqui puedes meter todo el codigo que quieras.
     }
@@ -24,7 +25,7 @@ public class Curacion : Efecto
     }
 
     //Aqui habra que cambair sistemaspersonaje por algo que tenga todo lo que pueda lanzar habilidades, SistemasBase
-    public override void Lanzar(SistemasPersonaje lanzador)
+    public override void Lanzar(SistemaBase lanzador)
     {
         //Este -10 deberia ser un calculo que tenga en cuenta una estadistica
         lanzador.Estadisticas.VidaActual.Modificar(-10);
