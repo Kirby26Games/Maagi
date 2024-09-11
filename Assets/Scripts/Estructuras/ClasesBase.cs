@@ -50,7 +50,7 @@ public abstract class Efecto
 {
     [HideInInspector] public string Nombre;
     public abstract void Definir();
-    public abstract void Lanzar(SistemasPersonaje lanzador);
+    public abstract void Lanzar(SistemaBase lanzador);
 }
 
 [Serializable]

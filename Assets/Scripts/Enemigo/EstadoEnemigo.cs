@@ -118,6 +118,7 @@ public class EstadoEnemigo : MonoBehaviour
         // Si hemos cambiado la acción a ejecutar durante la ejecución de la antigua, no necesitamos reponerla
         if (buffer != ColaDeAccion[0])
         {
+            Debug.Log("Modificada la acción durante ejecución");
             realizada = false;
         }
         // Si necesitamos reponer la acción, lo hacemos de la siguiente forma

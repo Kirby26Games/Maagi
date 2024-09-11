@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4435518248147366265}
   - component: {fileID: 6416728105665947128}
   - component: {fileID: 8754873562339979019}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: EspadaCorta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2268650980328749045}
   - component: {fileID: 7163940324092787735}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
