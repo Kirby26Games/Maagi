@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-    public GameObject MenuPausa;
+    public RectTransform MenuPausa;
     bool _Pausado = false;
     public bool PuedoPausar;
 
     private void Start()
     {
-        MenuPausa.SetActive(false);
         _Pausado = false;
+        MoverMenu();
         Debug.Log($"Puedo Pausar es {PuedoPausar}");
     }
 
@@ -23,7 +23,19 @@ public class Menu : MonoBehaviour
 
     void Pausar()
     {
-        MenuPausa.SetActive(!_Pausado);
         _Pausado = !_Pausado;
+        MoverMenu();
+    }
+
+    void MoverMenu()
+    {
+        if (_Pausado)
+        {
+            MenuPausa.anchoredPosition = Vector3.zero;
+        }
+        else
+        {
+            MenuPausa.anchoredPosition = 4 * Screen.height * Vector3.up;
+        }
     }
 }
