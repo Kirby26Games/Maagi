@@ -11,11 +11,11 @@ public class MovimientoPersonaje : MonoBehaviour
     private float VelocidadFinal;
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
-    private List<Vector3> FuerzasDinamicas;//Movimiento temporal que ira decayendo, esto es lo que deberia ser el movimiento deslizante.
+    public List<FuerzaExterna> FuerzasDinamicas;//Movimiento temporal que ira decayendo, esto es lo que deberia ser el movimiento deslizante.
     //Esto debe ser una estructura, que guarde el Vector3, y float Tiempo, que es el tiempo en llegar a 0, esta tendra una funcion dentro que se ejecutara todos los frames desde el movimiento
     //Esta funcion hace que ese Vector3 llegue a 0 segun la variable Tiempo. Esto permitira añadir fuerzas multiples a los objetos del juego.
     private Vector3 ModificadorMovimiento;//Se puede multiplicar por este para añadir variaciones al movimiento
-    private float UltimoEjeX;
+    public float UltimoEjeX;
     [Header("Salto")]
     public bool Saltando;
     public float DistanciaSalto;
@@ -76,7 +76,7 @@ public class MovimientoPersonaje : MonoBehaviour
             if ((Personaje.Gravedad.EjeY < 0 || CercaEscalera))//si el personaje esta cayendo
             {
                 //reduce/aumenta la distancia del salto dependiendo del input del jugador
-                //hacer el lerp de manera correcta
+                //corregir, hacer el lerp de manera correcta
                 UltimoEjeX = Mathf.Lerp(UltimoEjeX, Personaje.Controles.EjeX, Time.deltaTime * 4);
                 MovimientoXZ = (cam.transform.right * UltimoEjeX);
             }
@@ -92,7 +92,14 @@ public class MovimientoPersonaje : MonoBehaviour
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
 
+        for (int i = 0; i < FuerzasDinamicas.Count; i++)
+        {
+            FuerzasDinamicas[i].Contador();
+        }
+
         RBPersonaje.linearVelocity = MovimientoFinal;
+        //me dijo que no hiciera estoperoigual lo hice
+        //RBPersonaje.linearVelocity = Vector3.Scale(MovimientoFinal, ModificadorMovimiento);
     }
 
     //metodo de rotar personaje

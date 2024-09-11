@@ -49,4 +49,12 @@ public class Estadisticas : MonoBehaviour
         Nivel = new();
         Nivel.Estadisticas = this;
     }
+
+    private void Morir()
+    {
+        if (true)
+        {
+
+        }
+    }
 }
