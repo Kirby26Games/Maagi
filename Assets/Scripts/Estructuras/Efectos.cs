@@ -51,7 +51,7 @@ public class AreaDañoRedonda: Efecto
 
         AreaEfectoRedondaManager plantilla = GameObject.Instantiate(
             GestorClases.Instancia.PlantillasEfectos[0],
-            lanzador.transform.position + 100 * Vector3.up,
+            lanzador.transform.position + (lanzador.ControlesBase.PosicionApuntado - lanzador.ControlesBase.PosicionEnPantalla).normalized,
             lanzador.transform.rotation
             )
             .GetComponent<AreaEfectoRedondaManager>();
