@@ -1,4 +1,5 @@
 using NUnit.Framework.Constraints;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class SistemaEnemigo : SistemaBase
     public ColisionesEnemigo Colisiones;
     public InventarioEnemigo Inventario;
     public EstadoEnemigo Estado;
+    public Puerta PuertaDueño;
 
     [System.Serializable]
     public class Accion
@@ -60,8 +62,28 @@ public class SistemaEnemigo : SistemaBase
         };
     }
 
+    private void Start()
+    {
+        //Freddy Para PuzzlePuerta
+        if (PuertaDueño)
+        {
+            PuertaDueño.AddCount();
+        }
+    }
+
+    //Esto es Magia no tocar
     public bool SiempreTrue()
     {
         return true;
+    }
+
+    [Button]
+    public override void MeMuero()
+    {
+        if (PuertaDueño)
+        {
+            PuertaDueño.RemoveCount();
+        }
+        Destroy(gameObject);
     }
 }
