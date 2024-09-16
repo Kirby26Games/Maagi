@@ -40,6 +40,7 @@ public class GestorClases : MonoBehaviour
                 new Curacion(),
                 new DañoFisico(),
                 new AreaDañoRedonda(),
+                new Empuje(),
                 //añado los que quiera igual
         };
         Efectos = new();

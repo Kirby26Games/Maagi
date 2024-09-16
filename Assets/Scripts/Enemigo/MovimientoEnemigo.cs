@@ -29,6 +29,11 @@ public class MovimientoEnemigo : MonoBehaviour
     public float VelocidadVuelo;
     [HideInInspector] public int MurosGolpeados;
     [HideInInspector] public Vector3 DireccionVuelo;
+    [Header("Física")]
+    private float _Gravedad = -9.82f;
+    [Header("Comportamientos Enemigo")]
+    // VUELO
+    private int _MaximosMurosGolpeados = 4;       // Cantidad máxima de muros golpeados antes de volver a Idle
 
     private void Awake()
     {
@@ -187,7 +192,7 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // En caso contrario, calcula lo que debe saltar
-        _Enemigo.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * VariablesGlobales.Instancia.Gravedad);
+        _Enemigo.Gravedad.EjeY = Mathf.Sqrt(DistanciaSalto * -2 * _Gravedad);
     }
 
     private bool PuedoSaltar()
@@ -261,7 +266,7 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // Una vez termina la rutina, sucede esto
-        if(MurosGolpeados >= VariablesGlobales.Instancia.MaximosMurosGolpeados)
+        if(MurosGolpeados >= _MaximosMurosGolpeados)
         {
             // Si todavía detecta a algún objetivo, reinicia la rutina desde el principio
             if(_Enemigo.Estado.ObjetivoFijado != null)

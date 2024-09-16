@@ -14,6 +14,10 @@ public class DeteccionEnemigo : MonoBehaviour
     public Vector3 DireccionMirada;
     public float AmplitudMirada;
     [SerializeField] private LayerMask _CapasIgnoradasPorVision;
+    [Header("IAEnemigo")]
+    private float _RadioDeteccion = 7f;            // Distancia en la que un enemigo cambia a Perseguir
+    private int _MemoriaAtencion = 3;             // Cantidad de objetivos que puede recordar un enemigo
+    private float _RadioCombate = 1.5f;              // Distancia en la que un enemigo cambia a Ataque
 
     private void Awake()
     {
@@ -24,9 +28,9 @@ public class DeteccionEnemigo : MonoBehaviour
     private void Start()
     {
         // Inicializar todas las variables
-        _EsferaDeteccion.radius = VariablesGlobales.Instancia.RadioDeteccion;
+        _EsferaDeteccion.radius = _RadioDeteccion;
 
-        Objetivos = new GameObject[VariablesGlobales.Instancia.MemoriaAtencion];
+        Objetivos = new GameObject[_MemoriaAtencion];
         _MemoriaUsada = 0;
     }
 
@@ -53,7 +57,7 @@ public class DeteccionEnemigo : MonoBehaviour
     {
         // Revisa que el objetivo no esté a rango de ataque
         if (_Enemigo.Estado.ObjetivoFijado != null &&
-            Vector3.Distance(transform.position, _Enemigo.Estado.ObjetivoFijado.transform.position) < VariablesGlobales.Instancia.RadioCombate &&
+            Vector3.Distance(transform.position, _Enemigo.Estado.ObjetivoFijado.transform.position) < _RadioCombate &&
             _Enemigo.Estado.ColaDeAccion[0] != _Enemigo.DiccionarioAcciones["CogerObjeto"])
         {
             _Enemigo.Estado.Estado = EstadoEnemigo.Estados.Combate;
@@ -261,7 +265,7 @@ public class DeteccionEnemigo : MonoBehaviour
 
     public GameObject BuscarObjeto()
     {
-        Collider[] listaObjetos = Physics.OverlapSphere(transform.position, VariablesGlobales.Instancia.RadioDeteccion, _CapasIgnoradasPorVision);
+        Collider[] listaObjetos = Physics.OverlapSphere(transform.position, _RadioDeteccion, _CapasIgnoradasPorVision);
         GameObject objetoObjetivo = null;
         for (int i = 0; i < listaObjetos.Length; i++)
         {

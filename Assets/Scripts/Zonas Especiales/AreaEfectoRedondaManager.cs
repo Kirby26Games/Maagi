@@ -11,7 +11,7 @@ public class AreaEfectoRedondaManager : MonoBehaviour
     private void ActualizarAspecto()
     {
         // Hacer invisible
-        gameObject.GetComponent<Renderer>().enabled = true;
+        gameObject.GetComponent<Renderer>().enabled = false;
         // Actualizar radio
         gameObject.GetComponent<SphereCollider>().radius = Radio;
     }
