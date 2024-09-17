@@ -38,6 +38,7 @@ public class SistemaEnemigo : SistemaBase
     private void Awake()
     {
         Movimiento = GetComponent<MovimientoEnemigo>();
+        MovimientoBase = Movimiento;
         Gravedad = GetComponent<SistemaGravedad>();
         Raycast = GetComponent<RaycastEnemigo>();
         Deteccion = GetComponentInChildren<DeteccionEnemigo>();

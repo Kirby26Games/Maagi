@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MovimientoEnemigo : MonoBehaviour
+public class MovimientoEnemigo : MovimientoBase
 {
     public enum CriteriosSalto { Siempre, Nunca, DetectaBorde }
     [Header("Capacidades")]
@@ -10,19 +10,6 @@ public class MovimientoEnemigo : MonoBehaviour
     public bool CogeObjetos;
     [Header("Memoria")]
     private SistemaEnemigo _Enemigo;
-    [Header("Propiedades")]
-    private Rigidbody _Cuerpo;
-    private Collider _Colision;
-    public float VelocidadMovimiento;
-    [Header("Salto")]
-    public float DistanciaSalto;
-    public int SaltosEnElAireMaximos;
-    private int _SaltosEnElAire;
-    [Header("Escaleras")]
-    [HideInInspector] public bool CercaEscalera;
-    [HideInInspector] public float PosicionEscalera;
-    [HideInInspector] public float VelocidadSubirEscaleras;
-    private bool _EnEscalera;
     private float _CooldownEscalera;
     private float _MinimoCooldownEscalera;
     [Header("Vuelo")]
@@ -38,14 +25,15 @@ public class MovimientoEnemigo : MonoBehaviour
     private void Awake()
     {
         _Enemigo = GetComponent<SistemaEnemigo>();
-        _Cuerpo = GetComponent<Rigidbody>();
-        _Colision = GetComponent<Collider>();
+        Cuerpo = GetComponent<Rigidbody>();
+        Colision = GetComponent<Collider>();
     }
 
     private void Start()
     {
+        CalcularVelocidad();
         // Debug: No sucede nada malo si están todas activas, pero no es deseable
-        if(EsVolador && (PuedeUsarEscaleras || CriterioSalto != CriteriosSalto.Nunca))
+        if (EsVolador && (PuedeUsarEscaleras || CriterioSalto != CriteriosSalto.Nunca))
         {
             throw new System.Exception("Un enemigo no puede ser volador y tener otras capacidades activas");
         }
@@ -107,7 +95,7 @@ public class MovimientoEnemigo : MonoBehaviour
         velocidadFinal.y += _Enemigo.Gravedad.EjeY;
 
         // Mandar la velocidad resultante al cuerpo
-        _Cuerpo.linearVelocity = velocidadFinal;
+        Cuerpo.linearVelocity = velocidadFinal + FuerzasTotales();
     }
 
     private void Perseguir()
@@ -115,7 +103,7 @@ public class MovimientoEnemigo : MonoBehaviour
         // A velocidadFinal se le van a añadir los distintos desplazamientos
         Vector3 velocidadFinal = Vector3.zero;
         // Añadir la velocidad correcta en la dirección correcta
-        velocidadFinal += Mathf.Sign((_Enemigo.Estado.DestinoFijado - transform.position).x) * VelocidadMovimiento * Vector3.right;
+        velocidadFinal += Mathf.Sign((_Enemigo.Estado.DestinoFijado - transform.position).x) * VelocidadFinal * Vector3.right;
 
         // Revisar si debe saltar en caso de que sea capaz
         Saltar();
@@ -135,13 +123,13 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // Mandar la velocidad resultante al cuerpo
-        _Cuerpo.linearVelocity = velocidadFinal;
+        Cuerpo.linearVelocity = velocidadFinal + FuerzasTotales();
     }
 
     private bool UsarEscalera()
     {
         // Si no está cerca de escaleras no las puede usar
-        if (!CercaEscalera && !_EnEscalera)
+        if (!CercaEscalera && !EnEscalera)
         {
             return false;
         }
@@ -154,9 +142,9 @@ public class MovimientoEnemigo : MonoBehaviour
         }
 
         // Cambios de variables necesarios para poder llevar a cabo el movimiento a través de la escalera
-        _EnEscalera = true;
+        EnEscalera = true;
         transform.position = new Vector3(PosicionEscalera, transform.position.y, transform.position.z);
-        _Colision.isTrigger = true;
+        Colision.isTrigger = true;
 
         if (transform.position.y < _Enemigo.Estado.DestinoFijado.y)
         {
@@ -177,8 +165,8 @@ public class MovimientoEnemigo : MonoBehaviour
     public void SoltarEscalera()
     {
         // Devolver al objeto a su estado natural una vez salga de la escalera. Si se llama y no está cogido, no debería suceder nada
-        _Colision.isTrigger = false;
-        _EnEscalera = false;
+        Colision.isTrigger = false;
+        EnEscalera = false;
         VelocidadSubirEscaleras = 0f;
         _CooldownEscalera = 0f;
     }
@@ -204,10 +192,10 @@ public class MovimientoEnemigo : MonoBehaviour
             puedo = true;
         }
         //Si estoy en el aire, puedo saltar si no he llegado a los saltos maximos
-        else if (_SaltosEnElAire < SaltosEnElAireMaximos)
+        else if (SaltosEnElAire < SaltosEnElAireMaximos)
         {
             puedo = true;
-            _SaltosEnElAire++;
+            SaltosEnElAire++;
         }
         return puedo;
     }
@@ -223,7 +211,7 @@ public class MovimientoEnemigo : MonoBehaviour
 
             // Detecta borde se fija en la distancia al obstáculo más cercano (si existe) y si el objetivo está por encima de su posición
             case CriteriosSalto.DetectaBorde:
-                if(_Enemigo.Estado.DistanciaAObstaculo.x < VelocidadMovimiento &&
+                if(_Enemigo.Estado.DistanciaAObstaculo.x < VelocidadFinal &&
                     _Enemigo.Estado.DistanciaAObstaculo.x > -1f &&
                     _Enemigo.Estado.DistanciaAObstaculo.y < DistanciaSalto &&
                     _Enemigo.Estado.DistanciaAObstaculo.y > -1f &&
@@ -245,7 +233,7 @@ public class MovimientoEnemigo : MonoBehaviour
         // Una vez en el suelo, recupera la cantidad de saltos que puede realizar
         if(_Enemigo.Gravedad.EnSuelo)
         {
-            _SaltosEnElAire = 0;
+            SaltosEnElAire = 0;
         }
     }
 
@@ -282,7 +270,7 @@ public class MovimientoEnemigo : MonoBehaviour
                     _Enemigo.Estado.InsertarAccion(_Enemigo.DiccionarioAcciones["Idle"], i, true);
                 }
                 MurosGolpeados = -1;
-                _Cuerpo.linearVelocity = Vector3.zero;
+                Cuerpo.linearVelocity = Vector3.zero + FuerzasTotales();
                 return; 
             }
         }
@@ -299,6 +287,6 @@ public class MovimientoEnemigo : MonoBehaviour
             velocidadFinal = DireccionVuelo;
             velocidadFinal.z = 0f;
         }
-        _Cuerpo.linearVelocity = VelocidadVuelo * velocidadFinal.normalized;
+        Cuerpo.linearVelocity = VelocidadVuelo * velocidadFinal.normalized + FuerzasTotales();
     }
 }

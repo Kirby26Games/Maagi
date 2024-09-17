@@ -6,6 +6,7 @@ public class SistemaBase : MonoBehaviour
     public SistemaGravedad Gravedad;
     public Estadisticas Estadisticas;
     public ControlesBase ControlesBase;
+    public MovimientoBase MovimientoBase;
 
     public Clase Clase;
 }

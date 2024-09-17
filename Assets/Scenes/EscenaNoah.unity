@@ -62637,7 +62637,6 @@ GameObject:
   - component: {fileID: 1629097883}
   - component: {fileID: 1629097882}
   - component: {fileID: 1629097881}
-  - component: {fileID: 1629097880}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -62645,40 +62644,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1629097880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1629097879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b84eea600a082e54781e9f0f3630946d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Gravedad: -9.82
-  "Tama\xF1oHabitacion": {x: 22, y: 11, z: 0}
-  EspacioEntreHabitaciones: 1
-  MargenCambioHabitacion: 2
-  TiempoCambioHabitacion: 0.5
-  RadioDeteccion: 7
-  RadioCombate: 1.5
-  MemoriaAtencion: 3
-  FuerzaSalto: 2
-  Bolita:
-    rid: 6567983979964661760
-  "Tama\xF1oInventario": 3
-  "Tama\xF1oColaAccion": 3
-  MaximoTiempoInalcanzable: 5
-  MaximosMurosGolpeados: 4
-  references:
-    version: 2
-    RefIds:
-    - rid: 6567983979964661760
-      type: {class: BolaDeFuego, ns: , asm: Assembly-CSharp}
-      data:
-        Patata: 0
 --- !u!114 &1629097881
 MonoBehaviour:
   m_ObjectHideFlags: 0

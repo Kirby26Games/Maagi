@@ -24,6 +24,7 @@ public class SistemasPersonaje : SistemaBase
     private void Awake()
     {
         Movimiento = GetComponent<MovimientoPersonaje>();
+        MovimientoBase = Movimiento;
         Gravedad = GetComponent<SistemaGravedad>();      
         Raycast = GetComponent<SistemaRaycast>();
         Controles = GetComponent<ControlesPersonaje>();

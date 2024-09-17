@@ -1,40 +1,27 @@
 using UnityEngine;
 
-public class MovimientoPersonaje : MonoBehaviour
+public class MovimientoPersonaje : MovimientoBase
 {
     Camera cam;  //camara para basar el moviemiento
     [Header("Movimiento")]
-    public float VelocidadBase = 3;
-    public float MultiplicadorAlCorrer = 2;
-    private float VelocidadModificador = 1;
-    private float VelocidadFinal;
     private Vector3 MovimientoXZ;
     private Vector3 MovimientoFinal;
     private float UltimoEjeX;
     [Header("Salto")]
     public bool Saltando;
-    public float DistanciaSalto;
-    public int SaltosEnElAireMaximos;
-    private int SaltosEnElAire;
-    private Rigidbody RBPersonaje;
     private SistemasPersonaje Personaje;
     [Header("Escalera")]
-    public int VelocidadSubirEscaleras;
     public bool AtravesandoSuelo;
-    public bool EnEscalera;
     public bool PuedoSubir;
-    public bool CercaEscalera;
-    public float PosicionEscalera;
-    private Collider ColPersonaje;
 
 
 
     private void Awake()
     {
         cam = Camera.main;
-        RBPersonaje = GetComponent<Rigidbody>();
+        Cuerpo = GetComponent<Rigidbody>();
         Personaje = GetComponent<SistemasPersonaje>();
-        ColPersonaje = GetComponent<Collider>();
+        Colision = GetComponent<Collider>();
     }
 
 
@@ -86,7 +73,7 @@ public class MovimientoPersonaje : MonoBehaviour
         MovimientoFinal = cam.transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
-        RBPersonaje.linearVelocity = MovimientoFinal;
+        Cuerpo.linearVelocity = MovimientoFinal + FuerzasTotales();
     }
 
     //metodo de rotar personaje
@@ -146,31 +133,13 @@ public class MovimientoPersonaje : MonoBehaviour
         }
     }
 
-    public void Correr(bool Corriendo)
-    {
-        if (Corriendo)
-        {
-            VelocidadModificador = MultiplicadorAlCorrer;
-        }
-        else
-        {
-            VelocidadModificador = 1;
-        }
-        CalcularVelocidad();
-    }
-
-    public void CalcularVelocidad()
-    {
-        VelocidadFinal = VelocidadBase * VelocidadModificador;
-    }
-
     public void SubirEscaleras(bool puedoSubir)
     {
         if ((CercaEscalera && puedoSubir) || EnEscalera)
         {
             Personaje.Gravedad.enabled = false;
 
-            ColPersonaje.isTrigger = true;
+            Colision.isTrigger = true;
             EnEscalera = true;
             Personaje.Ataque.PuedoAtacar = false;
 
@@ -178,7 +147,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
             MovimientoXZ = new Vector3(Personaje.Controles.EjeX, Personaje.Controles.EjeZ, 0).normalized;
             MovimientoFinal = transform.TransformDirection(MovimientoXZ) * VelocidadSubirEscaleras;
-            RBPersonaje.linearVelocity = MovimientoFinal;
+            Cuerpo.linearVelocity = MovimientoFinal;
 
             if (Personaje.Gravedad.EnSuelo && Personaje.Controles.EjeZ == 0)
             {
@@ -195,6 +164,6 @@ public class MovimientoPersonaje : MonoBehaviour
         Personaje.Gravedad.enabled = true;
         Personaje.Movimiento.EnEscalera = false;
         Personaje.Ataque.PuedoAtacar = true;
-        ColPersonaje.isTrigger = false;
+        Colision.isTrigger = false;
     }
 }
