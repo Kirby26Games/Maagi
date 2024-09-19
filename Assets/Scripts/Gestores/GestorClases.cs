@@ -7,7 +7,7 @@ public class GestorClases : MonoBehaviour
     [SerializeReference] public Clase[] Clases;
     private Efecto[] EfectosBase;
     [SerializeReference] public Dictionary<string, Efecto> Efectos;
-    [SerializeReference] public GameObject[] PlantillasEfectos;
+    [SerializeReference] public GameObject[] PrefabEfectos;
 
 
     private void Awake()

@@ -30,6 +30,7 @@ public class AreaEfectoRedondaManager : MonoBehaviour
         List<GameObject> listaObjetivos = new List<GameObject>();
         for (int i = 0; i < listaDetectados.Length; i++)
         {
+            // TODO: Generalizar en un Efecto que se llame para poder quitar SistemaEnemigo
             if (listaDetectados[i].gameObject.GetComponent<SistemaEnemigo>() != null)
             {
                 listaObjetivos.Add(listaDetectados [i].gameObject);

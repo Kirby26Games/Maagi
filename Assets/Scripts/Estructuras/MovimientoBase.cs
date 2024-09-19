@@ -54,7 +54,7 @@ public class MovimientoBase : MonoBehaviour
             ContadorFuerzasAZero -= Time.deltaTime;
         }
     }
-    public void AñadirFuerza(Vector3 nuevaDireccion, float magnitud, float duracion = 3f)
+    public void AñadirFuerza(Vector3 nuevaDireccion, float magnitud, float duracion = .5f)
     {
         FuerzasAlPersonaje += nuevaDireccion.normalized * magnitud;
         DuracionFuerzasAZero = duracion;
