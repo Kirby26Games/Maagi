@@ -91,3 +91,24 @@ public class Empuje : Efecto
         Debug.Log("Empujado en direccion " + direccion + " con fuerza " + fuerza);
     }
 }
+
+[Serializable]
+public class Proyectil : Efecto
+{
+    public override void Definir()
+    {
+        Nombre = IdiomaEfectos.Proyectil;
+    }
+    public override void Lanzar(SistemaBase lanzador)
+    {
+        // Escalado de las variables
+        Vector3 direccion = (lanzador.ControlesBase.PosicionApuntado - lanzador.ControlesBase.PosicionEnPantalla).normalized;
+        float velocidad = lanzador.Estadisticas.Destreza.ValorFinal * 2;
+        float daño = lanzador.Estadisticas.Ataque.ValorFinal * 0.75f;
+        // Efecto
+        // TODO
+
+        // Debug
+        Debug.Log("Lanzado proyectil en dirección " + direccion + " a velocidad " + velocidad + " con daño " + daño);
+    }
+}

@@ -96,6 +96,10 @@ public class MovimientoEnemigo : MovimientoBase
 
         // Mandar la velocidad resultante al cuerpo
         Cuerpo.linearVelocity = velocidadFinal + FuerzasTotales();
+        if (_Enemigo.Gravedad.EnSuelo)
+        {
+            LimpiarFuerza(enSuelo: true);
+        }
     }
 
     private void Perseguir()
@@ -124,6 +128,10 @@ public class MovimientoEnemigo : MovimientoBase
 
         // Mandar la velocidad resultante al cuerpo
         Cuerpo.linearVelocity = velocidadFinal + FuerzasTotales();
+        if (_Enemigo.Gravedad.EnSuelo)
+        {
+            LimpiarFuerza(enSuelo: true);
+        }
     }
 
     private bool UsarEscalera()

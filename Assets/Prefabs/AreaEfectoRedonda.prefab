@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8344212706270948972}
   - component: {fileID: 3902267728404073301}
   - component: {fileID: 9145880881645323339}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AreaEfectoRedonda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,3 +122,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Radio: 0
+  Duracion: 0
