@@ -22,11 +22,12 @@ public class SistemasPersonaje : SistemaBase
 
 
     private void Awake()
-    {    
+    {
         Movimiento = GetComponent<MovimientoPersonaje>();
         Gravedad = GetComponent<SistemaGravedad>();      
         Raycast = GetComponent<SistemaRaycast>();
-        Controles = GetComponent<ControlesPersonaje>();      
+        Controles = GetComponent<ControlesPersonaje>();
+        ControlesBase = Controles;
         Tamaño = GetComponent<TamañoPersonaje>(); 
         Colisiones = GetComponent<ColisionesPersonaje>();
         Ataque = GetComponent<AtaquePersonaje>();

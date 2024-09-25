@@ -2,13 +2,16 @@ using System.Globalization;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class ControlesPersonaje : MonoBehaviour
+public class ControlesPersonaje : ControlesBase
 {
     [Header("Ejes")]
     public float EjeX;
     public float EjeZ;
+    [Header("Raton")]
     public float RatonHorizontal;
     public float RatonVertical;
+    public float SensibilidadRaton;
+    public Transform PunteroRaton;
     private SistemasPersonaje Personaje;
 
     private void Awake()
@@ -26,6 +29,12 @@ public class ControlesPersonaje : MonoBehaviour
         Personaje.Estadisticas.Constitucion.Calcular();
         Personaje.Estadisticas.Nivel.Base = 1;
         Personaje.Estadisticas.Nivel.Calcular();
+
+        // TODO: Administrar esto en las opciones del jugador
+        Cursor.visible = false;
+        PunteroRaton.position = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+        PosicionApuntado = ObtenerApuntado();
+        SensibilidadRaton = Mathf.Clamp(SensibilidadRaton, 1f, 10f);
     }
     private void Update()
     {
@@ -33,7 +42,14 @@ public class ControlesPersonaje : MonoBehaviour
         EjeZ = _EjeZTotal();
         RatonHorizontal = Input.GetAxis("Mouse X");
         RatonVertical = Input.GetAxis("Mouse Y");
-        
+        PunteroRaton.position += new Vector3(RatonHorizontal,RatonVertical,0f) * SensibilidadRaton;
+        PunteroRaton.position = new Vector3(Mathf.Clamp(PunteroRaton.position.x, 0f, Screen.width),Mathf.Clamp(PunteroRaton.position.y, 0f, Screen.height),0f);
+
+        PosicionEnPantalla = Camera.main.WorldToViewportPoint(transform.position);
+        PosicionEnPantalla = new Vector3(PosicionEnPantalla.x * Screen.width, PosicionEnPantalla.y * Screen.height, 0f);
+        PosicionApuntado = ObtenerApuntado();
+        // Guardar la información de la posición del ratón para los lanzamientos de habilidades
+
 
         if (Input.GetKeyDown(Controles.Saltar))
         {
@@ -93,6 +109,11 @@ public class ControlesPersonaje : MonoBehaviour
         {
             Personaje.Clase.Habilidades[2].Lanzar(Personaje);
         }
+    }
+
+    private Vector3 ObtenerApuntado()
+    {
+        return PunteroRaton.position;
     }
 
     //Hace el getaxisraw pero con los botones que uno elige

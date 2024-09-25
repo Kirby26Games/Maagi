@@ -1,5 +1,6 @@
 using NUnit.Framework.Constraints;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MovimientoEnemigo), typeof(RaycastEnemigo))]
@@ -43,6 +44,7 @@ public class SistemaEnemigo : SistemaBase
         Colisiones = GetComponent<ColisionesEnemigo>();
         Inventario = GetComponent<InventarioEnemigo>();
         Estado = GetComponent<EstadoEnemigo>();
+        ControlesBase = null;
 
         Accion idle = new("Idle", 100, SiempreTrue, SiempreTrue);
         Accion mover = new("Mover", 1000, Estado.RecordarPosicion, Estado.RecordarPosicion);
