@@ -74,6 +74,10 @@ public class MovimientoPersonaje : MovimientoBase
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
         Cuerpo.linearVelocity = MovimientoFinal + FuerzasTotales();
+        if(Personaje.Gravedad.EnSuelo)
+        {
+            LimpiarFuerza(enSuelo: true);
+        }
     }
 
     //metodo de rotar personaje
