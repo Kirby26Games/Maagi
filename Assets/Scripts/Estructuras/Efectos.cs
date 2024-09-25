@@ -57,17 +57,15 @@ public class AreaDañoRedonda: Efecto
             GestorClases.Instancia.PrefabEfectos[0],
             lanzador.transform.position + (lanzador.ControlesBase.PosicionApuntado - lanzador.ControlesBase.PosicionEnPantalla).normalized * alcanceMaximo,
             lanzador.transform.rotation
-            )
-            .GetComponent<AreaEfectoRedondaManager>();
+            ).GetComponent<AreaEfectoRedondaManager>();
         plantilla.Radio = radioArea;
-        plantilla.Duracion = duracion * 100; // segundos -> ms
         plantilla.Dañar(dañoInflingido);
 
         // Debug
         Debug.Log(Nombre + " hace " + dañoInflingido + " daño en radio " + radioArea + " a distancia " + alcanceMaximo);
 
         // Limpiar escena
-        plantilla.Destruir();
+        plantilla.Destruir(duracion * 100); // segundos -> ms
     }
 }
 
@@ -93,7 +91,7 @@ public class Empuje : Efecto
 }
 
 [Serializable]
-public class Proyectil : Efecto
+public class ProyectilGrande : Efecto
 {
     public override void Definir()
     {
@@ -104,9 +102,23 @@ public class Proyectil : Efecto
         // Escalado de las variables
         Vector3 direccion = (lanzador.ControlesBase.PosicionApuntado - lanzador.ControlesBase.PosicionEnPantalla).normalized;
         float velocidad = lanzador.Estadisticas.Destreza.ValorFinal * 2;
+        velocidad = Mathf.Clamp(velocidad, 3f, velocidad);
         float daño = lanzador.Estadisticas.Ataque.ValorFinal * 0.75f;
+        float alcance = lanzador.Estadisticas.Fuerza.ValorFinal * 0.5f;
+        alcance = Mathf.Clamp( alcance, 15f, alcance);
+        float duracion = alcance / velocidad;
         // Efecto
-        // TODO
+        ProyectilEfecto plantilla = GameObject.Instantiate(
+            GestorClases.Instancia.PrefabEfectos[1],
+            lanzador.transform.position + (lanzador.ControlesBase.PosicionApuntado - lanzador.ControlesBase.PosicionEnPantalla).normalized, // Instanciar justo fuera del personaje
+            lanzador.transform.rotation
+            ).GetComponent<ProyectilEfecto>();
+
+        plantilla.Radio = .5f;
+        plantilla.Lanzador = lanzador;
+        plantilla.Duracion = (int)(duracion * 100);
+        plantilla.Disparar(direccion, velocidad, daño);
+        plantilla.Destruir();
 
         // Debug
         Debug.Log("Lanzado proyectil en dirección " + direccion + " a velocidad " + velocidad + " con daño " + daño);

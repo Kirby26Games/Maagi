@@ -6,7 +6,6 @@ using UnityEngine;
 public class AreaEfectoRedondaManager : MonoBehaviour
 {
     public float Radio;
-    public int Duracion;
 
     private void ActualizarAspecto()
     {
@@ -16,9 +15,9 @@ public class AreaEfectoRedondaManager : MonoBehaviour
         gameObject.GetComponent<SphereCollider>().radius = Radio;
     }
 
-    public async void Destruir()
+    public async void Destruir(int duracion)
     {
-        await Task.Delay(Duracion);
+        await Task.Delay(duracion);
         Destroy(gameObject);
     }
 

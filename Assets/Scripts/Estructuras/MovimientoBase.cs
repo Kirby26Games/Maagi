@@ -42,14 +42,14 @@ public class MovimientoBase : MonoBehaviour
         CalcularVelocidad();
     }
 
-    public void LimpiarFuerza(bool enSuelo = false, bool instantaneo = false)
+    public void LimpiarFuerza(bool enSuelo = false)
     {
         if (enSuelo)
         {
             FuerzasAlPersonaje += Vector3.down * FuerzasAlPersonaje.y;
             return;
         }
-        if(instantaneo || ContadorFuerzasAZero < 0f)
+        if(ContadorFuerzasAZero < 0f)
         {
             FuerzasAlPersonaje = Vector3.zero;
         }

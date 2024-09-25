@@ -32,6 +32,7 @@ public class ControlesPersonaje : ControlesBase
         Personaje.Estadisticas.Nivel.Calcular();
 
         // TODO: Administrar esto en las opciones del jugador
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         PunteroRaton.position = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
         PosicionApuntado = ObtenerApuntado();
