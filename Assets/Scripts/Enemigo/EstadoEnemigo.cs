@@ -11,6 +11,9 @@ public class EstadoEnemigo : MonoBehaviour
     public Vector2 DistanciaAObstaculo;
     private float _ContadorObjetivoInalcanzable;
     private SistemaEnemigo _Enemigo;
+    [Header("IAEnemigo")]
+    private int _TamañoColaAccion = 3;            // La cantidad de acciones que puede recordar para hacer un enemigo
+    private float _MaximoTiempoInalcanzable = 5;  // Tiempo que dura un enemigo persiguiendo a un objeto difícil de alcanzar
 
     private void Awake()
     {
@@ -26,8 +29,8 @@ public class EstadoEnemigo : MonoBehaviour
         DestinoFijado = Vector3.zero;
 
         // Las acciones que desea realizar el objeto se incluyen aquí en orden
-        ColaDeAccion = new SistemaEnemigo.Accion[VariablesGlobales.Instancia.TamañoColaAccion];
-        for (int i = 0; i < VariablesGlobales.Instancia.TamañoColaAccion; i++)
+        ColaDeAccion = new SistemaEnemigo.Accion[_TamañoColaAccion];
+        for (int i = 0; i < _TamañoColaAccion; i++)
         {
             ColaDeAccion[i] = _Enemigo.DiccionarioAcciones["Idle"];
         }
@@ -77,7 +80,7 @@ public class EstadoEnemigo : MonoBehaviour
         // De otra forma, añade tiempo para terminar su motivación
         _ContadorObjetivoInalcanzable += Time.deltaTime;
         // Si ha pasado demasiado tiempo perdiendo motivación
-        if(_ContadorObjetivoInalcanzable > VariablesGlobales.Instancia.MaximoTiempoInalcanzable)
+        if(_ContadorObjetivoInalcanzable > _MaximoTiempoInalcanzable)
         {
             // Completa el movimiento
             return true;
@@ -148,7 +151,7 @@ public class EstadoEnemigo : MonoBehaviour
             // InsertarAccion(accionDecidida, 0, true);
         }
         // Si el objeto quiere perseguir y aún tiene motivación, la nueva acción será un Mover (y recuperará la motivación)
-        else if (Estado == Estados.Alerta && _ContadorObjetivoInalcanzable < VariablesGlobales.Instancia.MaximoTiempoInalcanzable)
+        else if (Estado == Estados.Alerta && _ContadorObjetivoInalcanzable < _MaximoTiempoInalcanzable)
         {
             _ContadorObjetivoInalcanzable = 0f;
             accionDecidida = _Enemigo.DiccionarioAcciones["Mover"];

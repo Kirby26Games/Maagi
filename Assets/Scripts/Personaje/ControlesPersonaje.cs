@@ -21,6 +21,7 @@ public class ControlesPersonaje : ControlesBase
 
     private async void Start()
     {
+        // TODO: Quitar esto del código final
         await Task.Delay(1);
         Personaje.Clase = GestorClases.Instancia.Clases[0];
         Personaje.Estadisticas.Fuerza.Base = 3;
