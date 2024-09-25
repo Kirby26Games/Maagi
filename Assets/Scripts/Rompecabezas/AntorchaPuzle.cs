@@ -1,16 +1,26 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class AntorchaPuzle : Antorcha
 {
-    public AntorchaPuerta PuertaAbrir;
+    public Puerta PuertaDueño;
 
     private void Start()
     {
-        PuertaAbrir.TotalAntorchas(this);
+        PuertaDueño.AddCount();
     }
+
+    [Button]
     public override void Interactuar()
     {
         base.Interactuar();
-        PuertaAbrir.ComprobarAntorchas();
+        if (!Prendida)
+        {
+            PuertaDueño.AddCount();
+        }
+        else
+        {
+            PuertaDueño.RemoveCount();
+        }
     }
 }

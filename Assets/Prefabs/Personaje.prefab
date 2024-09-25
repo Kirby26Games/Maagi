@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 4375316662008964144}
   - component: {fileID: 2133248529144290087}
   - component: {fileID: 595842367120652578}
+  - component: {fileID: 5412535793333080509}
   m_Layer: 3
   m_Name: Personaje
   m_TagString: Player
@@ -164,8 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe873a943554b694aa97def19236016b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Movimiento: {fileID: 0}
   Gravedad: {fileID: 0}
+  Estadisticas: {fileID: 0}
+  Movimiento: {fileID: 0}
   Raycast: {fileID: 0}
   Controles: {fileID: 0}
   "Tama\xF1o": {fileID: 0}
@@ -173,7 +175,6 @@ MonoBehaviour:
   Ataque: {fileID: 0}
   Inventario: {fileID: 0}
   Apuntar: {fileID: 0}
-  Estadisticas: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VelocidadBase: 3
   MultiplicadorAlCorrer: 2
+  FuerzasDinamicas: []
+  UltimoEjeX: 0
   Saltando: 0
   DistanciaSalto: 1
   SaltosEnElAireMaximos: 1
@@ -400,6 +403,19 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &5412535793333080509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577602945081306605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a0bf3baa6ccb84f9e81700f7d002d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PesoObj: 1
 --- !u!1 &8319080664039406530
 GameObject:
   m_ObjectHideFlags: 0

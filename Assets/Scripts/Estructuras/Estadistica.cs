@@ -114,7 +114,7 @@ public class VidaActual : Estadistica
         ValorFinal = Mathf.Clamp(ValorFinal, 0, Estadisticas.VidaMaxima.ValorFinal);
         if (ValorFinal <= 0)
         {
-
+            Estadisticas.GetComponent<SistemaBase>().MeMuero();
         }
     }
 }
