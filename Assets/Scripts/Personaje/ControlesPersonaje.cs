@@ -108,7 +108,7 @@ public class ControlesPersonaje : ControlesBase
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            Personaje.Clase.Habilidades[2].Lanzar(Personaje);
+            Personaje.Clase.Habilidades[3].Lanzar(Personaje);
         }
     }
 

@@ -81,7 +81,13 @@ public class Empuje : Efecto
     public override void Lanzar(SistemaBase lanzador)
     {
         // Escalado de las variables
+        Vector3 direccion = (lanzador.ControlesBase.PosicionApuntado - lanzador.ControlesBase.PosicionEnPantalla).normalized;
+        float fuerza = lanzador.Estadisticas.Fuerza.ValorFinal / 3;
+
+        // Efecto
+        lanzador.MovimientoBase.AñadirFuerza(direccion, fuerza);
 
         // Debug
+        Debug.Log("Empujado en direccion " + direccion + " con fuerza " + fuerza);
     }
 }
