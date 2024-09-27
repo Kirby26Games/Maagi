@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 4375316662008964144}
   - component: {fileID: 2133248529144290087}
   - component: {fileID: 595842367120652578}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Personaje
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -164,8 +164,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe873a943554b694aa97def19236016b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Movimiento: {fileID: 0}
   Gravedad: {fileID: 0}
+  Estadisticas: {fileID: 0}
+  ControlesBase: {fileID: 0}
+  MovimientoBase: {fileID: 0}
+  Movimiento: {fileID: 0}
   Raycast: {fileID: 0}
   Controles: {fileID: 0}
   "Tama\xF1o": {fileID: 0}
@@ -173,7 +176,6 @@ MonoBehaviour:
   Ataque: {fileID: 0}
   Inventario: {fileID: 0}
   Apuntar: {fileID: 0}
-  Estadisticas: {fileID: 0}
 --- !u!114 &5448920212085218350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,10 +201,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a26e319cc7b9fa4e997c84b78e9c18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosicionEnPantalla: {x: 0, y: 0, z: 0}
+  PosicionApuntado: {x: 0, y: 0, z: 0}
   EjeX: 0
   EjeZ: 0
   RatonHorizontal: 0
   RatonVertical: 0
+  SensibilidadRaton: 7
+  PunteroRaton: {fileID: 0}
 --- !u!114 &9141048713900540063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,17 +221,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a018be98d91b31c42916aa37cd626f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cuerpo: {fileID: 0}
+  Colision: {fileID: 0}
   VelocidadBase: 3
   MultiplicadorAlCorrer: 2
-  Saltando: 0
+  VelocidadModificador: 1
+  VelocidadFinal: 0
   DistanciaSalto: 1
   SaltosEnElAireMaximos: 1
-  VelocidadSubirEscaleras: 0
-  AtravesandoSuelo: 0
-  EnEscalera: 0
-  PuedoSubir: 0
+  SaltosEnElAire: 0
   CercaEscalera: 0
   PosicionEscalera: 0
+  VelocidadSubirEscaleras: 0
+  EnEscalera: 0
+  Sistema: {fileID: 0}
+  FuerzasAlPersonajeX: 0
+  FuerzaInicialX: 0
+  DuracionFuerzasAZero: 3
+  ContadorFuerzasAZero: 0
+  Saltando: 0
+  AtravesandoSuelo: 0
+  PuedoSubir: 0
 --- !u!114 &7918498663416027673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 233a06c71821d304087f218781a8a1aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gravedad: -9.82
+  Gravedad: -19.64
   EnSuelo: 0
   EjeY: 1
   LimiteVelocidadCaida: -20
@@ -295,7 +311,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5577602945081306605}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8067fa28bd271044f99288987449139f, type: 3}
   m_Name: 
@@ -410,7 +426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5603000656670007632}
   - component: {fileID: 636509548816668287}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ZonaDeteccion
   m_TagString: Untagged
   m_Icon: {fileID: 0}

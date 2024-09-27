@@ -107,7 +107,19 @@ public class ControlesPersonaje : ControlesBase
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Personaje.Clase.Habilidades[1].Lanzar(Personaje);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Personaje.Clase.Habilidades[2].Lanzar(Personaje);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Personaje.Clase.Habilidades[3].Lanzar(Personaje);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             Personaje.Clase.Habilidades[4].Lanzar(Personaje);
         }

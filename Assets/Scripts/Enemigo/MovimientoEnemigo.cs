@@ -55,8 +55,9 @@ public class MovimientoEnemigo : MovimientoBase
 
     private void Update()
     {
+        LimpiarFuerza();
         // Voladores vuelan, es lo que suelen hacer
-        if(EsVolador)
+        if (EsVolador)
         {
             Volar();
             return;
@@ -95,11 +96,7 @@ public class MovimientoEnemigo : MovimientoBase
         velocidadFinal.y += _Enemigo.Gravedad.EjeY;
 
         // Mandar la velocidad resultante al cuerpo
-        Cuerpo.linearVelocity = velocidadFinal + FuerzasTotales();
-        if (_Enemigo.Gravedad.EnSuelo)
-        {
-            LimpiarFuerza(enSuelo: true);
-        }
+        Cuerpo.linearVelocity = velocidadFinal + FuerzasAlPersonajeX * Vector3.right;
     }
 
     private void Perseguir()
@@ -127,11 +124,7 @@ public class MovimientoEnemigo : MovimientoBase
         }
 
         // Mandar la velocidad resultante al cuerpo
-        Cuerpo.linearVelocity = velocidadFinal + FuerzasTotales();
-        if (_Enemigo.Gravedad.EnSuelo)
-        {
-            LimpiarFuerza(enSuelo: true);
-        }
+        Cuerpo.linearVelocity = velocidadFinal + FuerzasAlPersonajeX * Vector3.right;
     }
 
     private bool UsarEscalera()
@@ -278,7 +271,7 @@ public class MovimientoEnemigo : MovimientoBase
                     _Enemigo.Estado.InsertarAccion(_Enemigo.DiccionarioAcciones["Idle"], i, true);
                 }
                 MurosGolpeados = -1;
-                Cuerpo.linearVelocity = Vector3.zero + FuerzasTotales();
+                Cuerpo.linearVelocity = Vector3.zero + FuerzasAlPersonajeX * Vector3.right;
                 return; 
             }
         }
@@ -295,6 +288,6 @@ public class MovimientoEnemigo : MovimientoBase
             velocidadFinal = DireccionVuelo;
             velocidadFinal.z = 0f;
         }
-        Cuerpo.linearVelocity = VelocidadVuelo * velocidadFinal.normalized + FuerzasTotales();
+        Cuerpo.linearVelocity = VelocidadVuelo * velocidadFinal.normalized + FuerzasAlPersonajeX * Vector3.right;
     }
 }

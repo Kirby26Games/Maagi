@@ -20,8 +20,9 @@ public class MovimientoBase : MonoBehaviour
     [HideInInspector] public float VelocidadSubirEscaleras;
     public bool EnEscalera;
     [Header("Externo")]
-    public Vector3 FuerzasAlPersonaje;
-    public Vector3 FuerzaInicial;
+    public SistemaBase Sistema;
+    public float FuerzasAlPersonajeX;
+    public float FuerzaInicialX;
     public float DuracionFuerzasAZero = 3f;
     public float ContadorFuerzasAZero;
 
@@ -42,34 +43,24 @@ public class MovimientoBase : MonoBehaviour
         CalcularVelocidad();
     }
 
-    public void LimpiarFuerza(bool enSuelo = false)
+    public void LimpiarFuerza()
     {
-        if (enSuelo)
-        {
-            FuerzasAlPersonaje += Vector3.down * FuerzasAlPersonaje.y;
-            return;
-        }
         if(ContadorFuerzasAZero < 0f)
         {
-            FuerzasAlPersonaje = Vector3.zero;
+            FuerzasAlPersonajeX = 0f;
         }
         else
         {
-            FuerzasAlPersonaje = ContadorFuerzasAZero / DuracionFuerzasAZero * FuerzaInicial;
+            FuerzasAlPersonajeX = ContadorFuerzasAZero / DuracionFuerzasAZero * FuerzaInicialX;
             ContadorFuerzasAZero -= Time.deltaTime;
         }
     }
-    public void AñadirFuerza(Vector3 nuevaDireccion, float magnitud, float duracion = .5f)
+    public void AñadirFuerza(Vector3 nuevaDireccion, float magnitud)
     {
-        FuerzasAlPersonaje += nuevaDireccion.normalized * magnitud;
-        DuracionFuerzasAZero = duracion;
+        Vector3 fuerzasAlPersonaje = nuevaDireccion.normalized * magnitud + Vector3.right * FuerzasAlPersonajeX;
+        DuracionFuerzasAZero = 2 * (nuevaDireccion.normalized * magnitud).y / -Sistema.Gravedad.Gravedad;
         ContadorFuerzasAZero = DuracionFuerzasAZero;
-        FuerzaInicial = FuerzasAlPersonaje;
-    }
-
-    public Vector3 FuerzasTotales()
-    {
-        LimpiarFuerza();
-        return FuerzasAlPersonaje;
+        FuerzaInicialX = fuerzasAlPersonaje.x;
+        Sistema.Gravedad.EjeY += fuerzasAlPersonaje.y;
     }
 }

@@ -43652,14 +43652,6 @@ PrefabInstance:
       propertyPath: PunteroRaton
       value: 
       objectReference: {fileID: 1846700781}
-    - target: {fileID: 1571377771316135303, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: SensibilidadRaton
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2133248529144290087, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2133248529144290087, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: MenuInventario
       value: 
@@ -43668,10 +43660,6 @@ PrefabInstance:
       propertyPath: InventarioInterfaz
       value: 
       objectReference: {fileID: 329181467}
-    - target: {fileID: 2133248529144290087, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: ContenedorObjetos.Array.size
-      value: 16
-      objectReference: {fileID: 0}
     - target: {fileID: 2133248529144290087, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: 'ContenedorObjetos.Array.data[0]'
       value: 
@@ -43736,10 +43724,6 @@ PrefabInstance:
       propertyPath: 'ContenedorObjetos.Array.data[15]'
       value: 
       objectReference: {fileID: 343070286}
-    - target: {fileID: 2133248529144290087, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: 'ContenedorObjetos.Array.data[16]'
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2260340639806594522, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -202.54
@@ -43784,25 +43768,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Personaje
       objectReference: {fileID: 0}
-    - target: {fileID: 5577602945081306605, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5577602945081306605, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626351627563782984, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7280032123139267448, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8319080664039406530, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
-      propertyPath: m_Layer
-      value: 6
+    - target: {fileID: 9141048713900540063, guid: aa3c558548e51cf4092d59617161a0fd, type: 3}
+      propertyPath: DistanciaSalto
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

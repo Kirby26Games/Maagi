@@ -21,6 +21,7 @@ public class MovimientoPersonaje : MovimientoBase
         cam = Camera.main;
         Cuerpo = GetComponent<Rigidbody>();
         Personaje = GetComponent<SistemasPersonaje>();
+        Sistema = Personaje;
         Colision = GetComponent<Collider>();
     }
 
@@ -32,6 +33,7 @@ public class MovimientoPersonaje : MovimientoBase
 
     void Update()
     {
+        LimpiarFuerza();
         SubirEscaleras(PuedoSubir);
 
         if (!EnEscalera)
@@ -73,11 +75,7 @@ public class MovimientoPersonaje : MovimientoBase
         MovimientoFinal = cam.transform.TransformDirection(MovimientoXZ) * VelocidadFinal;
         MovimientoFinal = Vector3.ProjectOnPlane(MovimientoFinal, Personaje.Raycast.DatosPendiente.normal);
         MovimientoFinal += Personaje.Gravedad.DireccionGravedad;
-        Cuerpo.linearVelocity = MovimientoFinal + FuerzasTotales();
-        if(Personaje.Gravedad.EnSuelo)
-        {
-            LimpiarFuerza(enSuelo: true);
-        }
+        Cuerpo.linearVelocity = MovimientoFinal + FuerzasAlPersonajeX * Vector3.right;
     }
 
     //metodo de rotar personaje
