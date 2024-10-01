@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public class Fuerza : Estadistica
 {
-    public Fuerza() { }
     public override void Calcular()
     {
         Nombre = IdiomaEstadisticas.Fuerza;
@@ -113,6 +112,10 @@ public class VidaActual : Estadistica
         Base = Mathf.Clamp(Base, 0, Estadisticas.VidaMaxima.ValorFinal);
         ValorFinal = Estadisticas.VidaMaxima.ValorFinal - CalculosBase();
         ValorFinal = Mathf.Clamp(ValorFinal, 0, Estadisticas.VidaMaxima.ValorFinal);
+        if (ValorFinal <= 0)
+        {
+            Estadisticas.GetComponent<SistemaBase>().MeMuero();
+        }
     }
 }
 [Serializable]

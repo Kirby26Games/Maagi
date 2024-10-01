@@ -49,11 +49,11 @@ public class SistemaRaycast : MonoBehaviour
             return;
         }
         //Cogemos el angulo de la pendiente usando su normal
-        AngulacionSuelo = Vector3.Angle(Vector3.up, DatosPendiente.normal);
+        AngulacionSuelo = Vector3.Angle(transform.up, DatosPendiente.normal);
         //Estamos en el suelo si AngulacionSuelo es menor a el angolo de escalada maximo
         SistemaPersonaje.Gravedad.EnSuelo = AngulacionSuelo <= AnguloEscaladaMaximo;
         //Dibujo el rayo de escalada
-        Debug.DrawRay(transform.position + Vector3.forward * 0.01f, Vector3.down * DistanciaRayoEscalada, Color.magenta);
+        Debug.DrawRay(transform.position + Vector3.forward * 0.01f, -transform.up * DistanciaRayoEscalada, Color.magenta);
 
     }
 

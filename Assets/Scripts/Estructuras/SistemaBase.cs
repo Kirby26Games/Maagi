@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Estadisticas), typeof(SistemaGravedad))]
-public class SistemaBase : MonoBehaviour
+public abstract class SistemaBase : MonoBehaviour
 {
     public SistemaGravedad Gravedad;
     public Estadisticas Estadisticas;
@@ -9,4 +9,5 @@ public class SistemaBase : MonoBehaviour
     public MovimientoBase MovimientoBase;
 
     public Clase Clase;
+    public abstract void MeMuero();
 }

@@ -20,33 +20,33 @@ public class Estadisticas : MonoBehaviour
     private void Awake()
     {
         //Esto se puede mejorar haciendo un constructor
-        Fuerza = new Fuerza();
+        Fuerza = new();
         Fuerza.Estadisticas = this;
-        Destreza = new Destreza();
+        Destreza = new();
         Destreza.Estadisticas = this;
-        Constitucion = new Constitucion();
+        Constitucion = new();
         Constitucion.Estadisticas = this;
-        Inteligencia = new Inteligencia();
+        Inteligencia = new();
         Inteligencia.Estadisticas = this;
-        Intuicion = new Intuicion();
+        Intuicion = new();
         Intuicion.Estadisticas = this;
-        Carisma = new Carisma();
+        Carisma = new();
         Carisma.Estadisticas = this;
-        Memoria = new Memoria();
+        Memoria = new();
         Memoria.Estadisticas = this;
-        Ataque = new Ataque();
+        Ataque = new();
         Ataque.Estadisticas = this;
-        Magia = new Magia();
+        Magia = new();
         Magia.Estadisticas = this;
-        VidaActual = new VidaActual();
+        VidaActual = new();
         VidaActual.Estadisticas = this;
-        VidaMaxima = new VidaMaxima();
+        VidaMaxima = new();
         VidaMaxima.Estadisticas = this;
-        ManaActual = new ManaActual();
+        ManaActual = new();
         ManaActual.Estadisticas = this;
-        ManaMaximo = new ManaMaximo();
+        ManaMaximo = new();
         ManaMaximo.Estadisticas = this;
-        Nivel = new Nivel();
+        Nivel = new();
         Nivel.Estadisticas = this;
     }
 }

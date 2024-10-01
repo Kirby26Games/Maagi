@@ -36,4 +36,8 @@ public class SistemasPersonaje : SistemaBase
         Apuntar = GetComponent<ApuntarPersonaje>();
         Estadisticas = GetComponent<Estadisticas>();
     }
+
+    public override void MeMuero()
+    {
+    }
 }
