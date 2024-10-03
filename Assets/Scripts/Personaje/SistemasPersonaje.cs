@@ -37,6 +37,11 @@ public class SistemasPersonaje : SistemaBase
         Estadisticas = GetComponent<Estadisticas>();
     }
 
+    private void Start()
+    {
+        EstablecerCentroHabitacion();
+    }
+
     public override void MeMuero()
     {
     }

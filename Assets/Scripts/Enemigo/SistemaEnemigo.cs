@@ -67,6 +67,7 @@ public class SistemaEnemigo : SistemaBase
 
     private void Start()
     {
+        EstablecerCentroHabitacion();
         //Freddy Para PuzzlePuerta
         if (PuertaDueño)
         {
