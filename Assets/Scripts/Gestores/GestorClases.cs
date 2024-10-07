@@ -42,6 +42,7 @@ public class GestorClases : MonoBehaviour
                 new AreaDañoRedonda(),
                 new Empuje(),
                 new ProyectilGrande(),
+                new DañoTodo(),
                 //añado los que quiera igual
         };
         Efectos = new();

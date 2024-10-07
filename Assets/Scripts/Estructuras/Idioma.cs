@@ -19,7 +19,8 @@ public class IdiomaHabilidades
     public static string Habilidad2 = "Nombre de Habilidad 2";
     public static string AtaqueCargado = "Ataque Cargado";
     public static string Propulsion = "Propulsion";
-    public static string LanzarHacha = "LanzarHacha";
+    public static string LanzarHacha = "Lanzar Hacha";
+    public static string GritoTemeroso = "Grito Temeroso";
 }
 
 public class IdiomaEfectos
@@ -29,6 +30,7 @@ public class IdiomaEfectos
     public static string AreaDaño = "Area de Daño";
     public static string Empuje = "Empuje";
     public static string Proyectil = "Proyectil";
+    public static string PantallaDaño = "Pantalla Daño";
 }
 
 public class IdiomaEstadisticas

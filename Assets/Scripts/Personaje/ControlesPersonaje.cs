@@ -123,6 +123,10 @@ public class ControlesPersonaje : ControlesBase
         {
             Personaje.Clase.Habilidades[4].Lanzar(Personaje);
         }
+        if(Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Personaje.Clase.Habilidades[5].Lanzar(Personaje);
+        }
     }
 
     private Vector3 ObtenerApuntado()

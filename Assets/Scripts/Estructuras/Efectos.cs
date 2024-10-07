@@ -124,3 +124,33 @@ public class ProyectilGrande : Efecto
         Debug.Log("Lanzado proyectil en dirección " + direccion + " a velocidad " + velocidad + " con daño " + daño);
     }
 }
+
+[Serializable]
+public class DañoTodo : Efecto
+{
+    public override void Definir()
+    {
+        Nombre = IdiomaEfectos.PantallaDaño;
+    }
+    public override void Lanzar(SistemaBase lanzador)
+    {
+        // TODO: Buscar mejores formas de hacer esto
+        lanzador.EstablecerCentroHabitacion();
+        // Escalado de las variables
+        float daño = lanzador.Estadisticas.Ataque.ValorFinal * 0.75f;
+        float duracion = lanzador.Estadisticas.Constitucion.ValorFinal * 0.1f;
+        duracion = Mathf.Clamp(duracion, 1f, 5f);
+        // Efecto
+        PantallaEfecto plantilla = GameObject.Instantiate(
+            GestorClases.Instancia.PrefabEfectos[2],
+            lanzador.CentroHabitacion,
+            Quaternion.identity
+            ).GetComponent<PantallaEfecto>();
+
+        plantilla.Dañar(daño);
+        plantilla.Destruir((int)(duracion * 100));
+
+        // Debug
+        Debug.Log("Daño: " + daño + " en pantalla");
+    }
+}

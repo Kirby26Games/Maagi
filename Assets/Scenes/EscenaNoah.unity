@@ -25772,6 +25772,7 @@ MonoBehaviour:
   PrefabEfectos:
   - {fileID: 2822946018928164725, guid: 5f90255f2894e7848a946b6f784913c9, type: 3}
   - {fileID: 2822946018928164725, guid: 245a32423317b4b4384153694a7605a1, type: 3}
+  - {fileID: 618675549273158805, guid: bbe703fdf418fd34195ea2dd0de4ea2e, type: 3}
 --- !u!4 &645538397
 Transform:
   m_ObjectHideFlags: 0
